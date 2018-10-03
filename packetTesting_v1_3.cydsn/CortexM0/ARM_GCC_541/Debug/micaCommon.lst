@@ -1,0 +1,573 @@
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"micaCommon.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.global	__aeabi_fmul
+  20              		.global	__aeabi_fdiv
+  21              		.section	.text.to_degrees,"ax",%progbits
+  22              		.align	2
+  23              		.global	to_degrees
+  24              		.code	16
+  25              		.thumb_func
+  26              		.type	to_degrees, %function
+  27              	to_degrees:
+  28              	.LFB2:
+  29              		.file 1 "Generated_Source\\PSoC4\\micaCommon.c"
+   1:Generated_Source\PSoC4/micaCommon.c **** /***************************************************************************
+   2:Generated_Source\PSoC4/micaCommon.c **** *                                       MICA
+   3:Generated_Source\PSoC4/micaCommon.c **** * File: micaCommon.c
+   4:Generated_Source\PSoC4/micaCommon.c **** * Workspace: micaCompnents
+   5:Generated_Source\PSoC4/micaCommon.c **** * Project Name: libMica
+   6:Generated_Source\PSoC4/micaCommon.c **** * Version: v1.0
+   7:Generated_Source\PSoC4/micaCommon.c **** * Author: Craig Cheney
+   8:Generated_Source\PSoC4/micaCommon.c **** *
+   9:Generated_Source\PSoC4/micaCommon.c **** * Brief:
+  10:Generated_Source\PSoC4/micaCommon.c **** *   Generic Functions used in MICA
+  11:Generated_Source\PSoC4/micaCommon.c **** * 
+  12:Generated_Source\PSoC4/micaCommon.c **** * Authors:
+  13:Generated_Source\PSoC4/micaCommon.c **** *   Craig Cheney
+  14:Generated_Source\PSoC4/micaCommon.c **** *
+  15:Generated_Source\PSoC4/micaCommon.c **** * Change Log:
+  16:Generated_Source\PSoC4/micaCommon.c **** *   2018.03.03 CC - Document created
+  17:Generated_Source\PSoC4/micaCommon.c **** ********************************************************************************/
+  18:Generated_Source\PSoC4/micaCommon.c **** #include "micaCommon.h"
+  19:Generated_Source\PSoC4/micaCommon.c **** 
+  20:Generated_Source\PSoC4/micaCommon.c **** /*******************************************************************************
+  21:Generated_Source\PSoC4/micaCommon.c **** * Function Name: to_degrees()
+  22:Generated_Source\PSoC4/micaCommon.c **** ****************************************************************************//**
+  23:Generated_Source\PSoC4/micaCommon.c **** *
+  24:Generated_Source\PSoC4/micaCommon.c **** * \brief Converts a radian argument to degrees
+  25:Generated_Source\PSoC4/micaCommon.c **** *
+  26:Generated_Source\PSoC4/micaCommon.c **** * \param radian - value to convert
+  27:Generated_Source\PSoC4/micaCommon.c **** *
+  28:Generated_Source\PSoC4/micaCommon.c **** * \return the angle in degrees
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 2
+
+
+  29:Generated_Source\PSoC4/micaCommon.c **** *
+  30:Generated_Source\PSoC4/micaCommon.c **** *
+  31:Generated_Source\PSoC4/micaCommon.c **** *******************************************************************************/
+  32:Generated_Source\PSoC4/micaCommon.c **** inline float to_degrees(float radians){
+  30              		.loc 1 32 0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              	.LVL0:
+  35 0000 10B5     		push	{r4, lr}
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  33:Generated_Source\PSoC4/micaCommon.c ****     return radians * (180.0f) / PI;
+  39              		.loc 1 33 0
+  40 0002 0349     		ldr	r1, .L2
+  41 0004 FFF7FEFF 		bl	__aeabi_fmul
+  42              	.LVL1:
+  43 0008 0249     		ldr	r1, .L2+4
+  44 000a FFF7FEFF 		bl	__aeabi_fdiv
+  45              	.LVL2:
+  34:Generated_Source\PSoC4/micaCommon.c **** }
+  46              		.loc 1 34 0
+  47              		@ sp needed
+  48 000e 10BD     		pop	{r4, pc}
+  49              	.L3:
+  50              		.align	2
+  51              	.L2:
+  52 0010 00003443 		.word	1127481344
+  53 0014 DB0F4940 		.word	1078530011
+  54              		.cfi_endproc
+  55              	.LFE2:
+  56              		.size	to_degrees, .-to_degrees
+  57              		.section	.text.to_radians,"ax",%progbits
+  58              		.align	2
+  59              		.global	to_radians
+  60              		.code	16
+  61              		.thumb_func
+  62              		.type	to_radians, %function
+  63              	to_radians:
+  64              	.LFB3:
+  35:Generated_Source\PSoC4/micaCommon.c **** /*******************************************************************************
+  36:Generated_Source\PSoC4/micaCommon.c **** * Function Name: to_radians()
+  37:Generated_Source\PSoC4/micaCommon.c **** ****************************************************************************//**
+  38:Generated_Source\PSoC4/micaCommon.c **** *
+  39:Generated_Source\PSoC4/micaCommon.c **** * \brief Converts a degree argument to radians
+  40:Generated_Source\PSoC4/micaCommon.c **** *
+  41:Generated_Source\PSoC4/micaCommon.c **** * \param degrees - value to convert, in degrees
+  42:Generated_Source\PSoC4/micaCommon.c **** *
+  43:Generated_Source\PSoC4/micaCommon.c **** * \return the angle in radians
+  44:Generated_Source\PSoC4/micaCommon.c **** *
+  45:Generated_Source\PSoC4/micaCommon.c **** *
+  46:Generated_Source\PSoC4/micaCommon.c **** *******************************************************************************/
+  47:Generated_Source\PSoC4/micaCommon.c **** inline float to_radians(float degrees){
+  65              		.loc 1 47 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 3
+
+
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              	.LVL3:
+  70 0000 10B5     		push	{r4, lr}
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 4, -8
+  73              		.cfi_offset 14, -4
+  48:Generated_Source\PSoC4/micaCommon.c ****     return degrees *  PI / (180.0f);
+  74              		.loc 1 48 0
+  75 0002 0349     		ldr	r1, .L5
+  76 0004 FFF7FEFF 		bl	__aeabi_fmul
+  77              	.LVL4:
+  78 0008 0249     		ldr	r1, .L5+4
+  79 000a FFF7FEFF 		bl	__aeabi_fdiv
+  80              	.LVL5:
+  49:Generated_Source\PSoC4/micaCommon.c **** }
+  81              		.loc 1 49 0
+  82              		@ sp needed
+  83 000e 10BD     		pop	{r4, pc}
+  84              	.L6:
+  85              		.align	2
+  86              	.L5:
+  87 0010 DB0F4940 		.word	1078530011
+  88 0014 00003443 		.word	1127481344
+  89              		.cfi_endproc
+  90              	.LFE3:
+  91              		.size	to_radians, .-to_radians
+  92              		.text
+  93              	.Letext0:
+  94              		.section	.debug_info,"",%progbits
+  95              	.Ldebug_info0:
+  96 0000 E0000000 		.4byte	0xe0
+  97 0004 0400     		.2byte	0x4
+  98 0006 00000000 		.4byte	.Ldebug_abbrev0
+  99 000a 04       		.byte	0x4
+ 100 000b 01       		.uleb128 0x1
+ 101 000c 10010000 		.4byte	.LASF17
+ 102 0010 0C       		.byte	0xc
+ 103 0011 C3000000 		.4byte	.LASF18
+ 104 0015 1B000000 		.4byte	.LASF19
+ 105 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 106 001d 00000000 		.4byte	0
+ 107 0021 00000000 		.4byte	.Ldebug_line0
+ 108 0025 02       		.uleb128 0x2
+ 109 0026 04       		.byte	0x4
+ 110 0027 04       		.byte	0x4
+ 111 0028 E7000000 		.4byte	.LASF0
+ 112 002c 02       		.uleb128 0x2
+ 113 002d 01       		.byte	0x1
+ 114 002e 06       		.byte	0x6
+ 115 002f B1010000 		.4byte	.LASF1
+ 116 0033 02       		.uleb128 0x2
+ 117 0034 01       		.byte	0x1
+ 118 0035 08       		.byte	0x8
+ 119 0036 81000000 		.4byte	.LASF2
+ 120 003a 02       		.uleb128 0x2
+ 121 003b 02       		.byte	0x2
+ 122 003c 05       		.byte	0x5
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 4
+
+
+ 123 003d D1010000 		.4byte	.LASF3
+ 124 0041 02       		.uleb128 0x2
+ 125 0042 02       		.byte	0x2
+ 126 0043 07       		.byte	0x7
+ 127 0044 9E010000 		.4byte	.LASF4
+ 128 0048 02       		.uleb128 0x2
+ 129 0049 04       		.byte	0x4
+ 130 004a 05       		.byte	0x5
+ 131 004b 00010000 		.4byte	.LASF5
+ 132 004f 02       		.uleb128 0x2
+ 133 0050 04       		.byte	0x4
+ 134 0051 07       		.byte	0x7
+ 135 0052 9A000000 		.4byte	.LASF6
+ 136 0056 02       		.uleb128 0x2
+ 137 0057 08       		.byte	0x8
+ 138 0058 05       		.byte	0x5
+ 139 0059 00000000 		.4byte	.LASF7
+ 140 005d 02       		.uleb128 0x2
+ 141 005e 08       		.byte	0x8
+ 142 005f 07       		.byte	0x7
+ 143 0060 AC000000 		.4byte	.LASF8
+ 144 0064 03       		.uleb128 0x3
+ 145 0065 04       		.byte	0x4
+ 146 0066 05       		.byte	0x5
+ 147 0067 696E7400 		.ascii	"int\000"
+ 148 006b 02       		.uleb128 0x2
+ 149 006c 04       		.byte	0x4
+ 150 006d 07       		.byte	0x7
+ 151 006e 0E000000 		.4byte	.LASF9
+ 152 0072 02       		.uleb128 0x2
+ 153 0073 08       		.byte	0x8
+ 154 0074 04       		.byte	0x4
+ 155 0075 09010000 		.4byte	.LASF10
+ 156 0079 02       		.uleb128 0x2
+ 157 007a 01       		.byte	0x1
+ 158 007b 08       		.byte	0x8
+ 159 007c F3000000 		.4byte	.LASF11
+ 160 0080 02       		.uleb128 0x2
+ 161 0081 08       		.byte	0x8
+ 162 0082 04       		.byte	0x4
+ 163 0083 BD010000 		.4byte	.LASF12
+ 164 0087 02       		.uleb128 0x2
+ 165 0088 04       		.byte	0x4
+ 166 0089 07       		.byte	0x7
+ 167 008a E6010000 		.4byte	.LASF13
+ 168 008e 02       		.uleb128 0x2
+ 169 008f 01       		.byte	0x1
+ 170 0090 02       		.byte	0x2
+ 171 0091 ED000000 		.4byte	.LASF14
+ 172 0095 04       		.uleb128 0x4
+ 173 0096 DB010000 		.4byte	.LASF20
+ 174 009a 01       		.byte	0x1
+ 175 009b 20       		.byte	0x20
+ 176 009c 25000000 		.4byte	0x25
+ 177 00a0 00000000 		.4byte	.LFB2
+ 178 00a4 18000000 		.4byte	.LFE2-.LFB2
+ 179 00a8 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 5
+
+
+ 180 00a9 9C       		.byte	0x9c
+ 181 00aa BE000000 		.4byte	0xbe
+ 182 00ae 05       		.uleb128 0x5
+ 183 00af F8000000 		.4byte	.LASF15
+ 184 00b3 01       		.byte	0x1
+ 185 00b4 20       		.byte	0x20
+ 186 00b5 25000000 		.4byte	0x25
+ 187 00b9 00000000 		.4byte	.LLST0
+ 188 00bd 00       		.byte	0
+ 189 00be 06       		.uleb128 0x6
+ 190 00bf 8F000000 		.4byte	.LASF21
+ 191 00c3 01       		.byte	0x1
+ 192 00c4 2F       		.byte	0x2f
+ 193 00c5 25000000 		.4byte	0x25
+ 194 00c9 00000000 		.4byte	.LFB3
+ 195 00cd 18000000 		.4byte	.LFE3-.LFB3
+ 196 00d1 01       		.uleb128 0x1
+ 197 00d2 9C       		.byte	0x9c
+ 198 00d3 05       		.uleb128 0x5
+ 199 00d4 C9010000 		.4byte	.LASF16
+ 200 00d8 01       		.byte	0x1
+ 201 00d9 2F       		.byte	0x2f
+ 202 00da 25000000 		.4byte	0x25
+ 203 00de 23000000 		.4byte	.LLST1
+ 204 00e2 00       		.byte	0
+ 205 00e3 00       		.byte	0
+ 206              		.section	.debug_abbrev,"",%progbits
+ 207              	.Ldebug_abbrev0:
+ 208 0000 01       		.uleb128 0x1
+ 209 0001 11       		.uleb128 0x11
+ 210 0002 01       		.byte	0x1
+ 211 0003 25       		.uleb128 0x25
+ 212 0004 0E       		.uleb128 0xe
+ 213 0005 13       		.uleb128 0x13
+ 214 0006 0B       		.uleb128 0xb
+ 215 0007 03       		.uleb128 0x3
+ 216 0008 0E       		.uleb128 0xe
+ 217 0009 1B       		.uleb128 0x1b
+ 218 000a 0E       		.uleb128 0xe
+ 219 000b 55       		.uleb128 0x55
+ 220 000c 17       		.uleb128 0x17
+ 221 000d 11       		.uleb128 0x11
+ 222 000e 01       		.uleb128 0x1
+ 223 000f 10       		.uleb128 0x10
+ 224 0010 17       		.uleb128 0x17
+ 225 0011 00       		.byte	0
+ 226 0012 00       		.byte	0
+ 227 0013 02       		.uleb128 0x2
+ 228 0014 24       		.uleb128 0x24
+ 229 0015 00       		.byte	0
+ 230 0016 0B       		.uleb128 0xb
+ 231 0017 0B       		.uleb128 0xb
+ 232 0018 3E       		.uleb128 0x3e
+ 233 0019 0B       		.uleb128 0xb
+ 234 001a 03       		.uleb128 0x3
+ 235 001b 0E       		.uleb128 0xe
+ 236 001c 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 6
+
+
+ 237 001d 00       		.byte	0
+ 238 001e 03       		.uleb128 0x3
+ 239 001f 24       		.uleb128 0x24
+ 240 0020 00       		.byte	0
+ 241 0021 0B       		.uleb128 0xb
+ 242 0022 0B       		.uleb128 0xb
+ 243 0023 3E       		.uleb128 0x3e
+ 244 0024 0B       		.uleb128 0xb
+ 245 0025 03       		.uleb128 0x3
+ 246 0026 08       		.uleb128 0x8
+ 247 0027 00       		.byte	0
+ 248 0028 00       		.byte	0
+ 249 0029 04       		.uleb128 0x4
+ 250 002a 2E       		.uleb128 0x2e
+ 251 002b 01       		.byte	0x1
+ 252 002c 3F       		.uleb128 0x3f
+ 253 002d 19       		.uleb128 0x19
+ 254 002e 03       		.uleb128 0x3
+ 255 002f 0E       		.uleb128 0xe
+ 256 0030 3A       		.uleb128 0x3a
+ 257 0031 0B       		.uleb128 0xb
+ 258 0032 3B       		.uleb128 0x3b
+ 259 0033 0B       		.uleb128 0xb
+ 260 0034 27       		.uleb128 0x27
+ 261 0035 19       		.uleb128 0x19
+ 262 0036 49       		.uleb128 0x49
+ 263 0037 13       		.uleb128 0x13
+ 264 0038 11       		.uleb128 0x11
+ 265 0039 01       		.uleb128 0x1
+ 266 003a 12       		.uleb128 0x12
+ 267 003b 06       		.uleb128 0x6
+ 268 003c 40       		.uleb128 0x40
+ 269 003d 18       		.uleb128 0x18
+ 270 003e 9642     		.uleb128 0x2116
+ 271 0040 19       		.uleb128 0x19
+ 272 0041 01       		.uleb128 0x1
+ 273 0042 13       		.uleb128 0x13
+ 274 0043 00       		.byte	0
+ 275 0044 00       		.byte	0
+ 276 0045 05       		.uleb128 0x5
+ 277 0046 05       		.uleb128 0x5
+ 278 0047 00       		.byte	0
+ 279 0048 03       		.uleb128 0x3
+ 280 0049 0E       		.uleb128 0xe
+ 281 004a 3A       		.uleb128 0x3a
+ 282 004b 0B       		.uleb128 0xb
+ 283 004c 3B       		.uleb128 0x3b
+ 284 004d 0B       		.uleb128 0xb
+ 285 004e 49       		.uleb128 0x49
+ 286 004f 13       		.uleb128 0x13
+ 287 0050 02       		.uleb128 0x2
+ 288 0051 17       		.uleb128 0x17
+ 289 0052 00       		.byte	0
+ 290 0053 00       		.byte	0
+ 291 0054 06       		.uleb128 0x6
+ 292 0055 2E       		.uleb128 0x2e
+ 293 0056 01       		.byte	0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 7
+
+
+ 294 0057 3F       		.uleb128 0x3f
+ 295 0058 19       		.uleb128 0x19
+ 296 0059 03       		.uleb128 0x3
+ 297 005a 0E       		.uleb128 0xe
+ 298 005b 3A       		.uleb128 0x3a
+ 299 005c 0B       		.uleb128 0xb
+ 300 005d 3B       		.uleb128 0x3b
+ 301 005e 0B       		.uleb128 0xb
+ 302 005f 27       		.uleb128 0x27
+ 303 0060 19       		.uleb128 0x19
+ 304 0061 49       		.uleb128 0x49
+ 305 0062 13       		.uleb128 0x13
+ 306 0063 11       		.uleb128 0x11
+ 307 0064 01       		.uleb128 0x1
+ 308 0065 12       		.uleb128 0x12
+ 309 0066 06       		.uleb128 0x6
+ 310 0067 40       		.uleb128 0x40
+ 311 0068 18       		.uleb128 0x18
+ 312 0069 9642     		.uleb128 0x2116
+ 313 006b 19       		.uleb128 0x19
+ 314 006c 00       		.byte	0
+ 315 006d 00       		.byte	0
+ 316 006e 00       		.byte	0
+ 317              		.section	.debug_loc,"",%progbits
+ 318              	.Ldebug_loc0:
+ 319              	.LLST0:
+ 320 0000 00000000 		.4byte	.LVL0
+ 321 0004 07000000 		.4byte	.LVL1-1
+ 322 0008 0100     		.2byte	0x1
+ 323 000a 50       		.byte	0x50
+ 324 000b 07000000 		.4byte	.LVL1-1
+ 325 000f 18000000 		.4byte	.LFE2
+ 326 0013 0600     		.2byte	0x6
+ 327 0015 F3       		.byte	0xf3
+ 328 0016 03       		.uleb128 0x3
+ 329 0017 F5       		.byte	0xf5
+ 330 0018 00       		.uleb128 0
+ 331 0019 25       		.uleb128 0x25
+ 332 001a 9F       		.byte	0x9f
+ 333 001b 00000000 		.4byte	0
+ 334 001f 00000000 		.4byte	0
+ 335              	.LLST1:
+ 336 0023 00000000 		.4byte	.LVL3
+ 337 0027 07000000 		.4byte	.LVL4-1
+ 338 002b 0100     		.2byte	0x1
+ 339 002d 50       		.byte	0x50
+ 340 002e 07000000 		.4byte	.LVL4-1
+ 341 0032 18000000 		.4byte	.LFE3
+ 342 0036 0600     		.2byte	0x6
+ 343 0038 F3       		.byte	0xf3
+ 344 0039 03       		.uleb128 0x3
+ 345 003a F5       		.byte	0xf5
+ 346 003b 00       		.uleb128 0
+ 347 003c 25       		.uleb128 0x25
+ 348 003d 9F       		.byte	0x9f
+ 349 003e 00000000 		.4byte	0
+ 350 0042 00000000 		.4byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 8
+
+
+ 351              		.section	.debug_aranges,"",%progbits
+ 352 0000 24000000 		.4byte	0x24
+ 353 0004 0200     		.2byte	0x2
+ 354 0006 00000000 		.4byte	.Ldebug_info0
+ 355 000a 04       		.byte	0x4
+ 356 000b 00       		.byte	0
+ 357 000c 0000     		.2byte	0
+ 358 000e 0000     		.2byte	0
+ 359 0010 00000000 		.4byte	.LFB2
+ 360 0014 18000000 		.4byte	.LFE2-.LFB2
+ 361 0018 00000000 		.4byte	.LFB3
+ 362 001c 18000000 		.4byte	.LFE3-.LFB3
+ 363 0020 00000000 		.4byte	0
+ 364 0024 00000000 		.4byte	0
+ 365              		.section	.debug_ranges,"",%progbits
+ 366              	.Ldebug_ranges0:
+ 367 0000 00000000 		.4byte	.LFB2
+ 368 0004 18000000 		.4byte	.LFE2
+ 369 0008 00000000 		.4byte	.LFB3
+ 370 000c 18000000 		.4byte	.LFE3
+ 371 0010 00000000 		.4byte	0
+ 372 0014 00000000 		.4byte	0
+ 373              		.section	.debug_line,"",%progbits
+ 374              	.Ldebug_line0:
+ 375 0000 62000000 		.section	.debug_str,"MS",%progbits,1
+ 375      02003A00 
+ 375      00000201 
+ 375      FB0E0D00 
+ 375      01010101 
+ 376              	.LASF7:
+ 377 0000 6C6F6E67 		.ascii	"long long int\000"
+ 377      206C6F6E 
+ 377      6720696E 
+ 377      7400
+ 378              	.LASF9:
+ 379 000e 756E7369 		.ascii	"unsigned int\000"
+ 379      676E6564 
+ 379      20696E74 
+ 379      00
+ 380              	.LASF19:
+ 381 001b 433A5C55 		.ascii	"C:\\Users\\ccheney\\Dropbox (MIT)\\MICA\\Creator\\l"
+ 381      73657273 
+ 381      5C636368 
+ 381      656E6579 
+ 381      5C44726F 
+ 382 0048 69627261 		.ascii	"ibraries\\micaComponents_testing\\packetTesting_v1_"
+ 382      72696573 
+ 382      5C6D6963 
+ 382      61436F6D 
+ 382      706F6E65 
+ 383 0079 332E6379 		.ascii	"3.cydsn\000"
+ 383      64736E00 
+ 384              	.LASF2:
+ 385 0081 756E7369 		.ascii	"unsigned char\000"
+ 385      676E6564 
+ 385      20636861 
+ 385      7200
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 9
+
+
+ 386              	.LASF21:
+ 387 008f 746F5F72 		.ascii	"to_radians\000"
+ 387      61646961 
+ 387      6E7300
+ 388              	.LASF6:
+ 389 009a 6C6F6E67 		.ascii	"long unsigned int\000"
+ 389      20756E73 
+ 389      69676E65 
+ 389      6420696E 
+ 389      7400
+ 390              	.LASF8:
+ 391 00ac 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 391      206C6F6E 
+ 391      6720756E 
+ 391      7369676E 
+ 391      65642069 
+ 392              	.LASF18:
+ 393 00c3 47656E65 		.ascii	"Generated_Source\\PSoC4\\micaCommon.c\000"
+ 393      72617465 
+ 393      645F536F 
+ 393      75726365 
+ 393      5C50536F 
+ 394              	.LASF0:
+ 395 00e7 666C6F61 		.ascii	"float\000"
+ 395      7400
+ 396              	.LASF14:
+ 397 00ed 5F426F6F 		.ascii	"_Bool\000"
+ 397      6C00
+ 398              	.LASF11:
+ 399 00f3 63686172 		.ascii	"char\000"
+ 399      00
+ 400              	.LASF15:
+ 401 00f8 72616469 		.ascii	"radians\000"
+ 401      616E7300 
+ 402              	.LASF5:
+ 403 0100 6C6F6E67 		.ascii	"long int\000"
+ 403      20696E74 
+ 403      00
+ 404              	.LASF10:
+ 405 0109 646F7562 		.ascii	"double\000"
+ 405      6C6500
+ 406              	.LASF17:
+ 407 0110 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 407      43313120 
+ 407      352E342E 
+ 407      31203230 
+ 407      31363036 
+ 408 0143 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 408      20726576 
+ 408      6973696F 
+ 408      6E203233 
+ 408      37373135 
+ 409 0176 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 409      66756E63 
+ 409      74696F6E 
+ 409      2D736563 
+ 409      74696F6E 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc3v9ksw.s 			page 10
+
+
+ 410              	.LASF4:
+ 411 019e 73686F72 		.ascii	"short unsigned int\000"
+ 411      7420756E 
+ 411      7369676E 
+ 411      65642069 
+ 411      6E7400
+ 412              	.LASF1:
+ 413 01b1 7369676E 		.ascii	"signed char\000"
+ 413      65642063 
+ 413      68617200 
+ 414              	.LASF12:
+ 415 01bd 6C6F6E67 		.ascii	"long double\000"
+ 415      20646F75 
+ 415      626C6500 
+ 416              	.LASF16:
+ 417 01c9 64656772 		.ascii	"degrees\000"
+ 417      65657300 
+ 418              	.LASF3:
+ 419 01d1 73686F72 		.ascii	"short int\000"
+ 419      7420696E 
+ 419      7400
+ 420              	.LASF20:
+ 421 01db 746F5F64 		.ascii	"to_degrees\000"
+ 421      65677265 
+ 421      657300
+ 422              	.LASF13:
+ 423 01e6 73697A65 		.ascii	"sizetype\000"
+ 423      74797065 
+ 423      00
+ 424              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

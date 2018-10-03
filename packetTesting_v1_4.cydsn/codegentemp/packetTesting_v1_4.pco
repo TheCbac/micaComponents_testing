@@ -1,0 +1,23 @@
+# packetTesting_v1_4
+# 2018-10-03 05:06:52Z
+
+# IO_6@[IOP=(0)][IoId=(6)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 6
+# IO_7@[IOP=(0)][IoId=(7)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 7
+dont_use_location LPCOMP -1 -1 0
+dont_use_location p4lpcompcell -1 -1 0
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_location "ClockBlock" m0s8clockblockcell -1 -1 0
+set_io "\UART_USB:tx(0)\" iocell 3 5
+set_io "\UART_USB:rx(0)\" iocell 3 4
+set_io "led_R_pin(0)" iocell 3 7
+set_io "led_G_pin(0)" iocell 1 3
+set_io "led_B_pin(0)" iocell 3 1
+set_io "\UART_IMU:tx(0)\" iocell 1 5
+set_io "\UART_IMU:rx(0)\" iocell 3 0
+set_location "\UART_USB:SCB_IRQ\" interrupt -1 -1 10
+set_location "\UART_USB:SCB\" m0s8scbcell -1 -1 1
+set_location "\LEDS:Control_reg:Sync:ctrl_reg\" 0 0 6
+set_location "\UART_IMU:SCB_IRQ\" interrupt -1 -1 9
+set_location "\UART_IMU:SCB\" m0s8scbcell -1 -1 0

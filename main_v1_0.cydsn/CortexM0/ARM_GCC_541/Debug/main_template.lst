@@ -1,0 +1,627 @@
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main_template.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.main,"ax",%progbits
+  20              		.align	2
+  21              		.global	main
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	main, %function
+  25              	main:
+  26              	.LFB32:
+  27              		.file 1 "Generated_Source\\PSoC4\\main_template.c"
+   1:Generated_Source\PSoC4/main_template.c **** /***************************************************************************
+   2:Generated_Source\PSoC4/main_template.c **** *                                 MICA  © 2018
+   3:Generated_Source\PSoC4/main_template.c **** *                           MIT BioInstrumentation Lab
+   4:Generated_Source\PSoC4/main_template.c **** *
+   5:Generated_Source\PSoC4/main_template.c **** * File: main.c
+   6:Generated_Source\PSoC4/main_template.c **** * Workspace: micaComponent_testing
+   7:Generated_Source\PSoC4/main_template.c **** * Project: main_v1_0
+   8:Generated_Source\PSoC4/main_template.c **** * Version: 1.0.0
+   9:Generated_Source\PSoC4/main_template.c **** * Authors: Craig Cheney
+  10:Generated_Source\PSoC4/main_template.c **** * 
+  11:Generated_Source\PSoC4/main_template.c **** * PCB: supportCube v2.1.2
+  12:Generated_Source\PSoC4/main_template.c **** * PSoC: CYBLE-214015-01
+  13:Generated_Source\PSoC4/main_template.c **** *
+  14:Generated_Source\PSoC4/main_template.c **** * Brief:
+  15:Generated_Source\PSoC4/main_template.c **** *   This is the top-level application file for supportCube.
+  16:Generated_Source\PSoC4/main_template.c **** *
+  17:Generated_Source\PSoC4/main_template.c **** * 2018.09.17  - Document Created
+  18:Generated_Source\PSoC4/main_template.c **** ********************************************************************************/
+  19:Generated_Source\PSoC4/main_template.c **** #include <stdbool.h>
+  20:Generated_Source\PSoC4/main_template.c **** #include "project.h"
+  21:Generated_Source\PSoC4/main_template.c **** 
+  22:Generated_Source\PSoC4/main_template.c **** 
+  23:Generated_Source\PSoC4/main_template.c **** /* ####################### BEGIN PROGRAM CONFIGURATION ###################### */
+  24:Generated_Source\PSoC4/main_template.c **** 
+  25:Generated_Source\PSoC4/main_template.c **** //#define MICA_DEBUG
+  26:Generated_Source\PSoC4/main_template.c **** /* ---------------- DEBUG CASE ----------------
+  27:Generated_Source\PSoC4/main_template.c **** * Uncomment ONE of the following
+  28:Generated_Source\PSoC4/main_template.c **** * Debugging will only occur when MICA_DEBUG is defined
+  29:Generated_Source\PSoC4/main_template.c **** */
+  30:Generated_Source\PSoC4/main_template.c **** #ifdef MICA_DEBUG
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 2
+
+
+  31:Generated_Source\PSoC4/main_template.c ****     #define MICA_DEBUG_LEDS     /* Run through the testings of the LEDS */
+  32:Generated_Source\PSoC4/main_template.c **** #endif
+  33:Generated_Source\PSoC4/main_template.c **** /* -------------- END DEBUG CASE --------------  */
+  34:Generated_Source\PSoC4/main_template.c ****    
+  35:Generated_Source\PSoC4/main_template.c **** 
+  36:Generated_Source\PSoC4/main_template.c **** //#define MICA_TEST
+  37:Generated_Source\PSoC4/main_template.c **** /* ---------------- TEST CASE -----------------
+  38:Generated_Source\PSoC4/main_template.c **** * Uncomment ONE of the following
+  39:Generated_Source\PSoC4/main_template.c **** * Testing will only occur when MICA_TEST is defined
+  40:Generated_Source\PSoC4/main_template.c **** */
+  41:Generated_Source\PSoC4/main_template.c **** #ifdef MICA_TEST
+  42:Generated_Source\PSoC4/main_template.c ****     #define MICA_TEST_case      /* Test Description */
+  43:Generated_Source\PSoC4/main_template.c **** #endif
+  44:Generated_Source\PSoC4/main_template.c **** /* -------------- END TEST CASE ---------------  */
+  45:Generated_Source\PSoC4/main_template.c **** 
+  46:Generated_Source\PSoC4/main_template.c **** 
+  47:Generated_Source\PSoC4/main_template.c **** /* ############################# BEGIN PROGRAM ############################## */
+  48:Generated_Source\PSoC4/main_template.c **** /* Interrupt Service Routines */
+  49:Generated_Source\PSoC4/main_template.c **** void ISR_isrName(void);
+  50:Generated_Source\PSoC4/main_template.c **** 
+  51:Generated_Source\PSoC4/main_template.c **** /* Global Variables */
+  52:Generated_Source\PSoC4/main_template.c **** volatile bool flag_isrFlag = false;
+  53:Generated_Source\PSoC4/main_template.c **** 
+  54:Generated_Source\PSoC4/main_template.c **** /* Main Program */
+  55:Generated_Source\PSoC4/main_template.c **** #if !defined(MICA_DEBUG) && !defined(MICA_TEST)
+  56:Generated_Source\PSoC4/main_template.c **** /*******************************************************************************
+  57:Generated_Source\PSoC4/main_template.c **** * Function Name: main()
+  58:Generated_Source\PSoC4/main_template.c **** ********************************************************************************
+  59:Generated_Source\PSoC4/main_template.c **** * Summary:
+  60:Generated_Source\PSoC4/main_template.c **** *   The top-level application function for the project.
+  61:Generated_Source\PSoC4/main_template.c **** *
+  62:Generated_Source\PSoC4/main_template.c **** *******************************************************************************/
+  63:Generated_Source\PSoC4/main_template.c **** int main(void)
+  64:Generated_Source\PSoC4/main_template.c **** {
+  28              		.loc 1 64 0
+  29              		.cfi_startproc
+  30              		@ Volatile: function does not return.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  65:Generated_Source\PSoC4/main_template.c ****     /* Enable global interrupts. */
+  66:Generated_Source\PSoC4/main_template.c ****     CyGlobalIntEnable; 
+  34              		.loc 1 66 0
+  35              		.syntax divided
+  36              	@ 66 "Generated_Source\PSoC4\main_template.c" 1
+  37 0000 62B6     		CPSIE   i
+  38              	@ 0 "" 2
+  39              		.thumb
+  40              		.syntax unified
+  41              	.L2:
+  42 0002 FEE7     		b	.L2
+  43              		.cfi_endproc
+  44              	.LFE32:
+  45              		.size	main, .-main
+  46              		.section	.text.ISR_isrName,"ax",%progbits
+  47              		.align	2
+  48              		.global	ISR_isrName
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 3
+
+
+  49              		.code	16
+  50              		.thumb_func
+  51              		.type	ISR_isrName, %function
+  52              	ISR_isrName:
+  53              	.LFB33:
+  67:Generated_Source\PSoC4/main_template.c ****     
+  68:Generated_Source\PSoC4/main_template.c ****     /* Infinite Loop */
+  69:Generated_Source\PSoC4/main_template.c ****     for(;;) {
+  70:Generated_Source\PSoC4/main_template.c ****         
+  71:Generated_Source\PSoC4/main_template.c ****     }
+  72:Generated_Source\PSoC4/main_template.c **** }
+  73:Generated_Source\PSoC4/main_template.c **** #endif /* !defined(MICA_DEBUG) && !defined(MICA_TEST) */
+  74:Generated_Source\PSoC4/main_template.c **** /* End Main Program */
+  75:Generated_Source\PSoC4/main_template.c **** 
+  76:Generated_Source\PSoC4/main_template.c **** /* ############################ BEGIN DEBUGGER ############################## */
+  77:Generated_Source\PSoC4/main_template.c **** #ifdef MICA_DEBUG
+  78:Generated_Source\PSoC4/main_template.c **** /*******************************************************************************
+  79:Generated_Source\PSoC4/main_template.c **** * DEBUGGER: main()
+  80:Generated_Source\PSoC4/main_template.c **** ********************************************************************************
+  81:Generated_Source\PSoC4/main_template.c **** * Summary:
+  82:Generated_Source\PSoC4/main_template.c **** *   Debugging function for the PCB hardware
+  83:Generated_Source\PSoC4/main_template.c **** *******************************************************************************/
+  84:Generated_Source\PSoC4/main_template.c **** int main(void){
+  85:Generated_Source\PSoC4/main_template.c ****     #warning "MICA_DEBUG is enabled"
+  86:Generated_Source\PSoC4/main_template.c ****     /* Enable global interrupts. */
+  87:Generated_Source\PSoC4/main_template.c ****     CyGlobalIntEnable; 
+  88:Generated_Source\PSoC4/main_template.c ****     #ifdef MICA_DEBUG_LEDS
+  89:Generated_Source\PSoC4/main_template.c ****         /* Test the onboard LEDs
+  90:Generated_Source\PSoC4/main_template.c ****         Expeted outcome: 
+  91:Generated_Source\PSoC4/main_template.c ****         0. All LEDs off
+  92:Generated_Source\PSoC4/main_template.c ****         1. Red LED on
+  93:Generated_Source\PSoC4/main_template.c ****         2. Green LED on
+  94:Generated_Source\PSoC4/main_template.c ****         3. Blue LED on
+  95:Generated_Source\PSoC4/main_template.c ****         4. Yellow (RB)
+  96:Generated_Source\PSoC4/main_template.c ****         5. Cyan (BG)
+  97:Generated_Source\PSoC4/main_template.c ****         6. Magenta (RG)
+  98:Generated_Source\PSoC4/main_template.c ****         7. White (RGB) LEDs on
+  99:Generated_Source\PSoC4/main_template.c ****         */
+ 100:Generated_Source\PSoC4/main_template.c ****         /* Infinite loop */
+ 101:Generated_Source\PSoC4/main_template.c ****         //LEDS_Test(MICA_TEST_INFINITE);
+ 102:Generated_Source\PSoC4/main_template.c ****     /* End MICA_DEBUG_LEDS */
+ 103:Generated_Source\PSoC4/main_template.c ****     #else
+ 104:Generated_Source\PSoC4/main_template.c ****         #error "At least ONE MICA_DEBUG_<case> must be defined if MICA_DEBUG is defined"
+ 105:Generated_Source\PSoC4/main_template.c ****     #endif /* End MICA_DEBUG_<case> */
+ 106:Generated_Source\PSoC4/main_template.c ****     /* Infinite loop */
+ 107:Generated_Source\PSoC4/main_template.c ****     for(;;){}
+ 108:Generated_Source\PSoC4/main_template.c **** }
+ 109:Generated_Source\PSoC4/main_template.c **** #endif /* MICA_DEBUG */
+ 110:Generated_Source\PSoC4/main_template.c **** 
+ 111:Generated_Source\PSoC4/main_template.c **** /* ############################# BEGIN TESTER ############################### */
+ 112:Generated_Source\PSoC4/main_template.c **** #ifdef MICA_TEST
+ 113:Generated_Source\PSoC4/main_template.c **** /*******************************************************************************
+ 114:Generated_Source\PSoC4/main_template.c **** * TESTER: main()
+ 115:Generated_Source\PSoC4/main_template.c **** ********************************************************************************
+ 116:Generated_Source\PSoC4/main_template.c **** * Summary:
+ 117:Generated_Source\PSoC4/main_template.c **** *   Test functions for features and algorithms
+ 118:Generated_Source\PSoC4/main_template.c **** *******************************************************************************/
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 4
+
+
+ 119:Generated_Source\PSoC4/main_template.c **** int main (void) {
+ 120:Generated_Source\PSoC4/main_template.c ****     #warning "MICA_TEST is enabled"
+ 121:Generated_Source\PSoC4/main_template.c ****     /* Enable global interrupts. */
+ 122:Generated_Source\PSoC4/main_template.c ****     CyGlobalIntEnable; 
+ 123:Generated_Source\PSoC4/main_template.c ****     #ifdef MICA_TEST_case
+ 124:Generated_Source\PSoC4/main_template.c ****         /* Test descriptions */
+ 125:Generated_Source\PSoC4/main_template.c ****     /* End MICA_TEST_case*/
+ 126:Generated_Source\PSoC4/main_template.c ****     #else 
+ 127:Generated_Source\PSoC4/main_template.c ****         #error "At least ONE MICA_TEST_<case> must be defined if MICA_TEST is defined"
+ 128:Generated_Source\PSoC4/main_template.c ****     #endif /* End MICA_TEST_<case> */    
+ 129:Generated_Source\PSoC4/main_template.c ****     for(;;){}
+ 130:Generated_Source\PSoC4/main_template.c **** }    
+ 131:Generated_Source\PSoC4/main_template.c **** #endif /* MICA_TEST */
+ 132:Generated_Source\PSoC4/main_template.c **** 
+ 133:Generated_Source\PSoC4/main_template.c **** /* ####################### BEGIN FUNCTION DEFINITIONS ####################### */
+ 134:Generated_Source\PSoC4/main_template.c **** 
+ 135:Generated_Source\PSoC4/main_template.c **** /*******************************************************************************
+ 136:Generated_Source\PSoC4/main_template.c **** * ISR Name: ISR_isrName()
+ 137:Generated_Source\PSoC4/main_template.c **** ********************************************************************************
+ 138:Generated_Source\PSoC4/main_template.c **** * Summary:
+ 139:Generated_Source\PSoC4/main_template.c **** *   <isrUserCase>
+ 140:Generated_Source\PSoC4/main_template.c **** * Interrupt: 
+ 141:Generated_Source\PSoC4/main_template.c **** *   <nameOfInterruptComponent>
+ 142:Generated_Source\PSoC4/main_template.c **** *
+ 143:Generated_Source\PSoC4/main_template.c **** *******************************************************************************/
+ 144:Generated_Source\PSoC4/main_template.c **** void ISR_isrName(void){
+  54              		.loc 1 144 0
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 0, uses_anonymous_args = 0
+  58              		@ link register save eliminated.
+ 145:Generated_Source\PSoC4/main_template.c ****     /* Clear the Interrupt */
+ 146:Generated_Source\PSoC4/main_template.c ****     
+ 147:Generated_Source\PSoC4/main_template.c ****     /* Set the flag */
+ 148:Generated_Source\PSoC4/main_template.c ****     flag_isrFlag = true;
+  59              		.loc 1 148 0
+  60 0000 0122     		movs	r2, #1
+  61 0002 014B     		ldr	r3, .L4
+  62 0004 1A70     		strb	r2, [r3]
+ 149:Generated_Source\PSoC4/main_template.c **** }
+  63              		.loc 1 149 0
+  64              		@ sp needed
+  65 0006 7047     		bx	lr
+  66              	.L5:
+  67              		.align	2
+  68              	.L4:
+  69 0008 00000000 		.word	.LANCHOR0
+  70              		.cfi_endproc
+  71              	.LFE33:
+  72              		.size	ISR_isrName, .-ISR_isrName
+  73              		.global	flag_isrFlag
+  74              		.bss
+  75              		.set	.LANCHOR0,. + 0
+  76              		.type	flag_isrFlag, %object
+  77              		.size	flag_isrFlag, 1
+  78              	flag_isrFlag:
+  79 0000 00       		.space	1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 5
+
+
+  80              		.text
+  81              	.Letext0:
+  82              		.section	.debug_info,"",%progbits
+  83              	.Ldebug_info0:
+  84 0000 CE000000 		.4byte	0xce
+  85 0004 0400     		.2byte	0x4
+  86 0006 00000000 		.4byte	.Ldebug_abbrev0
+  87 000a 04       		.byte	0x4
+  88 000b 01       		.uleb128 0x1
+  89 000c 15010000 		.4byte	.LASF15
+  90 0010 0C       		.byte	0xc
+  91 0011 E7000000 		.4byte	.LASF16
+  92 0015 2E000000 		.4byte	.LASF17
+  93 0019 00000000 		.4byte	.Ldebug_ranges0+0
+  94 001d 00000000 		.4byte	0
+  95 0021 00000000 		.4byte	.Ldebug_line0
+  96 0025 02       		.uleb128 0x2
+  97 0026 01       		.byte	0x1
+  98 0027 06       		.byte	0x6
+  99 0028 B6010000 		.4byte	.LASF0
+ 100 002c 02       		.uleb128 0x2
+ 101 002d 01       		.byte	0x1
+ 102 002e 08       		.byte	0x8
+ 103 002f 1B000000 		.4byte	.LASF1
+ 104 0033 02       		.uleb128 0x2
+ 105 0034 02       		.byte	0x2
+ 106 0035 05       		.byte	0x5
+ 107 0036 CE010000 		.4byte	.LASF2
+ 108 003a 02       		.uleb128 0x2
+ 109 003b 02       		.byte	0x2
+ 110 003c 07       		.byte	0x7
+ 111 003d A3010000 		.4byte	.LASF3
+ 112 0041 02       		.uleb128 0x2
+ 113 0042 04       		.byte	0x4
+ 114 0043 05       		.byte	0x5
+ 115 0044 DE000000 		.4byte	.LASF4
+ 116 0048 02       		.uleb128 0x2
+ 117 0049 04       		.byte	0x4
+ 118 004a 07       		.byte	0x7
+ 119 004b 8B000000 		.4byte	.LASF5
+ 120 004f 02       		.uleb128 0x2
+ 121 0050 08       		.byte	0x8
+ 122 0051 05       		.byte	0x5
+ 123 0052 00000000 		.4byte	.LASF6
+ 124 0056 02       		.uleb128 0x2
+ 125 0057 08       		.byte	0x8
+ 126 0058 07       		.byte	0x7
+ 127 0059 9D000000 		.4byte	.LASF7
+ 128 005d 03       		.uleb128 0x3
+ 129 005e 04       		.byte	0x4
+ 130 005f 05       		.byte	0x5
+ 131 0060 696E7400 		.ascii	"int\000"
+ 132 0064 02       		.uleb128 0x2
+ 133 0065 04       		.byte	0x4
+ 134 0066 07       		.byte	0x7
+ 135 0067 0E000000 		.4byte	.LASF8
+ 136 006b 02       		.uleb128 0x2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 6
+
+
+ 137 006c 04       		.byte	0x4
+ 138 006d 04       		.byte	0x4
+ 139 006e C1000000 		.4byte	.LASF9
+ 140 0072 02       		.uleb128 0x2
+ 141 0073 08       		.byte	0x8
+ 142 0074 04       		.byte	0x4
+ 143 0075 0E010000 		.4byte	.LASF10
+ 144 0079 02       		.uleb128 0x2
+ 145 007a 01       		.byte	0x1
+ 146 007b 08       		.byte	0x8
+ 147 007c D9000000 		.4byte	.LASF11
+ 148 0080 02       		.uleb128 0x2
+ 149 0081 04       		.byte	0x4
+ 150 0082 07       		.byte	0x7
+ 151 0083 D8010000 		.4byte	.LASF12
+ 152 0087 02       		.uleb128 0x2
+ 153 0088 08       		.byte	0x8
+ 154 0089 04       		.byte	0x4
+ 155 008a C2010000 		.4byte	.LASF13
+ 156 008e 04       		.uleb128 0x4
+ 157 008f 29000000 		.4byte	.LASF18
+ 158 0093 01       		.byte	0x1
+ 159 0094 3F       		.byte	0x3f
+ 160 0095 5D000000 		.4byte	0x5d
+ 161 0099 00000000 		.4byte	.LFB32
+ 162 009d 04000000 		.4byte	.LFE32-.LFB32
+ 163 00a1 01       		.uleb128 0x1
+ 164 00a2 9C       		.byte	0x9c
+ 165 00a3 05       		.uleb128 0x5
+ 166 00a4 C7000000 		.4byte	.LASF19
+ 167 00a8 01       		.byte	0x1
+ 168 00a9 90       		.byte	0x90
+ 169 00aa 00000000 		.4byte	.LFB33
+ 170 00ae 0C000000 		.4byte	.LFE33-.LFB33
+ 171 00b2 01       		.uleb128 0x1
+ 172 00b3 9C       		.byte	0x9c
+ 173 00b4 06       		.uleb128 0x6
+ 174 00b5 B4000000 		.4byte	.LASF20
+ 175 00b9 01       		.byte	0x1
+ 176 00ba 34       		.byte	0x34
+ 177 00bb CC000000 		.4byte	0xcc
+ 178 00bf 05       		.uleb128 0x5
+ 179 00c0 03       		.byte	0x3
+ 180 00c1 00000000 		.4byte	flag_isrFlag
+ 181 00c5 02       		.uleb128 0x2
+ 182 00c6 01       		.byte	0x1
+ 183 00c7 02       		.byte	0x2
+ 184 00c8 D3000000 		.4byte	.LASF14
+ 185 00cc 07       		.uleb128 0x7
+ 186 00cd C5000000 		.4byte	0xc5
+ 187 00d1 00       		.byte	0
+ 188              		.section	.debug_abbrev,"",%progbits
+ 189              	.Ldebug_abbrev0:
+ 190 0000 01       		.uleb128 0x1
+ 191 0001 11       		.uleb128 0x11
+ 192 0002 01       		.byte	0x1
+ 193 0003 25       		.uleb128 0x25
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 7
+
+
+ 194 0004 0E       		.uleb128 0xe
+ 195 0005 13       		.uleb128 0x13
+ 196 0006 0B       		.uleb128 0xb
+ 197 0007 03       		.uleb128 0x3
+ 198 0008 0E       		.uleb128 0xe
+ 199 0009 1B       		.uleb128 0x1b
+ 200 000a 0E       		.uleb128 0xe
+ 201 000b 55       		.uleb128 0x55
+ 202 000c 17       		.uleb128 0x17
+ 203 000d 11       		.uleb128 0x11
+ 204 000e 01       		.uleb128 0x1
+ 205 000f 10       		.uleb128 0x10
+ 206 0010 17       		.uleb128 0x17
+ 207 0011 00       		.byte	0
+ 208 0012 00       		.byte	0
+ 209 0013 02       		.uleb128 0x2
+ 210 0014 24       		.uleb128 0x24
+ 211 0015 00       		.byte	0
+ 212 0016 0B       		.uleb128 0xb
+ 213 0017 0B       		.uleb128 0xb
+ 214 0018 3E       		.uleb128 0x3e
+ 215 0019 0B       		.uleb128 0xb
+ 216 001a 03       		.uleb128 0x3
+ 217 001b 0E       		.uleb128 0xe
+ 218 001c 00       		.byte	0
+ 219 001d 00       		.byte	0
+ 220 001e 03       		.uleb128 0x3
+ 221 001f 24       		.uleb128 0x24
+ 222 0020 00       		.byte	0
+ 223 0021 0B       		.uleb128 0xb
+ 224 0022 0B       		.uleb128 0xb
+ 225 0023 3E       		.uleb128 0x3e
+ 226 0024 0B       		.uleb128 0xb
+ 227 0025 03       		.uleb128 0x3
+ 228 0026 08       		.uleb128 0x8
+ 229 0027 00       		.byte	0
+ 230 0028 00       		.byte	0
+ 231 0029 04       		.uleb128 0x4
+ 232 002a 2E       		.uleb128 0x2e
+ 233 002b 00       		.byte	0
+ 234 002c 3F       		.uleb128 0x3f
+ 235 002d 19       		.uleb128 0x19
+ 236 002e 03       		.uleb128 0x3
+ 237 002f 0E       		.uleb128 0xe
+ 238 0030 3A       		.uleb128 0x3a
+ 239 0031 0B       		.uleb128 0xb
+ 240 0032 3B       		.uleb128 0x3b
+ 241 0033 0B       		.uleb128 0xb
+ 242 0034 27       		.uleb128 0x27
+ 243 0035 19       		.uleb128 0x19
+ 244 0036 49       		.uleb128 0x49
+ 245 0037 13       		.uleb128 0x13
+ 246 0038 8701     		.uleb128 0x87
+ 247 003a 19       		.uleb128 0x19
+ 248 003b 11       		.uleb128 0x11
+ 249 003c 01       		.uleb128 0x1
+ 250 003d 12       		.uleb128 0x12
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 8
+
+
+ 251 003e 06       		.uleb128 0x6
+ 252 003f 40       		.uleb128 0x40
+ 253 0040 18       		.uleb128 0x18
+ 254 0041 9742     		.uleb128 0x2117
+ 255 0043 19       		.uleb128 0x19
+ 256 0044 00       		.byte	0
+ 257 0045 00       		.byte	0
+ 258 0046 05       		.uleb128 0x5
+ 259 0047 2E       		.uleb128 0x2e
+ 260 0048 00       		.byte	0
+ 261 0049 3F       		.uleb128 0x3f
+ 262 004a 19       		.uleb128 0x19
+ 263 004b 03       		.uleb128 0x3
+ 264 004c 0E       		.uleb128 0xe
+ 265 004d 3A       		.uleb128 0x3a
+ 266 004e 0B       		.uleb128 0xb
+ 267 004f 3B       		.uleb128 0x3b
+ 268 0050 0B       		.uleb128 0xb
+ 269 0051 27       		.uleb128 0x27
+ 270 0052 19       		.uleb128 0x19
+ 271 0053 11       		.uleb128 0x11
+ 272 0054 01       		.uleb128 0x1
+ 273 0055 12       		.uleb128 0x12
+ 274 0056 06       		.uleb128 0x6
+ 275 0057 40       		.uleb128 0x40
+ 276 0058 18       		.uleb128 0x18
+ 277 0059 9742     		.uleb128 0x2117
+ 278 005b 19       		.uleb128 0x19
+ 279 005c 00       		.byte	0
+ 280 005d 00       		.byte	0
+ 281 005e 06       		.uleb128 0x6
+ 282 005f 34       		.uleb128 0x34
+ 283 0060 00       		.byte	0
+ 284 0061 03       		.uleb128 0x3
+ 285 0062 0E       		.uleb128 0xe
+ 286 0063 3A       		.uleb128 0x3a
+ 287 0064 0B       		.uleb128 0xb
+ 288 0065 3B       		.uleb128 0x3b
+ 289 0066 0B       		.uleb128 0xb
+ 290 0067 49       		.uleb128 0x49
+ 291 0068 13       		.uleb128 0x13
+ 292 0069 3F       		.uleb128 0x3f
+ 293 006a 19       		.uleb128 0x19
+ 294 006b 02       		.uleb128 0x2
+ 295 006c 18       		.uleb128 0x18
+ 296 006d 00       		.byte	0
+ 297 006e 00       		.byte	0
+ 298 006f 07       		.uleb128 0x7
+ 299 0070 35       		.uleb128 0x35
+ 300 0071 00       		.byte	0
+ 301 0072 49       		.uleb128 0x49
+ 302 0073 13       		.uleb128 0x13
+ 303 0074 00       		.byte	0
+ 304 0075 00       		.byte	0
+ 305 0076 00       		.byte	0
+ 306              		.section	.debug_aranges,"",%progbits
+ 307 0000 24000000 		.4byte	0x24
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 9
+
+
+ 308 0004 0200     		.2byte	0x2
+ 309 0006 00000000 		.4byte	.Ldebug_info0
+ 310 000a 04       		.byte	0x4
+ 311 000b 00       		.byte	0
+ 312 000c 0000     		.2byte	0
+ 313 000e 0000     		.2byte	0
+ 314 0010 00000000 		.4byte	.LFB32
+ 315 0014 04000000 		.4byte	.LFE32-.LFB32
+ 316 0018 00000000 		.4byte	.LFB33
+ 317 001c 0C000000 		.4byte	.LFE33-.LFB33
+ 318 0020 00000000 		.4byte	0
+ 319 0024 00000000 		.4byte	0
+ 320              		.section	.debug_ranges,"",%progbits
+ 321              	.Ldebug_ranges0:
+ 322 0000 00000000 		.4byte	.LFB32
+ 323 0004 04000000 		.4byte	.LFE32
+ 324 0008 00000000 		.4byte	.LFB33
+ 325 000c 0C000000 		.4byte	.LFE33
+ 326 0010 00000000 		.4byte	0
+ 327 0014 00000000 		.4byte	0
+ 328              		.section	.debug_line,"",%progbits
+ 329              	.Ldebug_line0:
+ 330 0000 65000000 		.section	.debug_str,"MS",%progbits,1
+ 330      02003D00 
+ 330      00000201 
+ 330      FB0E0D00 
+ 330      01010101 
+ 331              	.LASF6:
+ 332 0000 6C6F6E67 		.ascii	"long long int\000"
+ 332      206C6F6E 
+ 332      6720696E 
+ 332      7400
+ 333              	.LASF8:
+ 334 000e 756E7369 		.ascii	"unsigned int\000"
+ 334      676E6564 
+ 334      20696E74 
+ 334      00
+ 335              	.LASF1:
+ 336 001b 756E7369 		.ascii	"unsigned char\000"
+ 336      676E6564 
+ 336      20636861 
+ 336      7200
+ 337              	.LASF18:
+ 338 0029 6D61696E 		.ascii	"main\000"
+ 338      00
+ 339              	.LASF17:
+ 340 002e 433A5C55 		.ascii	"C:\\Users\\ccheney\\Dropbox (MIT)\\MICA\\Creator\\l"
+ 340      73657273 
+ 340      5C636368 
+ 340      656E6579 
+ 340      5C44726F 
+ 341 005b 69627261 		.ascii	"ibraries\\micaComponents_testing\\main_v1_0.cydsn\000"
+ 341      72696573 
+ 341      5C6D6963 
+ 341      61436F6D 
+ 341      706F6E65 
+ 342              	.LASF5:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 10
+
+
+ 343 008b 6C6F6E67 		.ascii	"long unsigned int\000"
+ 343      20756E73 
+ 343      69676E65 
+ 343      6420696E 
+ 343      7400
+ 344              	.LASF7:
+ 345 009d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 345      206C6F6E 
+ 345      6720756E 
+ 345      7369676E 
+ 345      65642069 
+ 346              	.LASF20:
+ 347 00b4 666C6167 		.ascii	"flag_isrFlag\000"
+ 347      5F697372 
+ 347      466C6167 
+ 347      00
+ 348              	.LASF9:
+ 349 00c1 666C6F61 		.ascii	"float\000"
+ 349      7400
+ 350              	.LASF19:
+ 351 00c7 4953525F 		.ascii	"ISR_isrName\000"
+ 351      6973724E 
+ 351      616D6500 
+ 352              	.LASF14:
+ 353 00d3 5F426F6F 		.ascii	"_Bool\000"
+ 353      6C00
+ 354              	.LASF11:
+ 355 00d9 63686172 		.ascii	"char\000"
+ 355      00
+ 356              	.LASF4:
+ 357 00de 6C6F6E67 		.ascii	"long int\000"
+ 357      20696E74 
+ 357      00
+ 358              	.LASF16:
+ 359 00e7 47656E65 		.ascii	"Generated_Source\\PSoC4\\main_template.c\000"
+ 359      72617465 
+ 359      645F536F 
+ 359      75726365 
+ 359      5C50536F 
+ 360              	.LASF10:
+ 361 010e 646F7562 		.ascii	"double\000"
+ 361      6C6500
+ 362              	.LASF15:
+ 363 0115 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 363      43313120 
+ 363      352E342E 
+ 363      31203230 
+ 363      31363036 
+ 364 0148 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 364      20726576 
+ 364      6973696F 
+ 364      6E203233 
+ 364      37373135 
+ 365 017b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 365      66756E63 
+ 365      74696F6E 
+ 365      2D736563 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc8BjS1m.s 			page 11
+
+
+ 365      74696F6E 
+ 366              	.LASF3:
+ 367 01a3 73686F72 		.ascii	"short unsigned int\000"
+ 367      7420756E 
+ 367      7369676E 
+ 367      65642069 
+ 367      6E7400
+ 368              	.LASF0:
+ 369 01b6 7369676E 		.ascii	"signed char\000"
+ 369      65642063 
+ 369      68617200 
+ 370              	.LASF13:
+ 371 01c2 6C6F6E67 		.ascii	"long double\000"
+ 371      20646F75 
+ 371      626C6500 
+ 372              	.LASF2:
+ 373 01ce 73686F72 		.ascii	"short int\000"
+ 373      7420696E 
+ 373      7400
+ 374              	.LASF12:
+ 375 01d8 73697A65 		.ascii	"sizetype\000"
+ 375      74797065 
+ 375      00
+ 376              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

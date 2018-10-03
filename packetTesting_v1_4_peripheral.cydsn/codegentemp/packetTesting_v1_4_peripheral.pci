@@ -1,0 +1,15 @@
+# packetTesting_v1_4_peripheral
+# 2018-10-02 20:56:47Z
+
+# IO_6@[IOP=(0)][IoId=(6)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 6
+# IO_7@[IOP=(0)][IoId=(7)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 7
+dont_use_location LPCOMP -1 -1 0
+dont_use_location p4lpcompcell -1 -1 0
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "\UART:tx(0)\" iocell 3 5
+set_io "\UART:rx(0)\" iocell 3 4
+set_io "led_R_pin(0)" iocell 1 1
+set_io "led_G_pin(0)" iocell 0 1
+set_io "led_B_pin(0)" iocell 1 5

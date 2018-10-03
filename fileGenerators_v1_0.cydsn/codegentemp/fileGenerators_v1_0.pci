@@ -1,0 +1,10 @@
+# fileGenerators_v1_0
+# 2018-10-01 22:22:03Z
+
+# IO_6@[IOP=(0)][IoId=(6)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 6
+# IO_7@[IOP=(0)][IoId=(7)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 7
+dont_use_location LPCOMP -1 -1 0
+dont_use_location p4lpcompcell -1 -1 0
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0

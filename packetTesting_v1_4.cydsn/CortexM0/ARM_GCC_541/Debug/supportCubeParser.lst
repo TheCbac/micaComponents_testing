@@ -1,0 +1,1475 @@
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"supportCubeParser.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.validateSupportCubeCmd,"ax",%progbits
+  20              		.align	2
+  21              		.global	validateSupportCubeCmd
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	validateSupportCubeCmd, %function
+  25              	validateSupportCubeCmd:
+  26              	.LFB3:
+  27              		.file 1 "supportCubeParser.c"
+   1:supportCubeParser.c **** /***************************************************************************
+   2:supportCubeParser.c **** *                                 MICA  © 2018
+   3:supportCubeParser.c **** *                           MIT BioInstrumentation Lab
+   4:supportCubeParser.c **** *
+   5:supportCubeParser.c **** * File: supportCubeParser.c
+   6:supportCubeParser.c **** * Workspace: micaComponents_testing
+   7:supportCubeParser.c **** * Project: packetTesting_v1_4
+   8:supportCubeParser.c **** * Version: 1.0.0
+   9:supportCubeParser.c **** * Authors: Craig Cheney
+  10:supportCubeParser.c **** * 
+  11:supportCubeParser.c **** * PCB: SupporCube 2.1.1
+  12:supportCubeParser.c **** * PSoC: CYBLE-214015-01
+  13:supportCubeParser.c **** *
+  14:supportCubeParser.c **** * Brief:
+  15:supportCubeParser.c **** *   Validator for the support cube
+  16:supportCubeParser.c **** *
+  17:supportCubeParser.c **** * 2018.10.01  - Document Created
+  18:supportCubeParser.c **** ********************************************************************************/
+  19:supportCubeParser.c **** #include "supportCubeParser.h"
+  20:supportCubeParser.c **** #include "micaCommon.h"
+  21:supportCubeParser.c **** 
+  22:supportCubeParser.c **** 
+  23:supportCubeParser.c **** 
+  24:supportCubeParser.c **** /*******************************************************************************
+  25:supportCubeParser.c **** * Function Name: acknowledgePacket()
+  26:supportCubeParser.c **** ****************************************************************************//**
+  27:supportCubeParser.c **** * \brief
+  28:supportCubeParser.c **** *  <function description>
+  29:supportCubeParser.c **** *
+  30:supportCubeParser.c **** * \param rxPacket [in]
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 2
+
+
+  31:supportCubeParser.c **** *  Pointer to the received packet
+  32:supportCubeParser.c **** * 
+  33:supportCubeParser.c **** * \return
+  34:supportCubeParser.c **** *  Returns the error of associated with 
+  35:supportCubeParser.c **** *******************************************************************************/
+  36:supportCubeParser.c **** uint32_t acknowledgePacket(packets_BUFFER_FULL_S* packet){
+  37:supportCubeParser.c ****     /* Validate that the command is valid */
+  38:supportCubeParser.c ****     uint32_t validateErr = validateSupportCubeCmd(&(packet->receive.packet), &(packet->send.packet)
+  39:supportCubeParser.c ****     uint32_t responseErr = packets_ERR_SUCCESS;
+  40:supportCubeParser.c ****     /* Command is valid */
+  41:supportCubeParser.c ****     if(validateErr == packets_ERR_SUCCESS){
+  42:supportCubeParser.c ****         /* Respond if the NO ACK flag is not set */
+  43:supportCubeParser.c ****         if( !(packet->receive.packet.flags & packets_FLAG_NO_ACK)){
+  44:supportCubeParser.c ****             /* Construct the response packet */
+  45:supportCubeParser.c ****             responseErr = packets_constructPacket(packet);
+  46:supportCubeParser.c ****             if(!responseErr){
+  47:supportCubeParser.c ****                 /* Send the response packet */
+  48:supportCubeParser.c ****                 responseErr = packets_sendPacket(packet);
+  49:supportCubeParser.c ****             }
+  50:supportCubeParser.c ****         }
+  51:supportCubeParser.c ****     /* An error occured during validation */
+  52:supportCubeParser.c ****     } else {
+  53:supportCubeParser.c ****         responseErr = validateErr;
+  54:supportCubeParser.c ****     }
+  55:supportCubeParser.c ****     return responseErr;
+  56:supportCubeParser.c **** }
+  57:supportCubeParser.c **** 
+  58:supportCubeParser.c **** 
+  59:supportCubeParser.c **** /*******************************************************************************
+  60:supportCubeParser.c **** * Function Name: validateSupportCubeCmd()
+  61:supportCubeParser.c **** ****************************************************************************//**
+  62:supportCubeParser.c **** * \brief
+  63:supportCubeParser.c **** *  <function description>
+  64:supportCubeParser.c **** *
+  65:supportCubeParser.c **** * \param rxPacket [in]
+  66:supportCubeParser.c **** *  Pointer to the packet containing the command to validate
+  67:supportCubeParser.c **** *
+  68:supportCubeParser.c **** * \param txPacket [out]
+  69:supportCubeParser.c **** *  Pointer to the response packet
+  70:supportCubeParser.c **** * 
+  71:supportCubeParser.c **** * \return
+  72:supportCubeParser.c **** *  Returns the error of associated with 
+  73:supportCubeParser.c **** *******************************************************************************/
+  74:supportCubeParser.c **** uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket){
+  28              		.loc 1 74 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  75:supportCubeParser.c ****     /* Set the acknowledge response flag by default */
+  76:supportCubeParser.c ****     txPacket->flags = packets_FLAG_ACK;
+  34              		.loc 1 76 0
+  35 0000 0123     		movs	r3, #1
+  36 0002 8B81     		strh	r3, [r1, #12]
+  77:supportCubeParser.c ****     /* extract command */
+  78:supportCubeParser.c ****     switch(rxPacket->cmd) {
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 3
+
+
+  37              		.loc 1 78 0
+  38 0004 4378     		ldrb	r3, [r0, #1]
+  39 0006 002B     		cmp	r3, #0
+  40 0008 0CD1     		bne	.L5
+  41              	.LVL1:
+  42              	.LBB2:
+  79:supportCubeParser.c ****         case CMD_ID: {
+  80:supportCubeParser.c ****             /* Respond with the device ID */
+  81:supportCubeParser.c ****             uint8_t i = ZERO;
+  82:supportCubeParser.c ****             txPacket->payload[i++] = SUPPORT_ID_DEVICE_MSB;
+  43              		.loc 1 82 0
+  44 000a 0022     		movs	r2, #0
+  45 000c 4B68     		ldr	r3, [r1, #4]
+  46 000e 1A70     		strb	r2, [r3]
+  47              	.LVL2:
+  83:supportCubeParser.c ****             txPacket->payload[i++] = SUPPORT_ID_DEVICE_LSB;
+  48              		.loc 1 83 0
+  49 0010 0123     		movs	r3, #1
+  50 0012 4868     		ldr	r0, [r1, #4]
+  51              	.LVL3:
+  52 0014 4370     		strb	r3, [r0, #1]
+  53              	.LVL4:
+  84:supportCubeParser.c ****             txPacket->payload[i++] = SUPPORT_ID_FIRMWARE_MSB;
+  54              		.loc 1 84 0
+  55 0016 4868     		ldr	r0, [r1, #4]
+  56 0018 8270     		strb	r2, [r0, #2]
+  57              	.LVL5:
+  85:supportCubeParser.c ****             txPacket->payload[i++] = SUPPORT_ID_FIRMWARE_LSB;
+  58              		.loc 1 85 0
+  59 001a 4A68     		ldr	r2, [r1, #4]
+  60 001c D370     		strb	r3, [r2, #3]
+  86:supportCubeParser.c ****             txPacket->payloadLen = i;
+  61              		.loc 1 86 0
+  62 001e 0333     		adds	r3, r3, #3
+  63 0020 4B81     		strh	r3, [r1, #10]
+  87:supportCubeParser.c ****             break;
+  64              		.loc 1 87 0
+  65 0022 01E0     		b	.L4
+  66              	.LVL6:
+  67              	.L5:
+  68              	.LBE2:
+  88:supportCubeParser.c ****         }
+  89:supportCubeParser.c ****         /* Command not found */
+  90:supportCubeParser.c ****         default:{
+  91:supportCubeParser.c ****             /* Set the invalid command flag */
+  92:supportCubeParser.c ****             txPacket->flags |= packets_FLAG_INVALID_CMD;
+  69              		.loc 1 92 0
+  70 0024 0523     		movs	r3, #5
+  71 0026 8B81     		strh	r3, [r1, #12]
+  72              	.LVL7:
+  73              	.L4:
+  93:supportCubeParser.c ****         }
+  94:supportCubeParser.c ****     }
+  95:supportCubeParser.c ****     
+  96:supportCubeParser.c ****     return packets_ERR_SUCCESS;
+  97:supportCubeParser.c **** }
+  74              		.loc 1 97 0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 4
+
+
+  75 0028 0020     		movs	r0, #0
+  76              		@ sp needed
+  77 002a 7047     		bx	lr
+  78              		.cfi_endproc
+  79              	.LFE3:
+  80              		.size	validateSupportCubeCmd, .-validateSupportCubeCmd
+  81              		.section	.text.acknowledgePacket,"ax",%progbits
+  82              		.align	2
+  83              		.global	acknowledgePacket
+  84              		.code	16
+  85              		.thumb_func
+  86              		.type	acknowledgePacket, %function
+  87              	acknowledgePacket:
+  88              	.LFB2:
+  36:supportCubeParser.c ****     /* Validate that the command is valid */
+  89              		.loc 1 36 0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              	.LVL8:
+  94 0000 10B5     		push	{r4, lr}
+  95              		.cfi_def_cfa_offset 8
+  96              		.cfi_offset 4, -8
+  97              		.cfi_offset 14, -4
+  98 0002 0400     		movs	r4, r0
+  38:supportCubeParser.c ****     uint32_t responseErr = packets_ERR_SUCCESS;
+  99              		.loc 1 38 0
+ 100 0004 2430     		adds	r0, r0, #36
+ 101              	.LVL9:
+ 102 0006 2100     		movs	r1, r4
+ 103 0008 FFF7FEFF 		bl	validateSupportCubeCmd
+ 104              	.LVL10:
+  41:supportCubeParser.c ****         /* Respond if the NO ACK flag is not set */
+ 105              		.loc 1 41 0
+ 106 000c 0028     		cmp	r0, #0
+ 107 000e 0AD1     		bne	.L7
+  43:supportCubeParser.c ****             /* Construct the response packet */
+ 108              		.loc 1 43 0
+ 109 0010 238E     		ldrh	r3, [r4, #48]
+ 110 0012 9B07     		lsls	r3, r3, #30
+ 111 0014 07D4     		bmi	.L7
+  45:supportCubeParser.c ****             if(!responseErr){
+ 112              		.loc 1 45 0
+ 113 0016 2000     		movs	r0, r4
+ 114              	.LVL11:
+ 115 0018 FFF7FEFF 		bl	packets_constructPacket
+ 116              	.LVL12:
+  46:supportCubeParser.c ****                 /* Send the response packet */
+ 117              		.loc 1 46 0
+ 118 001c 0028     		cmp	r0, #0
+ 119 001e 02D1     		bne	.L7
+  48:supportCubeParser.c ****             }
+ 120              		.loc 1 48 0
+ 121 0020 2000     		movs	r0, r4
+ 122              	.LVL13:
+ 123 0022 FFF7FEFF 		bl	packets_sendPacket
+ 124              	.LVL14:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 5
+
+
+ 125              	.L7:
+  56:supportCubeParser.c **** 
+ 126              		.loc 1 56 0
+ 127              		@ sp needed
+ 128              	.LVL15:
+ 129 0026 10BD     		pop	{r4, pc}
+ 130              		.cfi_endproc
+ 131              	.LFE2:
+ 132              		.size	acknowledgePacket, .-acknowledgePacket
+ 133              		.text
+ 134              	.Letext0:
+ 135              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 136              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 137              		.file 4 "Generated_Source\\PSoC4/packets.h"
+ 138              		.section	.debug_info,"",%progbits
+ 139              	.Ldebug_info0:
+ 140 0000 7C030000 		.4byte	0x37c
+ 141 0004 0400     		.2byte	0x4
+ 142 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 143 000a 04       		.byte	0x4
+ 144 000b 01       		.uleb128 0x1
+ 145 000c 4E000000 		.4byte	.LASF60
+ 146 0010 0C       		.byte	0xc
+ 147 0011 A3020000 		.4byte	.LASF61
+ 148 0015 2C040000 		.4byte	.LASF62
+ 149 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 150 001d 00000000 		.4byte	0
+ 151 0021 00000000 		.4byte	.Ldebug_line0
+ 152 0025 02       		.uleb128 0x2
+ 153 0026 01       		.byte	0x1
+ 154 0027 06       		.byte	0x6
+ 155 0028 37010000 		.4byte	.LASF0
+ 156 002c 03       		.uleb128 0x3
+ 157 002d 26000000 		.4byte	.LASF3
+ 158 0031 02       		.byte	0x2
+ 159 0032 1D       		.byte	0x1d
+ 160 0033 37000000 		.4byte	0x37
+ 161 0037 02       		.uleb128 0x2
+ 162 0038 01       		.byte	0x1
+ 163 0039 08       		.byte	0x8
+ 164 003a 23030000 		.4byte	.LASF1
+ 165 003e 02       		.uleb128 0x2
+ 166 003f 02       		.byte	0x2
+ 167 0040 05       		.byte	0x5
+ 168 0041 50030000 		.4byte	.LASF2
+ 169 0045 03       		.uleb128 0x3
+ 170 0046 9E030000 		.4byte	.LASF4
+ 171 004a 02       		.byte	0x2
+ 172 004b 2B       		.byte	0x2b
+ 173 004c 50000000 		.4byte	0x50
+ 174 0050 02       		.uleb128 0x2
+ 175 0051 02       		.byte	0x2
+ 176 0052 07       		.byte	0x7
+ 177 0053 54020000 		.4byte	.LASF5
+ 178 0057 02       		.uleb128 0x2
+ 179 0058 04       		.byte	0x4
+ 180 0059 05       		.byte	0x5
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 6
+
+
+ 181 005a 9E010000 		.4byte	.LASF6
+ 182 005e 03       		.uleb128 0x3
+ 183 005f E2010000 		.4byte	.LASF7
+ 184 0063 02       		.byte	0x2
+ 185 0064 41       		.byte	0x41
+ 186 0065 69000000 		.4byte	0x69
+ 187 0069 02       		.uleb128 0x2
+ 188 006a 04       		.byte	0x4
+ 189 006b 07       		.byte	0x7
+ 190 006c 42020000 		.4byte	.LASF8
+ 191 0070 02       		.uleb128 0x2
+ 192 0071 08       		.byte	0x8
+ 193 0072 05       		.byte	0x5
+ 194 0073 29010000 		.4byte	.LASF9
+ 195 0077 02       		.uleb128 0x2
+ 196 0078 08       		.byte	0x8
+ 197 0079 07       		.byte	0x7
+ 198 007a DC000000 		.4byte	.LASF10
+ 199 007e 04       		.uleb128 0x4
+ 200 007f 04       		.byte	0x4
+ 201 0080 05       		.byte	0x5
+ 202 0081 696E7400 		.ascii	"int\000"
+ 203 0085 02       		.uleb128 0x2
+ 204 0086 04       		.byte	0x4
+ 205 0087 07       		.byte	0x7
+ 206 0088 35020000 		.4byte	.LASF11
+ 207 008c 03       		.uleb128 0x3
+ 208 008d 0B040000 		.4byte	.LASF12
+ 209 0091 03       		.byte	0x3
+ 210 0092 18       		.byte	0x18
+ 211 0093 2C000000 		.4byte	0x2c
+ 212 0097 03       		.uleb128 0x3
+ 213 0098 A7010000 		.4byte	.LASF13
+ 214 009c 03       		.byte	0x3
+ 215 009d 24       		.byte	0x24
+ 216 009e 45000000 		.4byte	0x45
+ 217 00a2 03       		.uleb128 0x3
+ 218 00a3 72030000 		.4byte	.LASF14
+ 219 00a7 03       		.byte	0x3
+ 220 00a8 30       		.byte	0x30
+ 221 00a9 5E000000 		.4byte	0x5e
+ 222 00ad 02       		.uleb128 0x2
+ 223 00ae 04       		.byte	0x4
+ 224 00af 04       		.byte	0x4
+ 225 00b0 D0020000 		.4byte	.LASF15
+ 226 00b4 02       		.uleb128 0x2
+ 227 00b5 08       		.byte	0x8
+ 228 00b6 04       		.byte	0x4
+ 229 00b7 B0010000 		.4byte	.LASF16
+ 230 00bb 02       		.uleb128 0x2
+ 231 00bc 01       		.byte	0x1
+ 232 00bd 08       		.byte	0x8
+ 233 00be 99030000 		.4byte	.LASF17
+ 234 00c2 05       		.uleb128 0x5
+ 235 00c3 01       		.byte	0x1
+ 236 00c4 37000000 		.4byte	0x37
+ 237 00c8 04       		.byte	0x4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 7
+
+
+ 238 00c9 8A       		.byte	0x8a
+ 239 00ca ED000000 		.4byte	0xed
+ 240 00ce 06       		.uleb128 0x6
+ 241 00cf 0F020000 		.4byte	.LASF18
+ 242 00d3 00       		.byte	0
+ 243 00d4 06       		.uleb128 0x6
+ 244 00d5 7B030000 		.4byte	.LASF19
+ 245 00d9 01       		.byte	0x1
+ 246 00da 06       		.uleb128 0x6
+ 247 00db 31030000 		.4byte	.LASF20
+ 248 00df 02       		.byte	0x2
+ 249 00e0 06       		.uleb128 0x6
+ 250 00e1 30000000 		.4byte	.LASF21
+ 251 00e5 03       		.byte	0x3
+ 252 00e6 06       		.uleb128 0x6
+ 253 00e7 F4020000 		.4byte	.LASF22
+ 254 00eb 04       		.byte	0x4
+ 255 00ec 00       		.byte	0
+ 256 00ed 03       		.uleb128 0x3
+ 257 00ee 92040000 		.4byte	.LASF23
+ 258 00f2 04       		.byte	0x4
+ 259 00f3 90       		.byte	0x90
+ 260 00f4 C2000000 		.4byte	0xc2
+ 261 00f8 05       		.uleb128 0x5
+ 262 00f9 01       		.byte	0x1
+ 263 00fa 37000000 		.4byte	0x37
+ 264 00fe 04       		.byte	0x4
+ 265 00ff 93       		.byte	0x93
+ 266 0100 1D010000 		.4byte	0x11d
+ 267 0104 06       		.uleb128 0x6
+ 268 0105 F3000000 		.4byte	.LASF24
+ 269 0109 00       		.byte	0
+ 270 010a 06       		.uleb128 0x6
+ 271 010b 6B010000 		.4byte	.LASF25
+ 272 010f 01       		.byte	0x1
+ 273 0110 06       		.uleb128 0x6
+ 274 0111 0C010000 		.4byte	.LASF26
+ 275 0115 02       		.byte	0x2
+ 276 0116 06       		.uleb128 0x6
+ 277 0117 43010000 		.4byte	.LASF27
+ 278 011b 03       		.byte	0x3
+ 279 011c 00       		.byte	0
+ 280 011d 03       		.uleb128 0x3
+ 281 011e EF030000 		.4byte	.LASF28
+ 282 0122 04       		.byte	0x4
+ 283 0123 98       		.byte	0x98
+ 284 0124 F8000000 		.4byte	0xf8
+ 285 0128 07       		.uleb128 0x7
+ 286 0129 0C       		.byte	0xc
+ 287 012a 04       		.byte	0x4
+ 288 012b A3       		.byte	0xa3
+ 289 012c 61010000 		.4byte	0x161
+ 290 0130 08       		.uleb128 0x8
+ 291 0131 CA030000 		.4byte	.LASF29
+ 292 0135 04       		.byte	0x4
+ 293 0136 A4       		.byte	0xa4
+ 294 0137 61010000 		.4byte	0x161
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 8
+
+
+ 295 013b 00       		.byte	0
+ 296 013c 08       		.uleb128 0x8
+ 297 013d A9030000 		.4byte	.LASF30
+ 298 0141 04       		.byte	0x4
+ 299 0142 A5       		.byte	0xa5
+ 300 0143 97000000 		.4byte	0x97
+ 301 0147 04       		.byte	0x4
+ 302 0148 08       		.uleb128 0x8
+ 303 0149 8A020000 		.4byte	.LASF31
+ 304 014d 04       		.byte	0x4
+ 305 014e A6       		.byte	0xa6
+ 306 014f 97000000 		.4byte	0x97
+ 307 0153 06       		.byte	0x6
+ 308 0154 08       		.uleb128 0x8
+ 309 0155 68030000 		.4byte	.LASF32
+ 310 0159 04       		.byte	0x4
+ 311 015a A7       		.byte	0xa7
+ 312 015b A2000000 		.4byte	0xa2
+ 313 015f 08       		.byte	0x8
+ 314 0160 00       		.byte	0
+ 315 0161 09       		.uleb128 0x9
+ 316 0162 04       		.byte	0x4
+ 317 0163 8C000000 		.4byte	0x8c
+ 318 0167 03       		.uleb128 0x3
+ 319 0168 85010000 		.4byte	.LASF33
+ 320 016c 04       		.byte	0x4
+ 321 016d A8       		.byte	0xa8
+ 322 016e 28010000 		.4byte	0x128
+ 323 0172 07       		.uleb128 0x7
+ 324 0173 14       		.byte	0x14
+ 325 0174 04       		.byte	0x4
+ 326 0175 AC       		.byte	0xac
+ 327 0176 CF010000 		.4byte	0x1cf
+ 328 017a 08       		.uleb128 0x8
+ 329 017b 11000000 		.4byte	.LASF34
+ 330 017f 04       		.byte	0x4
+ 331 0180 AD       		.byte	0xad
+ 332 0181 8C000000 		.4byte	0x8c
+ 333 0185 00       		.byte	0
+ 334 0186 0A       		.uleb128 0xa
+ 335 0187 636D6400 		.ascii	"cmd\000"
+ 336 018b 04       		.byte	0x4
+ 337 018c AE       		.byte	0xae
+ 338 018d 8C000000 		.4byte	0x8c
+ 339 0191 01       		.byte	0x1
+ 340 0192 08       		.uleb128 0x8
+ 341 0193 9B020000 		.4byte	.LASF35
+ 342 0197 04       		.byte	0x4
+ 343 0198 AF       		.byte	0xaf
+ 344 0199 61010000 		.4byte	0x161
+ 345 019d 04       		.byte	0x4
+ 346 019e 08       		.uleb128 0x8
+ 347 019f 60010000 		.4byte	.LASF36
+ 348 01a3 04       		.byte	0x4
+ 349 01a4 B0       		.byte	0xb0
+ 350 01a5 97000000 		.4byte	0x97
+ 351 01a9 08       		.byte	0x8
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 9
+
+
+ 352 01aa 08       		.uleb128 0x8
+ 353 01ab D8030000 		.4byte	.LASF37
+ 354 01af 04       		.byte	0x4
+ 355 01b0 B1       		.byte	0xb1
+ 356 01b1 97000000 		.4byte	0x97
+ 357 01b5 0A       		.byte	0xa
+ 358 01b6 08       		.uleb128 0x8
+ 359 01b7 13040000 		.4byte	.LASF38
+ 360 01bb 04       		.byte	0x4
+ 361 01bc B2       		.byte	0xb2
+ 362 01bd 97000000 		.4byte	0x97
+ 363 01c1 0C       		.byte	0xc
+ 364 01c2 08       		.uleb128 0x8
+ 365 01c3 D6020000 		.4byte	.LASF39
+ 366 01c7 04       		.byte	0x4
+ 367 01c8 B3       		.byte	0xb3
+ 368 01c9 A2000000 		.4byte	0xa2
+ 369 01cd 10       		.byte	0x10
+ 370 01ce 00       		.byte	0
+ 371 01cf 03       		.uleb128 0x3
+ 372 01d0 00000000 		.4byte	.LASF40
+ 373 01d4 04       		.byte	0x4
+ 374 01d5 B4       		.byte	0xb4
+ 375 01d6 72010000 		.4byte	0x172
+ 376 01da 07       		.uleb128 0x7
+ 377 01db 24       		.byte	0x24
+ 378 01dc 04       		.byte	0x4
+ 379 01dd B7       		.byte	0xb7
+ 380 01de 07020000 		.4byte	0x207
+ 381 01e2 08       		.uleb128 0x8
+ 382 01e3 D1030000 		.4byte	.LASF41
+ 383 01e7 04       		.byte	0x4
+ 384 01e8 B8       		.byte	0xb8
+ 385 01e9 CF010000 		.4byte	0x1cf
+ 386 01ed 00       		.byte	0
+ 387 01ee 08       		.uleb128 0x8
+ 388 01ef 5A030000 		.4byte	.LASF42
+ 389 01f3 04       		.byte	0x4
+ 390 01f4 B9       		.byte	0xb9
+ 391 01f5 67010000 		.4byte	0x167
+ 392 01f9 14       		.byte	0x14
+ 393 01fa 08       		.uleb128 0x8
+ 394 01fb E3030000 		.4byte	.LASF43
+ 395 01ff 04       		.byte	0x4
+ 396 0200 BA       		.byte	0xba
+ 397 0201 1D010000 		.4byte	0x11d
+ 398 0205 20       		.byte	0x20
+ 399 0206 00       		.byte	0
+ 400 0207 03       		.uleb128 0x3
+ 401 0208 C0010000 		.4byte	.LASF44
+ 402 020c 04       		.byte	0x4
+ 403 020d BB       		.byte	0xbb
+ 404 020e DA010000 		.4byte	0x1da
+ 405 0212 07       		.uleb128 0x7
+ 406 0213 24       		.byte	0x24
+ 407 0214 04       		.byte	0x4
+ 408 0215 BE       		.byte	0xbe
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 10
+
+
+ 409 0216 3F020000 		.4byte	0x23f
+ 410 021a 08       		.uleb128 0x8
+ 411 021b D1030000 		.4byte	.LASF41
+ 412 021f 04       		.byte	0x4
+ 413 0220 BF       		.byte	0xbf
+ 414 0221 CF010000 		.4byte	0x1cf
+ 415 0225 00       		.byte	0
+ 416 0226 08       		.uleb128 0x8
+ 417 0227 5A030000 		.4byte	.LASF42
+ 418 022b 04       		.byte	0x4
+ 419 022c C0       		.byte	0xc0
+ 420 022d 67010000 		.4byte	0x167
+ 421 0231 14       		.byte	0x14
+ 422 0232 08       		.uleb128 0x8
+ 423 0233 E3030000 		.4byte	.LASF43
+ 424 0237 04       		.byte	0x4
+ 425 0238 C1       		.byte	0xc1
+ 426 0239 ED000000 		.4byte	0xed
+ 427 023d 20       		.byte	0x20
+ 428 023e 00       		.byte	0
+ 429 023f 03       		.uleb128 0x3
+ 430 0240 B7020000 		.4byte	.LASF45
+ 431 0244 04       		.byte	0x4
+ 432 0245 C2       		.byte	0xc2
+ 433 0246 12020000 		.4byte	0x212
+ 434 024a 07       		.uleb128 0x7
+ 435 024b 48       		.byte	0x48
+ 436 024c 04       		.byte	0x4
+ 437 024d C5       		.byte	0xc5
+ 438 024e 6B020000 		.4byte	0x26b
+ 439 0252 08       		.uleb128 0x8
+ 440 0253 96020000 		.4byte	.LASF46
+ 441 0257 04       		.byte	0x4
+ 442 0258 C6       		.byte	0xc6
+ 443 0259 07020000 		.4byte	0x207
+ 444 025d 00       		.byte	0
+ 445 025e 08       		.uleb128 0x8
+ 446 025f 67020000 		.4byte	.LASF47
+ 447 0263 04       		.byte	0x4
+ 448 0264 C7       		.byte	0xc7
+ 449 0265 3F020000 		.4byte	0x23f
+ 450 0269 24       		.byte	0x24
+ 451 026a 00       		.byte	0
+ 452 026b 03       		.uleb128 0x3
+ 453 026c F9010000 		.4byte	.LASF48
+ 454 0270 04       		.byte	0x4
+ 455 0271 C8       		.byte	0xc8
+ 456 0272 4A020000 		.4byte	0x24a
+ 457 0276 02       		.uleb128 0x2
+ 458 0277 08       		.byte	0x8
+ 459 0278 04       		.byte	0x4
+ 460 0279 D6010000 		.4byte	.LASF49
+ 461 027d 02       		.uleb128 0x2
+ 462 027e 04       		.byte	0x4
+ 463 027f 07       		.byte	0x7
+ 464 0280 81020000 		.4byte	.LASF50
+ 465 0284 02       		.uleb128 0x2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 11
+
+
+ 466 0285 01       		.byte	0x1
+ 467 0286 02       		.byte	0x2
+ 468 0287 14030000 		.4byte	.LASF51
+ 469 028b 0B       		.uleb128 0xb
+ 470 028c B3030000 		.4byte	.LASF54
+ 471 0290 01       		.byte	0x1
+ 472 0291 4A       		.byte	0x4a
+ 473 0292 A2000000 		.4byte	0xa2
+ 474 0296 00000000 		.4byte	.LFB3
+ 475 029a 2C000000 		.4byte	.LFE3-.LFB3
+ 476 029e 01       		.uleb128 0x1
+ 477 029f 9C       		.byte	0x9c
+ 478 02a0 D8020000 		.4byte	0x2d8
+ 479 02a4 0C       		.uleb128 0xc
+ 480 02a5 B7010000 		.4byte	.LASF52
+ 481 02a9 01       		.byte	0x1
+ 482 02aa 4A       		.byte	0x4a
+ 483 02ab D8020000 		.4byte	0x2d8
+ 484 02af 00000000 		.4byte	.LLST0
+ 485 02b3 0D       		.uleb128 0xd
+ 486 02b4 1A030000 		.4byte	.LASF53
+ 487 02b8 01       		.byte	0x1
+ 488 02b9 4A       		.byte	0x4a
+ 489 02ba D8020000 		.4byte	0x2d8
+ 490 02be 01       		.uleb128 0x1
+ 491 02bf 51       		.byte	0x51
+ 492 02c0 0E       		.uleb128 0xe
+ 493 02c1 0A000000 		.4byte	.LBB2
+ 494 02c5 1A000000 		.4byte	.LBE2-.LBB2
+ 495 02c9 0F       		.uleb128 0xf
+ 496 02ca 6900     		.ascii	"i\000"
+ 497 02cc 01       		.byte	0x1
+ 498 02cd 51       		.byte	0x51
+ 499 02ce 8C000000 		.4byte	0x8c
+ 500 02d2 3A000000 		.4byte	.LLST1
+ 501 02d6 00       		.byte	0
+ 502 02d7 00       		.byte	0
+ 503 02d8 09       		.uleb128 0x9
+ 504 02d9 04       		.byte	0x4
+ 505 02da CF010000 		.4byte	0x1cf
+ 506 02de 0B       		.uleb128 0xb
+ 507 02df 6F020000 		.4byte	.LASF55
+ 508 02e3 01       		.byte	0x1
+ 509 02e4 24       		.byte	0x24
+ 510 02e5 A2000000 		.4byte	0xa2
+ 511 02e9 00000000 		.4byte	.LFB2
+ 512 02ed 28000000 		.4byte	.LFE2-.LFB2
+ 513 02f1 01       		.uleb128 0x1
+ 514 02f2 9C       		.byte	0x9c
+ 515 02f3 63030000 		.4byte	0x363
+ 516 02f7 0C       		.uleb128 0xc
+ 517 02f8 D1030000 		.4byte	.LASF41
+ 518 02fc 01       		.byte	0x1
+ 519 02fd 24       		.byte	0x24
+ 520 02fe 63030000 		.4byte	0x363
+ 521 0302 72000000 		.4byte	.LLST2
+ 522 0306 10       		.uleb128 0x10
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 12
+
+
+ 523 0307 ED010000 		.4byte	.LASF56
+ 524 030b 01       		.byte	0x1
+ 525 030c 26       		.byte	0x26
+ 526 030d A2000000 		.4byte	0xa2
+ 527 0311 9E000000 		.4byte	.LLST3
+ 528 0315 10       		.uleb128 0x10
+ 529 0316 1A000000 		.4byte	.LASF57
+ 530 031a 01       		.byte	0x1
+ 531 031b 27       		.byte	0x27
+ 532 031c A2000000 		.4byte	0xa2
+ 533 0320 B1000000 		.4byte	.LLST4
+ 534 0324 11       		.uleb128 0x11
+ 535 0325 0C000000 		.4byte	.LVL10
+ 536 0329 8B020000 		.4byte	0x28b
+ 537 032d 3E030000 		.4byte	0x33e
+ 538 0331 12       		.uleb128 0x12
+ 539 0332 01       		.uleb128 0x1
+ 540 0333 50       		.byte	0x50
+ 541 0334 02       		.uleb128 0x2
+ 542 0335 74       		.byte	0x74
+ 543 0336 24       		.sleb128 36
+ 544 0337 12       		.uleb128 0x12
+ 545 0338 01       		.uleb128 0x1
+ 546 0339 51       		.byte	0x51
+ 547 033a 02       		.uleb128 0x2
+ 548 033b 74       		.byte	0x74
+ 549 033c 00       		.sleb128 0
+ 550 033d 00       		.byte	0
+ 551 033e 11       		.uleb128 0x11
+ 552 033f 1C000000 		.4byte	.LVL12
+ 553 0343 69030000 		.4byte	0x369
+ 554 0347 52030000 		.4byte	0x352
+ 555 034b 12       		.uleb128 0x12
+ 556 034c 01       		.uleb128 0x1
+ 557 034d 50       		.byte	0x50
+ 558 034e 02       		.uleb128 0x2
+ 559 034f 74       		.byte	0x74
+ 560 0350 00       		.sleb128 0
+ 561 0351 00       		.byte	0
+ 562 0352 13       		.uleb128 0x13
+ 563 0353 26000000 		.4byte	.LVL14
+ 564 0357 74030000 		.4byte	0x374
+ 565 035b 12       		.uleb128 0x12
+ 566 035c 01       		.uleb128 0x1
+ 567 035d 50       		.byte	0x50
+ 568 035e 02       		.uleb128 0x2
+ 569 035f 74       		.byte	0x74
+ 570 0360 00       		.sleb128 0
+ 571 0361 00       		.byte	0
+ 572 0362 00       		.byte	0
+ 573 0363 09       		.uleb128 0x9
+ 574 0364 04       		.byte	0x4
+ 575 0365 6B020000 		.4byte	0x26b
+ 576 0369 14       		.uleb128 0x14
+ 577 036a DC020000 		.4byte	.LASF58
+ 578 036e DC020000 		.4byte	.LASF58
+ 579 0372 04       		.byte	0x4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 13
+
+
+ 580 0373 D6       		.byte	0xd6
+ 581 0374 14       		.uleb128 0x14
+ 582 0375 19040000 		.4byte	.LASF59
+ 583 0379 19040000 		.4byte	.LASF59
+ 584 037d 04       		.byte	0x4
+ 585 037e D7       		.byte	0xd7
+ 586 037f 00       		.byte	0
+ 587              		.section	.debug_abbrev,"",%progbits
+ 588              	.Ldebug_abbrev0:
+ 589 0000 01       		.uleb128 0x1
+ 590 0001 11       		.uleb128 0x11
+ 591 0002 01       		.byte	0x1
+ 592 0003 25       		.uleb128 0x25
+ 593 0004 0E       		.uleb128 0xe
+ 594 0005 13       		.uleb128 0x13
+ 595 0006 0B       		.uleb128 0xb
+ 596 0007 03       		.uleb128 0x3
+ 597 0008 0E       		.uleb128 0xe
+ 598 0009 1B       		.uleb128 0x1b
+ 599 000a 0E       		.uleb128 0xe
+ 600 000b 55       		.uleb128 0x55
+ 601 000c 17       		.uleb128 0x17
+ 602 000d 11       		.uleb128 0x11
+ 603 000e 01       		.uleb128 0x1
+ 604 000f 10       		.uleb128 0x10
+ 605 0010 17       		.uleb128 0x17
+ 606 0011 00       		.byte	0
+ 607 0012 00       		.byte	0
+ 608 0013 02       		.uleb128 0x2
+ 609 0014 24       		.uleb128 0x24
+ 610 0015 00       		.byte	0
+ 611 0016 0B       		.uleb128 0xb
+ 612 0017 0B       		.uleb128 0xb
+ 613 0018 3E       		.uleb128 0x3e
+ 614 0019 0B       		.uleb128 0xb
+ 615 001a 03       		.uleb128 0x3
+ 616 001b 0E       		.uleb128 0xe
+ 617 001c 00       		.byte	0
+ 618 001d 00       		.byte	0
+ 619 001e 03       		.uleb128 0x3
+ 620 001f 16       		.uleb128 0x16
+ 621 0020 00       		.byte	0
+ 622 0021 03       		.uleb128 0x3
+ 623 0022 0E       		.uleb128 0xe
+ 624 0023 3A       		.uleb128 0x3a
+ 625 0024 0B       		.uleb128 0xb
+ 626 0025 3B       		.uleb128 0x3b
+ 627 0026 0B       		.uleb128 0xb
+ 628 0027 49       		.uleb128 0x49
+ 629 0028 13       		.uleb128 0x13
+ 630 0029 00       		.byte	0
+ 631 002a 00       		.byte	0
+ 632 002b 04       		.uleb128 0x4
+ 633 002c 24       		.uleb128 0x24
+ 634 002d 00       		.byte	0
+ 635 002e 0B       		.uleb128 0xb
+ 636 002f 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 14
+
+
+ 637 0030 3E       		.uleb128 0x3e
+ 638 0031 0B       		.uleb128 0xb
+ 639 0032 03       		.uleb128 0x3
+ 640 0033 08       		.uleb128 0x8
+ 641 0034 00       		.byte	0
+ 642 0035 00       		.byte	0
+ 643 0036 05       		.uleb128 0x5
+ 644 0037 04       		.uleb128 0x4
+ 645 0038 01       		.byte	0x1
+ 646 0039 0B       		.uleb128 0xb
+ 647 003a 0B       		.uleb128 0xb
+ 648 003b 49       		.uleb128 0x49
+ 649 003c 13       		.uleb128 0x13
+ 650 003d 3A       		.uleb128 0x3a
+ 651 003e 0B       		.uleb128 0xb
+ 652 003f 3B       		.uleb128 0x3b
+ 653 0040 0B       		.uleb128 0xb
+ 654 0041 01       		.uleb128 0x1
+ 655 0042 13       		.uleb128 0x13
+ 656 0043 00       		.byte	0
+ 657 0044 00       		.byte	0
+ 658 0045 06       		.uleb128 0x6
+ 659 0046 28       		.uleb128 0x28
+ 660 0047 00       		.byte	0
+ 661 0048 03       		.uleb128 0x3
+ 662 0049 0E       		.uleb128 0xe
+ 663 004a 1C       		.uleb128 0x1c
+ 664 004b 0B       		.uleb128 0xb
+ 665 004c 00       		.byte	0
+ 666 004d 00       		.byte	0
+ 667 004e 07       		.uleb128 0x7
+ 668 004f 13       		.uleb128 0x13
+ 669 0050 01       		.byte	0x1
+ 670 0051 0B       		.uleb128 0xb
+ 671 0052 0B       		.uleb128 0xb
+ 672 0053 3A       		.uleb128 0x3a
+ 673 0054 0B       		.uleb128 0xb
+ 674 0055 3B       		.uleb128 0x3b
+ 675 0056 0B       		.uleb128 0xb
+ 676 0057 01       		.uleb128 0x1
+ 677 0058 13       		.uleb128 0x13
+ 678 0059 00       		.byte	0
+ 679 005a 00       		.byte	0
+ 680 005b 08       		.uleb128 0x8
+ 681 005c 0D       		.uleb128 0xd
+ 682 005d 00       		.byte	0
+ 683 005e 03       		.uleb128 0x3
+ 684 005f 0E       		.uleb128 0xe
+ 685 0060 3A       		.uleb128 0x3a
+ 686 0061 0B       		.uleb128 0xb
+ 687 0062 3B       		.uleb128 0x3b
+ 688 0063 0B       		.uleb128 0xb
+ 689 0064 49       		.uleb128 0x49
+ 690 0065 13       		.uleb128 0x13
+ 691 0066 38       		.uleb128 0x38
+ 692 0067 0B       		.uleb128 0xb
+ 693 0068 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 15
+
+
+ 694 0069 00       		.byte	0
+ 695 006a 09       		.uleb128 0x9
+ 696 006b 0F       		.uleb128 0xf
+ 697 006c 00       		.byte	0
+ 698 006d 0B       		.uleb128 0xb
+ 699 006e 0B       		.uleb128 0xb
+ 700 006f 49       		.uleb128 0x49
+ 701 0070 13       		.uleb128 0x13
+ 702 0071 00       		.byte	0
+ 703 0072 00       		.byte	0
+ 704 0073 0A       		.uleb128 0xa
+ 705 0074 0D       		.uleb128 0xd
+ 706 0075 00       		.byte	0
+ 707 0076 03       		.uleb128 0x3
+ 708 0077 08       		.uleb128 0x8
+ 709 0078 3A       		.uleb128 0x3a
+ 710 0079 0B       		.uleb128 0xb
+ 711 007a 3B       		.uleb128 0x3b
+ 712 007b 0B       		.uleb128 0xb
+ 713 007c 49       		.uleb128 0x49
+ 714 007d 13       		.uleb128 0x13
+ 715 007e 38       		.uleb128 0x38
+ 716 007f 0B       		.uleb128 0xb
+ 717 0080 00       		.byte	0
+ 718 0081 00       		.byte	0
+ 719 0082 0B       		.uleb128 0xb
+ 720 0083 2E       		.uleb128 0x2e
+ 721 0084 01       		.byte	0x1
+ 722 0085 3F       		.uleb128 0x3f
+ 723 0086 19       		.uleb128 0x19
+ 724 0087 03       		.uleb128 0x3
+ 725 0088 0E       		.uleb128 0xe
+ 726 0089 3A       		.uleb128 0x3a
+ 727 008a 0B       		.uleb128 0xb
+ 728 008b 3B       		.uleb128 0x3b
+ 729 008c 0B       		.uleb128 0xb
+ 730 008d 27       		.uleb128 0x27
+ 731 008e 19       		.uleb128 0x19
+ 732 008f 49       		.uleb128 0x49
+ 733 0090 13       		.uleb128 0x13
+ 734 0091 11       		.uleb128 0x11
+ 735 0092 01       		.uleb128 0x1
+ 736 0093 12       		.uleb128 0x12
+ 737 0094 06       		.uleb128 0x6
+ 738 0095 40       		.uleb128 0x40
+ 739 0096 18       		.uleb128 0x18
+ 740 0097 9742     		.uleb128 0x2117
+ 741 0099 19       		.uleb128 0x19
+ 742 009a 01       		.uleb128 0x1
+ 743 009b 13       		.uleb128 0x13
+ 744 009c 00       		.byte	0
+ 745 009d 00       		.byte	0
+ 746 009e 0C       		.uleb128 0xc
+ 747 009f 05       		.uleb128 0x5
+ 748 00a0 00       		.byte	0
+ 749 00a1 03       		.uleb128 0x3
+ 750 00a2 0E       		.uleb128 0xe
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 16
+
+
+ 751 00a3 3A       		.uleb128 0x3a
+ 752 00a4 0B       		.uleb128 0xb
+ 753 00a5 3B       		.uleb128 0x3b
+ 754 00a6 0B       		.uleb128 0xb
+ 755 00a7 49       		.uleb128 0x49
+ 756 00a8 13       		.uleb128 0x13
+ 757 00a9 02       		.uleb128 0x2
+ 758 00aa 17       		.uleb128 0x17
+ 759 00ab 00       		.byte	0
+ 760 00ac 00       		.byte	0
+ 761 00ad 0D       		.uleb128 0xd
+ 762 00ae 05       		.uleb128 0x5
+ 763 00af 00       		.byte	0
+ 764 00b0 03       		.uleb128 0x3
+ 765 00b1 0E       		.uleb128 0xe
+ 766 00b2 3A       		.uleb128 0x3a
+ 767 00b3 0B       		.uleb128 0xb
+ 768 00b4 3B       		.uleb128 0x3b
+ 769 00b5 0B       		.uleb128 0xb
+ 770 00b6 49       		.uleb128 0x49
+ 771 00b7 13       		.uleb128 0x13
+ 772 00b8 02       		.uleb128 0x2
+ 773 00b9 18       		.uleb128 0x18
+ 774 00ba 00       		.byte	0
+ 775 00bb 00       		.byte	0
+ 776 00bc 0E       		.uleb128 0xe
+ 777 00bd 0B       		.uleb128 0xb
+ 778 00be 01       		.byte	0x1
+ 779 00bf 11       		.uleb128 0x11
+ 780 00c0 01       		.uleb128 0x1
+ 781 00c1 12       		.uleb128 0x12
+ 782 00c2 06       		.uleb128 0x6
+ 783 00c3 00       		.byte	0
+ 784 00c4 00       		.byte	0
+ 785 00c5 0F       		.uleb128 0xf
+ 786 00c6 34       		.uleb128 0x34
+ 787 00c7 00       		.byte	0
+ 788 00c8 03       		.uleb128 0x3
+ 789 00c9 08       		.uleb128 0x8
+ 790 00ca 3A       		.uleb128 0x3a
+ 791 00cb 0B       		.uleb128 0xb
+ 792 00cc 3B       		.uleb128 0x3b
+ 793 00cd 0B       		.uleb128 0xb
+ 794 00ce 49       		.uleb128 0x49
+ 795 00cf 13       		.uleb128 0x13
+ 796 00d0 02       		.uleb128 0x2
+ 797 00d1 17       		.uleb128 0x17
+ 798 00d2 00       		.byte	0
+ 799 00d3 00       		.byte	0
+ 800 00d4 10       		.uleb128 0x10
+ 801 00d5 34       		.uleb128 0x34
+ 802 00d6 00       		.byte	0
+ 803 00d7 03       		.uleb128 0x3
+ 804 00d8 0E       		.uleb128 0xe
+ 805 00d9 3A       		.uleb128 0x3a
+ 806 00da 0B       		.uleb128 0xb
+ 807 00db 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 17
+
+
+ 808 00dc 0B       		.uleb128 0xb
+ 809 00dd 49       		.uleb128 0x49
+ 810 00de 13       		.uleb128 0x13
+ 811 00df 02       		.uleb128 0x2
+ 812 00e0 17       		.uleb128 0x17
+ 813 00e1 00       		.byte	0
+ 814 00e2 00       		.byte	0
+ 815 00e3 11       		.uleb128 0x11
+ 816 00e4 898201   		.uleb128 0x4109
+ 817 00e7 01       		.byte	0x1
+ 818 00e8 11       		.uleb128 0x11
+ 819 00e9 01       		.uleb128 0x1
+ 820 00ea 31       		.uleb128 0x31
+ 821 00eb 13       		.uleb128 0x13
+ 822 00ec 01       		.uleb128 0x1
+ 823 00ed 13       		.uleb128 0x13
+ 824 00ee 00       		.byte	0
+ 825 00ef 00       		.byte	0
+ 826 00f0 12       		.uleb128 0x12
+ 827 00f1 8A8201   		.uleb128 0x410a
+ 828 00f4 00       		.byte	0
+ 829 00f5 02       		.uleb128 0x2
+ 830 00f6 18       		.uleb128 0x18
+ 831 00f7 9142     		.uleb128 0x2111
+ 832 00f9 18       		.uleb128 0x18
+ 833 00fa 00       		.byte	0
+ 834 00fb 00       		.byte	0
+ 835 00fc 13       		.uleb128 0x13
+ 836 00fd 898201   		.uleb128 0x4109
+ 837 0100 01       		.byte	0x1
+ 838 0101 11       		.uleb128 0x11
+ 839 0102 01       		.uleb128 0x1
+ 840 0103 31       		.uleb128 0x31
+ 841 0104 13       		.uleb128 0x13
+ 842 0105 00       		.byte	0
+ 843 0106 00       		.byte	0
+ 844 0107 14       		.uleb128 0x14
+ 845 0108 2E       		.uleb128 0x2e
+ 846 0109 00       		.byte	0
+ 847 010a 3F       		.uleb128 0x3f
+ 848 010b 19       		.uleb128 0x19
+ 849 010c 3C       		.uleb128 0x3c
+ 850 010d 19       		.uleb128 0x19
+ 851 010e 6E       		.uleb128 0x6e
+ 852 010f 0E       		.uleb128 0xe
+ 853 0110 03       		.uleb128 0x3
+ 854 0111 0E       		.uleb128 0xe
+ 855 0112 3A       		.uleb128 0x3a
+ 856 0113 0B       		.uleb128 0xb
+ 857 0114 3B       		.uleb128 0x3b
+ 858 0115 0B       		.uleb128 0xb
+ 859 0116 00       		.byte	0
+ 860 0117 00       		.byte	0
+ 861 0118 00       		.byte	0
+ 862              		.section	.debug_loc,"",%progbits
+ 863              	.Ldebug_loc0:
+ 864              	.LLST0:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 18
+
+
+ 865 0000 00000000 		.4byte	.LVL0
+ 866 0004 14000000 		.4byte	.LVL3
+ 867 0008 0100     		.2byte	0x1
+ 868 000a 50       		.byte	0x50
+ 869 000b 14000000 		.4byte	.LVL3
+ 870 000f 24000000 		.4byte	.LVL6
+ 871 0013 0400     		.2byte	0x4
+ 872 0015 F3       		.byte	0xf3
+ 873 0016 01       		.uleb128 0x1
+ 874 0017 50       		.byte	0x50
+ 875 0018 9F       		.byte	0x9f
+ 876 0019 24000000 		.4byte	.LVL6
+ 877 001d 28000000 		.4byte	.LVL7
+ 878 0021 0100     		.2byte	0x1
+ 879 0023 50       		.byte	0x50
+ 880 0024 28000000 		.4byte	.LVL7
+ 881 0028 2C000000 		.4byte	.LFE3
+ 882 002c 0400     		.2byte	0x4
+ 883 002e F3       		.byte	0xf3
+ 884 002f 01       		.uleb128 0x1
+ 885 0030 50       		.byte	0x50
+ 886 0031 9F       		.byte	0x9f
+ 887 0032 00000000 		.4byte	0
+ 888 0036 00000000 		.4byte	0
+ 889              	.LLST1:
+ 890 003a 0A000000 		.4byte	.LVL1
+ 891 003e 10000000 		.4byte	.LVL2
+ 892 0042 0200     		.2byte	0x2
+ 893 0044 31       		.byte	0x31
+ 894 0045 9F       		.byte	0x9f
+ 895 0046 10000000 		.4byte	.LVL2
+ 896 004a 16000000 		.4byte	.LVL4
+ 897 004e 0200     		.2byte	0x2
+ 898 0050 32       		.byte	0x32
+ 899 0051 9F       		.byte	0x9f
+ 900 0052 16000000 		.4byte	.LVL4
+ 901 0056 1A000000 		.4byte	.LVL5
+ 902 005a 0200     		.2byte	0x2
+ 903 005c 33       		.byte	0x33
+ 904 005d 9F       		.byte	0x9f
+ 905 005e 1A000000 		.4byte	.LVL5
+ 906 0062 24000000 		.4byte	.LVL6
+ 907 0066 0200     		.2byte	0x2
+ 908 0068 34       		.byte	0x34
+ 909 0069 9F       		.byte	0x9f
+ 910 006a 00000000 		.4byte	0
+ 911 006e 00000000 		.4byte	0
+ 912              	.LLST2:
+ 913 0072 00000000 		.4byte	.LVL8
+ 914 0076 06000000 		.4byte	.LVL9
+ 915 007a 0100     		.2byte	0x1
+ 916 007c 50       		.byte	0x50
+ 917 007d 06000000 		.4byte	.LVL9
+ 918 0081 26000000 		.4byte	.LVL15
+ 919 0085 0100     		.2byte	0x1
+ 920 0087 54       		.byte	0x54
+ 921 0088 26000000 		.4byte	.LVL15
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 19
+
+
+ 922 008c 28000000 		.4byte	.LFE2
+ 923 0090 0400     		.2byte	0x4
+ 924 0092 F3       		.byte	0xf3
+ 925 0093 01       		.uleb128 0x1
+ 926 0094 50       		.byte	0x50
+ 927 0095 9F       		.byte	0x9f
+ 928 0096 00000000 		.4byte	0
+ 929 009a 00000000 		.4byte	0
+ 930              	.LLST3:
+ 931 009e 0C000000 		.4byte	.LVL10
+ 932 00a2 18000000 		.4byte	.LVL11
+ 933 00a6 0100     		.2byte	0x1
+ 934 00a8 50       		.byte	0x50
+ 935 00a9 00000000 		.4byte	0
+ 936 00ad 00000000 		.4byte	0
+ 937              	.LLST4:
+ 938 00b1 0C000000 		.4byte	.LVL10
+ 939 00b5 1C000000 		.4byte	.LVL12
+ 940 00b9 0200     		.2byte	0x2
+ 941 00bb 30       		.byte	0x30
+ 942 00bc 9F       		.byte	0x9f
+ 943 00bd 1C000000 		.4byte	.LVL12
+ 944 00c1 22000000 		.4byte	.LVL13
+ 945 00c5 0100     		.2byte	0x1
+ 946 00c7 50       		.byte	0x50
+ 947 00c8 26000000 		.4byte	.LVL14
+ 948 00cc 28000000 		.4byte	.LFE2
+ 949 00d0 0100     		.2byte	0x1
+ 950 00d2 50       		.byte	0x50
+ 951 00d3 00000000 		.4byte	0
+ 952 00d7 00000000 		.4byte	0
+ 953              		.section	.debug_aranges,"",%progbits
+ 954 0000 24000000 		.4byte	0x24
+ 955 0004 0200     		.2byte	0x2
+ 956 0006 00000000 		.4byte	.Ldebug_info0
+ 957 000a 04       		.byte	0x4
+ 958 000b 00       		.byte	0
+ 959 000c 0000     		.2byte	0
+ 960 000e 0000     		.2byte	0
+ 961 0010 00000000 		.4byte	.LFB3
+ 962 0014 2C000000 		.4byte	.LFE3-.LFB3
+ 963 0018 00000000 		.4byte	.LFB2
+ 964 001c 28000000 		.4byte	.LFE2-.LFB2
+ 965 0020 00000000 		.4byte	0
+ 966 0024 00000000 		.4byte	0
+ 967              		.section	.debug_ranges,"",%progbits
+ 968              	.Ldebug_ranges0:
+ 969 0000 00000000 		.4byte	.LFB3
+ 970 0004 2C000000 		.4byte	.LFE3
+ 971 0008 00000000 		.4byte	.LFB2
+ 972 000c 28000000 		.4byte	.LFE2
+ 973 0010 00000000 		.4byte	0
+ 974 0014 00000000 		.4byte	0
+ 975              		.section	.debug_line,"",%progbits
+ 976              	.Ldebug_line0:
+ 977 0000 81010000 		.section	.debug_str,"MS",%progbits,1
+ 977      02004B01 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 20
+
+
+ 977      00000201 
+ 977      FB0E0D00 
+ 977      01010101 
+ 978              	.LASF40:
+ 979 0000 7061636B 		.ascii	"packets_PACKET_S\000"
+ 979      6574735F 
+ 979      5041434B 
+ 979      45545F53 
+ 979      00
+ 980              	.LASF34:
+ 981 0011 6D6F6475 		.ascii	"moduleId\000"
+ 981      6C654964 
+ 981      00
+ 982              	.LASF57:
+ 983 001a 72657370 		.ascii	"responseErr\000"
+ 983      6F6E7365 
+ 983      45727200 
+ 984              	.LASF3:
+ 985 0026 5F5F7569 		.ascii	"__uint8_t\000"
+ 985      6E74385F 
+ 985      7400
+ 986              	.LASF21:
+ 987 0030 7061636B 		.ascii	"packets_BUFFER_RECEIVE_FOOTER\000"
+ 987      6574735F 
+ 987      42554646 
+ 987      45525F52 
+ 987      45434549 
+ 988              	.LASF60:
+ 989 004e 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 989      43313120 
+ 989      352E342E 
+ 989      31203230 
+ 989      31363036 
+ 990 0081 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 990      20726576 
+ 990      6973696F 
+ 990      6E203233 
+ 990      37373135 
+ 991 00b4 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 991      66756E63 
+ 991      74696F6E 
+ 991      2D736563 
+ 991      74696F6E 
+ 992              	.LASF10:
+ 993 00dc 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 993      206C6F6E 
+ 993      6720756E 
+ 993      7369676E 
+ 993      65642069 
+ 994              	.LASF24:
+ 995 00f3 7061636B 		.ascii	"packets_BUFFER_SEND_WAIT\000"
+ 995      6574735F 
+ 995      42554646 
+ 995      45525F53 
+ 995      454E445F 
+ 996              	.LASF26:
+ 997 010c 7061636B 		.ascii	"packets_BUFFER_SEND_QUEUEING\000"
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 21
+
+
+ 997      6574735F 
+ 997      42554646 
+ 997      45525F53 
+ 997      454E445F 
+ 998              	.LASF9:
+ 999 0129 6C6F6E67 		.ascii	"long long int\000"
+ 999      206C6F6E 
+ 999      6720696E 
+ 999      7400
+ 1000              	.LASF0:
+ 1001 0137 7369676E 		.ascii	"signed char\000"
+ 1001      65642063 
+ 1001      68617200 
+ 1002              	.LASF27:
+ 1003 0143 7061636B 		.ascii	"packets_BUFFER_SEND_COMPLETE\000"
+ 1003      6574735F 
+ 1003      42554646 
+ 1003      45525F53 
+ 1003      454E445F 
+ 1004              	.LASF36:
+ 1005 0160 7061796C 		.ascii	"payloadMax\000"
+ 1005      6F61644D 
+ 1005      617800
+ 1006              	.LASF25:
+ 1007 016b 7061636B 		.ascii	"packets_BUFFER_SEND_READY\000"
+ 1007      6574735F 
+ 1007      42554646 
+ 1007      45525F53 
+ 1007      454E445F 
+ 1008              	.LASF33:
+ 1009 0185 7061636B 		.ascii	"packets_BUFFER_PROCESS_S\000"
+ 1009      6574735F 
+ 1009      42554646 
+ 1009      45525F50 
+ 1009      524F4345 
+ 1010              	.LASF6:
+ 1011 019e 6C6F6E67 		.ascii	"long int\000"
+ 1011      20696E74 
+ 1011      00
+ 1012              	.LASF13:
+ 1013 01a7 75696E74 		.ascii	"uint16_t\000"
+ 1013      31365F74 
+ 1013      00
+ 1014              	.LASF16:
+ 1015 01b0 646F7562 		.ascii	"double\000"
+ 1015      6C6500
+ 1016              	.LASF52:
+ 1017 01b7 72785061 		.ascii	"rxPacket\000"
+ 1017      636B6574 
+ 1017      00
+ 1018              	.LASF44:
+ 1019 01c0 7061636B 		.ascii	"packets_BUFFER_SEND_S\000"
+ 1019      6574735F 
+ 1019      42554646 
+ 1019      45525F53 
+ 1019      454E445F 
+ 1020              	.LASF49:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 22
+
+
+ 1021 01d6 6C6F6E67 		.ascii	"long double\000"
+ 1021      20646F75 
+ 1021      626C6500 
+ 1022              	.LASF7:
+ 1023 01e2 5F5F7569 		.ascii	"__uint32_t\000"
+ 1023      6E743332 
+ 1023      5F7400
+ 1024              	.LASF56:
+ 1025 01ed 76616C69 		.ascii	"validateErr\000"
+ 1025      64617465 
+ 1025      45727200 
+ 1026              	.LASF48:
+ 1027 01f9 7061636B 		.ascii	"packets_BUFFER_FULL_S\000"
+ 1027      6574735F 
+ 1027      42554646 
+ 1027      45525F46 
+ 1027      554C4C5F 
+ 1028              	.LASF18:
+ 1029 020f 7061636B 		.ascii	"packets_BUFFER_RECEIVE_WAIT_FOR_START\000"
+ 1029      6574735F 
+ 1029      42554646 
+ 1029      45525F52 
+ 1029      45434549 
+ 1030              	.LASF11:
+ 1031 0235 756E7369 		.ascii	"unsigned int\000"
+ 1031      676E6564 
+ 1031      20696E74 
+ 1031      00
+ 1032              	.LASF8:
+ 1033 0242 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1033      20756E73 
+ 1033      69676E65 
+ 1033      6420696E 
+ 1033      7400
+ 1034              	.LASF5:
+ 1035 0254 73686F72 		.ascii	"short unsigned int\000"
+ 1035      7420756E 
+ 1035      7369676E 
+ 1035      65642069 
+ 1035      6E7400
+ 1036              	.LASF47:
+ 1037 0267 72656365 		.ascii	"receive\000"
+ 1037      69766500 
+ 1038              	.LASF55:
+ 1039 026f 61636B6E 		.ascii	"acknowledgePacket\000"
+ 1039      6F776C65 
+ 1039      64676550 
+ 1039      61636B65 
+ 1039      7400
+ 1040              	.LASF50:
+ 1041 0281 73697A65 		.ascii	"sizetype\000"
+ 1041      74797065 
+ 1041      00
+ 1042              	.LASF31:
+ 1043 028a 62756666 		.ascii	"bufferIndex\000"
+ 1043      6572496E 
+ 1043      64657800 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 23
+
+
+ 1044              	.LASF46:
+ 1045 0296 73656E64 		.ascii	"send\000"
+ 1045      00
+ 1046              	.LASF35:
+ 1047 029b 7061796C 		.ascii	"payload\000"
+ 1047      6F616400 
+ 1048              	.LASF61:
+ 1049 02a3 73757070 		.ascii	"supportCubeParser.c\000"
+ 1049      6F727443 
+ 1049      75626550 
+ 1049      61727365 
+ 1049      722E6300 
+ 1050              	.LASF45:
+ 1051 02b7 7061636B 		.ascii	"packets_BUFFER_RECEIVE_S\000"
+ 1051      6574735F 
+ 1051      42554646 
+ 1051      45525F52 
+ 1051      45434549 
+ 1052              	.LASF15:
+ 1053 02d0 666C6F61 		.ascii	"float\000"
+ 1053      7400
+ 1054              	.LASF39:
+ 1055 02d6 6572726F 		.ascii	"error\000"
+ 1055      7200
+ 1056              	.LASF58:
+ 1057 02dc 7061636B 		.ascii	"packets_constructPacket\000"
+ 1057      6574735F 
+ 1057      636F6E73 
+ 1057      74727563 
+ 1057      74506163 
+ 1058              	.LASF22:
+ 1059 02f4 7061636B 		.ascii	"packets_BUFFER_RECEIVE_COMPLETE\000"
+ 1059      6574735F 
+ 1059      42554646 
+ 1059      45525F52 
+ 1059      45434549 
+ 1060              	.LASF51:
+ 1061 0314 5F426F6F 		.ascii	"_Bool\000"
+ 1061      6C00
+ 1062              	.LASF53:
+ 1063 031a 74785061 		.ascii	"txPacket\000"
+ 1063      636B6574 
+ 1063      00
+ 1064              	.LASF1:
+ 1065 0323 756E7369 		.ascii	"unsigned char\000"
+ 1065      676E6564 
+ 1065      20636861 
+ 1065      7200
+ 1066              	.LASF20:
+ 1067 0331 7061636B 		.ascii	"packets_BUFFER_RECEIVE_PAYLOAD\000"
+ 1067      6574735F 
+ 1067      42554646 
+ 1067      45525F52 
+ 1067      45434549 
+ 1068              	.LASF2:
+ 1069 0350 73686F72 		.ascii	"short int\000"
+ 1069      7420696E 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 24
+
+
+ 1069      7400
+ 1070              	.LASF42:
+ 1071 035a 70726F63 		.ascii	"processBuffer\000"
+ 1071      65737342 
+ 1071      75666665 
+ 1071      7200
+ 1072              	.LASF32:
+ 1073 0368 74696D65 		.ascii	"timeCount\000"
+ 1073      436F756E 
+ 1073      7400
+ 1074              	.LASF14:
+ 1075 0372 75696E74 		.ascii	"uint32_t\000"
+ 1075      33325F74 
+ 1075      00
+ 1076              	.LASF19:
+ 1077 037b 7061636B 		.ascii	"packets_BUFFER_RECEIVE_HEADER\000"
+ 1077      6574735F 
+ 1077      42554646 
+ 1077      45525F52 
+ 1077      45434549 
+ 1078              	.LASF17:
+ 1079 0399 63686172 		.ascii	"char\000"
+ 1079      00
+ 1080              	.LASF4:
+ 1081 039e 5F5F7569 		.ascii	"__uint16_t\000"
+ 1081      6E743136 
+ 1081      5F7400
+ 1082              	.LASF30:
+ 1083 03a9 62756666 		.ascii	"bufferLen\000"
+ 1083      65724C65 
+ 1083      6E00
+ 1084              	.LASF54:
+ 1085 03b3 76616C69 		.ascii	"validateSupportCubeCmd\000"
+ 1085      64617465 
+ 1085      53757070 
+ 1085      6F727443 
+ 1085      75626543 
+ 1086              	.LASF29:
+ 1087 03ca 62756666 		.ascii	"buffer\000"
+ 1087      657200
+ 1088              	.LASF41:
+ 1089 03d1 7061636B 		.ascii	"packet\000"
+ 1089      657400
+ 1090              	.LASF37:
+ 1091 03d8 7061796C 		.ascii	"payloadLen\000"
+ 1091      6F61644C 
+ 1091      656E00
+ 1092              	.LASF43:
+ 1093 03e3 62756666 		.ascii	"bufferState\000"
+ 1093      65725374 
+ 1093      61746500 
+ 1094              	.LASF28:
+ 1095 03ef 7061636B 		.ascii	"packets_BUFFER_STATE_SEND_T\000"
+ 1095      6574735F 
+ 1095      42554646 
+ 1095      45525F53 
+ 1095      54415445 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\cc2v5uaJ.s 			page 25
+
+
+ 1096              	.LASF12:
+ 1097 040b 75696E74 		.ascii	"uint8_t\000"
+ 1097      385F7400 
+ 1098              	.LASF38:
+ 1099 0413 666C6167 		.ascii	"flags\000"
+ 1099      7300
+ 1100              	.LASF59:
+ 1101 0419 7061636B 		.ascii	"packets_sendPacket\000"
+ 1101      6574735F 
+ 1101      73656E64 
+ 1101      5061636B 
+ 1101      657400
+ 1102              	.LASF62:
+ 1103 042c 433A5C55 		.ascii	"C:\\Users\\ccheney\\Dropbox (MIT)\\MICA\\Creator\\l"
+ 1103      73657273 
+ 1103      5C636368 
+ 1103      656E6579 
+ 1103      5C44726F 
+ 1104 0459 69627261 		.ascii	"ibraries\\micaComponents_testing\\packetTesting_v1_"
+ 1104      72696573 
+ 1104      5C6D6963 
+ 1104      61436F6D 
+ 1104      706F6E65 
+ 1105 048a 342E6379 		.ascii	"4.cydsn\000"
+ 1105      64736E00 
+ 1106              	.LASF23:
+ 1107 0492 7061636B 		.ascii	"packets_BUFFER_STATE_RECEIVE_T\000"
+ 1107      6574735F 
+ 1107      42554646 
+ 1107      45525F53 
+ 1107      54415445 
+ 1108              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

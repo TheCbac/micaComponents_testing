@@ -1,0 +1,2445 @@
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"usbUart.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.usbUart_putString,"ax",%progbits
+  20              		.align	2
+  21              		.global	usbUart_putString
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	usbUart_putString, %function
+  25              	usbUart_putString:
+  26              	.LFB2:
+  27              		.file 1 "Generated_Source\\PSoC4\\usbUart.c"
+   1:Generated_Source\PSoC4/usbUart.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC4/usbUart.c **** * \file usbUart.c
+   3:Generated_Source\PSoC4/usbUart.c **** * \version 0.1.0
+   4:Generated_Source\PSoC4/usbUart.c **** *
+   5:Generated_Source\PSoC4/usbUart.c **** * \brief
+   6:Generated_Source\PSoC4/usbUart.c **** *   Simple print functionality
+   7:Generated_Source\PSoC4/usbUart.c **** *
+   8:Generated_Source\PSoC4/usbUart.c **** * \date Date Created:  2017.12.19
+   9:Generated_Source\PSoC4/usbUart.c **** * \date Last Modified: 2017.12.19
+  10:Generated_Source\PSoC4/usbUart.c **** *
+  11:Generated_Source\PSoC4/usbUart.c **** ********************************************************************************
+  12:Generated_Source\PSoC4/usbUart.c **** * \copyright
+  13:Generated_Source\PSoC4/usbUart.c **** * Copyright 2017, MICA. All rights reserved.
+  14:Generated_Source\PSoC4/usbUart.c **** *******************************************************************************/
+  15:Generated_Source\PSoC4/usbUart.c **** #include "usbUart.h"
+  16:Generated_Source\PSoC4/usbUart.c **** #include "UART_USB_SPI_UART.h"
+  17:Generated_Source\PSoC4/usbUart.c **** #include "micaCommon.h"
+  18:Generated_Source\PSoC4/usbUart.c **** 
+  19:Generated_Source\PSoC4/usbUart.c **** 
+  20:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+  21:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_putString()
+  22:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+  23:Generated_Source\PSoC4/usbUart.c **** *
+  24:Generated_Source\PSoC4/usbUart.c **** * \brief Prints out the string starting at address passsed until a null character
+  25:Generated_Source\PSoC4/usbUart.c ****     is reached.
+  26:Generated_Source\PSoC4/usbUart.c **** *
+  27:Generated_Source\PSoC4/usbUart.c **** * \param Address of array, must be zero terminated
+  28:Generated_Source\PSoC4/usbUart.c **** *
+  29:Generated_Source\PSoC4/usbUart.c **** * \return
+  30:Generated_Source\PSoC4/usbUart.c **** * None
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 2
+
+
+  31:Generated_Source\PSoC4/usbUart.c ****  *******************************************************************************/
+  32:Generated_Source\PSoC4/usbUart.c **** void usbUart_putString(char * str){
+  28              		.loc 1 32 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 10B5     		push	{r4, lr}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 14, -4
+  37 0002 0400     		movs	r4, r0
+  33:Generated_Source\PSoC4/usbUart.c ****     /* Iterate until a zero is hit */
+  34:Generated_Source\PSoC4/usbUart.c ****     while(*str){
+  38              		.loc 1 34 0
+  39 0004 02E0     		b	.L2
+  40              	.LVL1:
+  41              	.L3:
+  35:Generated_Source\PSoC4/usbUart.c ****         usbUart_putChar(*str);
+  42              		.loc 1 35 0
+  43 0006 FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+  44              	.LVL2:
+  36:Generated_Source\PSoC4/usbUart.c ****         /* Increment index */
+  37:Generated_Source\PSoC4/usbUart.c ****         str++;
+  45              		.loc 1 37 0
+  46 000a 0134     		adds	r4, r4, #1
+  47              	.LVL3:
+  48              	.L2:
+  34:Generated_Source\PSoC4/usbUart.c ****         usbUart_putChar(*str);
+  49              		.loc 1 34 0
+  50 000c 2078     		ldrb	r0, [r4]
+  51 000e 0028     		cmp	r0, #0
+  52 0010 F9D1     		bne	.L3
+  38:Generated_Source\PSoC4/usbUart.c ****     }
+  39:Generated_Source\PSoC4/usbUart.c ****     
+  40:Generated_Source\PSoC4/usbUart.c **** }
+  53              		.loc 1 40 0
+  54              		@ sp needed
+  55              	.LVL4:
+  56 0012 10BD     		pop	{r4, pc}
+  57              		.cfi_endproc
+  58              	.LFE2:
+  59              		.size	usbUart_putString, .-usbUart_putString
+  60              		.section	.text.usbUart_putArray,"ax",%progbits
+  61              		.align	2
+  62              		.global	usbUart_putArray
+  63              		.code	16
+  64              		.thumb_func
+  65              		.type	usbUart_putArray, %function
+  66              	usbUart_putArray:
+  67              	.LFB3:
+  41:Generated_Source\PSoC4/usbUart.c **** 
+  42:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+  43:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_putArray()
+  44:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+  45:Generated_Source\PSoC4/usbUart.c **** *
+  46:Generated_Source\PSoC4/usbUart.c **** * \brief Prints out the data starting at the addressed passed in, for the specified 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 3
+
+
+  47:Generated_Source\PSoC4/usbUart.c **** *   length
+  48:Generated_Source\PSoC4/usbUart.c **** *
+  49:Generated_Source\PSoC4/usbUart.c **** * \param Array  - Address of array with the data to print
+  50:Generated_Source\PSoC4/usbUart.c **** *
+  51:Generated_Source\PSoC4/usbUart.c **** * \param length - Length of data to write
+  52:Generated_Source\PSoC4/usbUart.c **** *
+  53:Generated_Source\PSoC4/usbUart.c **** * \return
+  54:Generated_Source\PSoC4/usbUart.c **** * None
+  55:Generated_Source\PSoC4/usbUart.c ****  *******************************************************************************/
+  56:Generated_Source\PSoC4/usbUart.c **** void usbUart_putArray(uint8 * array, uint16 length){
+  68              		.loc 1 56 0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72              	.LVL5:
+  73 0000 70B5     		push	{r4, r5, r6, lr}
+  74              		.cfi_def_cfa_offset 16
+  75              		.cfi_offset 4, -16
+  76              		.cfi_offset 5, -12
+  77              		.cfi_offset 6, -8
+  78              		.cfi_offset 14, -4
+  79 0002 0500     		movs	r5, r0
+  80 0004 0E00     		movs	r6, r1
+  81              	.LVL6:
+  57:Generated_Source\PSoC4/usbUart.c ****     uint8 i;
+  58:Generated_Source\PSoC4/usbUart.c ****     /* Loop until length satisfacition is met*/
+  59:Generated_Source\PSoC4/usbUart.c ****     for(i=ZERO; i < length; i++){
+  82              		.loc 1 59 0
+  83 0006 0024     		movs	r4, #0
+  84 0008 05E0     		b	.L5
+  85              	.LVL7:
+  86              	.L6:
+  60:Generated_Source\PSoC4/usbUart.c ****         usbUart_putChar(*array);
+  87              		.loc 1 60 0 discriminator 3
+  88 000a 2878     		ldrb	r0, [r5]
+  89 000c FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+  90              	.LVL8:
+  61:Generated_Source\PSoC4/usbUart.c ****         /* Increment index */
+  62:Generated_Source\PSoC4/usbUart.c ****         array++;
+  91              		.loc 1 62 0 discriminator 3
+  92 0010 0135     		adds	r5, r5, #1
+  93              	.LVL9:
+  59:Generated_Source\PSoC4/usbUart.c ****         usbUart_putChar(*array);
+  94              		.loc 1 59 0 discriminator 3
+  95 0012 0134     		adds	r4, r4, #1
+  96              	.LVL10:
+  97 0014 E4B2     		uxtb	r4, r4
+  98              	.LVL11:
+  99              	.L5:
+  59:Generated_Source\PSoC4/usbUart.c ****         usbUart_putChar(*array);
+ 100              		.loc 1 59 0 is_stmt 0 discriminator 1
+ 101 0016 A3B2     		uxth	r3, r4
+ 102 0018 B342     		cmp	r3, r6
+ 103 001a F6D3     		bcc	.L6
+  63:Generated_Source\PSoC4/usbUart.c ****     }
+  64:Generated_Source\PSoC4/usbUart.c ****     
+  65:Generated_Source\PSoC4/usbUart.c **** }
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 4
+
+
+ 104              		.loc 1 65 0 is_stmt 1
+ 105              		@ sp needed
+ 106              	.LVL12:
+ 107              	.LVL13:
+ 108 001c 70BD     		pop	{r4, r5, r6, pc}
+ 109              		.cfi_endproc
+ 110              	.LFE3:
+ 111              		.size	usbUart_putArray, .-usbUart_putArray
+ 112              		.global	__aeabi_uidivmod
+ 113              		.global	__aeabi_uidiv
+ 114 001e C046     		.section	.text.usbUart_print,"ax",%progbits
+ 115              		.align	2
+ 116              		.global	usbUart_print
+ 117              		.code	16
+ 118              		.thumb_func
+ 119              		.type	usbUart_print, %function
+ 120              	usbUart_print:
+ 121              	.LFB5:
+  66:Generated_Source\PSoC4/usbUart.c **** 
+  67:Generated_Source\PSoC4/usbUart.c **** 
+  68:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+  69:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_changeBase()
+  70:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+  71:Generated_Source\PSoC4/usbUart.c **** *
+  72:Generated_Source\PSoC4/usbUart.c **** * \brief Changes the base to hex from decimal
+  73:Generated_Source\PSoC4/usbUart.c **** *
+  74:Generated_Source\PSoC4/usbUart.c **** * \param Index
+  75:Generated_Source\PSoC4/usbUart.c **** *  new value
+  76:Generated_Source\PSoC4/usbUart.c **** *
+  77:Generated_Source\PSoC4/usbUart.c **** * \return
+  78:Generated_Source\PSoC4/usbUart.c **** * None
+  79:Generated_Source\PSoC4/usbUart.c ****  *******************************************************************************/
+  80:Generated_Source\PSoC4/usbUart.c **** static inline uint8* usbUart_changeBase(uint32 Index)
+  81:Generated_Source\PSoC4/usbUart.c **** {
+  82:Generated_Source\PSoC4/usbUart.c ****     return (uint8*)("0123456789ABCDEF"+Index);
+  83:Generated_Source\PSoC4/usbUart.c **** }
+  84:Generated_Source\PSoC4/usbUart.c **** 
+  85:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+  86:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_print()
+  87:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+  88:Generated_Source\PSoC4/usbUart.c **** *
+  89:Generated_Source\PSoC4/usbUart.c **** * \brief Prints out the string
+  90:Generated_Source\PSoC4/usbUart.c **** *
+  91:Generated_Source\PSoC4/usbUart.c **** * \param pszFmt
+  92:Generated_Source\PSoC4/usbUart.c **** *   Pointer to string, zero formatted. String to print out, accepts %d, %s, %x, %c
+  93:Generated_Source\PSoC4/usbUart.c **** *
+  94:Generated_Source\PSoC4/usbUart.c **** * \return
+  95:Generated_Source\PSoC4/usbUart.c **** * None
+  96:Generated_Source\PSoC4/usbUart.c ****  *******************************************************************************/
+  97:Generated_Source\PSoC4/usbUart.c **** void usbUart_print(char8 *pszFmt,...){
+ 122              		.loc 1 97 0
+ 123              		.cfi_startproc
+ 124              		@ args = 4, pretend = 16, frame = 48
+ 125              		@ frame_needed = 0, uses_anonymous_args = 1
+ 126              	.LVL14:
+ 127 0000 0FB4     		push	{r0, r1, r2, r3}
+ 128              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 5
+
+
+ 129 0002 F0B5     		push	{r4, r5, r6, r7, lr}
+ 130              		.cfi_def_cfa_offset 36
+ 131              		.cfi_offset 4, -36
+ 132              		.cfi_offset 5, -32
+ 133              		.cfi_offset 6, -28
+ 134              		.cfi_offset 7, -24
+ 135              		.cfi_offset 14, -20
+ 136 0004 8DB0     		sub	sp, sp, #52
+ 137              		.cfi_def_cfa_offset 88
+ 138              	.LVL15:
+  98:Generated_Source\PSoC4/usbUart.c ****     uint8 *pszVal;
+  99:Generated_Source\PSoC4/usbUart.c ****     uint32 iVal, xVal, i = 0, buffer[12], index = 1;
+ 139              		.loc 1 99 0
+ 140 0006 0124     		movs	r4, #1
+ 100:Generated_Source\PSoC4/usbUart.c ****     uint8 cVal;
+ 101:Generated_Source\PSoC4/usbUart.c ****     uint32 *pArg;
+ 102:Generated_Source\PSoC4/usbUart.c ****     pArg =(uint32 *)&pszFmt;
+ 103:Generated_Source\PSoC4/usbUart.c **** 
+ 104:Generated_Source\PSoC4/usbUart.c ****     while(*pszFmt)
+ 141              		.loc 1 104 0
+ 142 0008 8AE0     		b	.L8
+ 143              	.LVL16:
+ 144              	.L26:
+ 105:Generated_Source\PSoC4/usbUart.c ****     {
+ 106:Generated_Source\PSoC4/usbUart.c ****         if('%' != *pszFmt)
+ 145              		.loc 1 106 0
+ 146 000a 2528     		cmp	r0, #37
+ 147 000c 05D0     		beq	.L9
+ 107:Generated_Source\PSoC4/usbUart.c ****         {
+ 108:Generated_Source\PSoC4/usbUart.c ****             usbUart_putChar(*pszFmt);
+ 148              		.loc 1 108 0
+ 149 000e FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+ 150              	.LVL17:
+ 109:Generated_Source\PSoC4/usbUart.c ****             pszFmt++;
+ 151              		.loc 1 109 0
+ 152 0012 129B     		ldr	r3, [sp, #72]
+ 153 0014 0133     		adds	r3, r3, #1
+ 154 0016 1293     		str	r3, [sp, #72]
+ 110:Generated_Source\PSoC4/usbUart.c ****             continue;
+ 155              		.loc 1 110 0
+ 156 0018 82E0     		b	.L8
+ 157              	.L9:
+ 111:Generated_Source\PSoC4/usbUart.c ****         }
+ 112:Generated_Source\PSoC4/usbUart.c ****         pszFmt++;
+ 158              		.loc 1 112 0
+ 159 001a 5A1C     		adds	r2, r3, #1
+ 160 001c 1292     		str	r2, [sp, #72]
+ 113:Generated_Source\PSoC4/usbUart.c **** 
+ 114:Generated_Source\PSoC4/usbUart.c ****         if(*pszFmt == 's')
+ 161              		.loc 1 114 0
+ 162 001e 5B78     		ldrb	r3, [r3, #1]
+ 163 0020 732B     		cmp	r3, #115
+ 164 0022 11D1     		bne	.L11
+ 115:Generated_Source\PSoC4/usbUart.c ****         {
+ 116:Generated_Source\PSoC4/usbUart.c ****             pszVal = (uint8*)pArg[index++];
+ 165              		.loc 1 116 0
+ 166 0024 651C     		adds	r5, r4, #1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 6
+
+
+ 167              	.LVL18:
+ 168 0026 A400     		lsls	r4, r4, #2
+ 169 0028 12AB     		add	r3, sp, #72
+ 170              	.LVL19:
+ 171 002a 9C46     		mov	ip, r3
+ 172 002c 6444     		add	r4, r4, ip
+ 173 002e 2468     		ldr	r4, [r4]
+ 174              	.LVL20:
+ 117:Generated_Source\PSoC4/usbUart.c ****             for(; *pszVal != '\0'; pszVal++)
+ 175              		.loc 1 117 0
+ 176 0030 02E0     		b	.L12
+ 177              	.LVL21:
+ 178              	.L13:
+ 118:Generated_Source\PSoC4/usbUart.c ****                 usbUart_putChar(*pszVal);
+ 179              		.loc 1 118 0 discriminator 2
+ 180 0032 FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+ 181              	.LVL22:
+ 117:Generated_Source\PSoC4/usbUart.c ****             for(; *pszVal != '\0'; pszVal++)
+ 182              		.loc 1 117 0 discriminator 2
+ 183 0036 0134     		adds	r4, r4, #1
+ 184              	.LVL23:
+ 185              	.L12:
+ 117:Generated_Source\PSoC4/usbUart.c ****             for(; *pszVal != '\0'; pszVal++)
+ 186              		.loc 1 117 0 is_stmt 0 discriminator 1
+ 187 0038 2078     		ldrb	r0, [r4]
+ 188 003a 0028     		cmp	r0, #0
+ 189 003c F9D1     		bne	.L13
+ 119:Generated_Source\PSoC4/usbUart.c ****             pszFmt++;
+ 190              		.loc 1 119 0 is_stmt 1
+ 191 003e 129B     		ldr	r3, [sp, #72]
+ 192 0040 0133     		adds	r3, r3, #1
+ 193 0042 1293     		str	r3, [sp, #72]
+ 116:Generated_Source\PSoC4/usbUart.c ****             for(; *pszVal != '\0'; pszVal++)
+ 194              		.loc 1 116 0
+ 195 0044 2C00     		movs	r4, r5
+ 196              	.LVL24:
+ 120:Generated_Source\PSoC4/usbUart.c ****             continue;
+ 197              		.loc 1 120 0
+ 198 0046 6BE0     		b	.L8
+ 199              	.LVL25:
+ 200              	.L11:
+ 121:Generated_Source\PSoC4/usbUart.c ****         }
+ 122:Generated_Source\PSoC4/usbUart.c ****         if(*pszFmt == 'd')
+ 201              		.loc 1 122 0
+ 202 0048 642B     		cmp	r3, #100
+ 203 004a 26D1     		bne	.L14
+ 123:Generated_Source\PSoC4/usbUart.c ****         {
+ 124:Generated_Source\PSoC4/usbUart.c ****             iVal = pArg[index++];
+ 204              		.loc 1 124 0
+ 205 004c 671C     		adds	r7, r4, #1
+ 206              	.LVL26:
+ 207 004e A400     		lsls	r4, r4, #2
+ 208 0050 12AB     		add	r3, sp, #72
+ 209              	.LVL27:
+ 210 0052 9C46     		mov	ip, r3
+ 211 0054 6444     		add	r4, r4, ip
+ 212 0056 2668     		ldr	r6, [r4]
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 7
+
+
+ 213              	.LVL28:
+ 125:Generated_Source\PSoC4/usbUart.c ****             i = 0;
+ 214              		.loc 1 125 0
+ 215 0058 0025     		movs	r5, #0
+ 216              	.LVL29:
+ 217              	.L15:
+ 126:Generated_Source\PSoC4/usbUart.c ****             do{
+ 127:Generated_Source\PSoC4/usbUart.c ****                 buffer[i++] = iVal % 10;
+ 218              		.loc 1 127 0 discriminator 1
+ 219 005a 6C1C     		adds	r4, r5, #1
+ 220              	.LVL30:
+ 221 005c 0A21     		movs	r1, #10
+ 222 005e 3000     		movs	r0, r6
+ 223 0060 FFF7FEFF 		bl	__aeabi_uidivmod
+ 224              	.LVL31:
+ 225 0064 AD00     		lsls	r5, r5, #2
+ 226 0066 6B46     		mov	r3, sp
+ 227 0068 E950     		str	r1, [r5, r3]
+ 128:Generated_Source\PSoC4/usbUart.c ****                 iVal /= 10;
+ 228              		.loc 1 128 0 discriminator 1
+ 229 006a 0A21     		movs	r1, #10
+ 230 006c 3000     		movs	r0, r6
+ 231 006e FFF7FEFF 		bl	__aeabi_uidiv
+ 232              	.LVL32:
+ 233 0072 0600     		movs	r6, r0
+ 234              	.LVL33:
+ 127:Generated_Source\PSoC4/usbUart.c ****                 iVal /= 10;
+ 235              		.loc 1 127 0 discriminator 1
+ 236 0074 2500     		movs	r5, r4
+ 129:Generated_Source\PSoC4/usbUart.c ****             }while(iVal);
+ 237              		.loc 1 129 0 discriminator 1
+ 238 0076 0028     		cmp	r0, #0
+ 239 0078 EFD1     		bne	.L15
+ 240 007a 07E0     		b	.L16
+ 241              	.LVL34:
+ 242              	.L17:
+ 130:Generated_Source\PSoC4/usbUart.c ****             while(i > 0)
+ 131:Generated_Source\PSoC4/usbUart.c ****             {
+ 132:Generated_Source\PSoC4/usbUart.c ****                 i--;
+ 243              		.loc 1 132 0
+ 244 007c 013C     		subs	r4, r4, #1
+ 245              	.LVL35:
+ 133:Generated_Source\PSoC4/usbUart.c ****                 usbUart_putChar(*usbUart_changeBase(buffer[i]));
+ 246              		.loc 1 133 0
+ 247 007e A300     		lsls	r3, r4, #2
+ 248 0080 6A46     		mov	r2, sp
+ 249 0082 9B58     		ldr	r3, [r3, r2]
+ 250              	.LVL36:
+ 251 0084 2B4A     		ldr	r2, .L28
+ 252 0086 D05C     		ldrb	r0, [r2, r3]
+ 253 0088 FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+ 254              	.LVL37:
+ 255              	.L16:
+ 130:Generated_Source\PSoC4/usbUart.c ****             while(i > 0)
+ 256              		.loc 1 130 0
+ 257 008c 002C     		cmp	r4, #0
+ 258 008e F5D1     		bne	.L17
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 8
+
+
+ 134:Generated_Source\PSoC4/usbUart.c ****             }
+ 135:Generated_Source\PSoC4/usbUart.c ****             pszFmt++;
+ 259              		.loc 1 135 0
+ 260 0090 129B     		ldr	r3, [sp, #72]
+ 261 0092 0133     		adds	r3, r3, #1
+ 262 0094 1293     		str	r3, [sp, #72]
+ 124:Generated_Source\PSoC4/usbUart.c ****             i = 0;
+ 263              		.loc 1 124 0
+ 264 0096 3C00     		movs	r4, r7
+ 265              	.LVL38:
+ 136:Generated_Source\PSoC4/usbUart.c ****             continue;
+ 266              		.loc 1 136 0
+ 267 0098 42E0     		b	.L8
+ 268              	.LVL39:
+ 269              	.L14:
+ 137:Generated_Source\PSoC4/usbUart.c ****         }
+ 138:Generated_Source\PSoC4/usbUart.c ****         if(*pszFmt == 'c')
+ 270              		.loc 1 138 0
+ 271 009a 632B     		cmp	r3, #99
+ 272 009c 0ED1     		bne	.L18
+ 139:Generated_Source\PSoC4/usbUart.c ****         {
+ 140:Generated_Source\PSoC4/usbUart.c ****             cVal = (uint8)pArg[index++];
+ 273              		.loc 1 140 0
+ 274 009e 651C     		adds	r5, r4, #1
+ 275              	.LVL40:
+ 276 00a0 A400     		lsls	r4, r4, #2
+ 277 00a2 12AB     		add	r3, sp, #72
+ 278              	.LVL41:
+ 279 00a4 9C46     		mov	ip, r3
+ 280 00a6 6444     		add	r4, r4, ip
+ 281 00a8 2368     		ldr	r3, [r4]
+ 282              	.LVL42:
+ 141:Generated_Source\PSoC4/usbUart.c ****             usbUart_putChar(cVal);
+ 283              		.loc 1 141 0
+ 284 00aa FF20     		movs	r0, #255
+ 285 00ac 1840     		ands	r0, r3
+ 286 00ae FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+ 287              	.LVL43:
+ 142:Generated_Source\PSoC4/usbUart.c ****             pszFmt++;
+ 288              		.loc 1 142 0
+ 289 00b2 129B     		ldr	r3, [sp, #72]
+ 290 00b4 0133     		adds	r3, r3, #1
+ 291 00b6 1293     		str	r3, [sp, #72]
+ 140:Generated_Source\PSoC4/usbUart.c ****             usbUart_putChar(cVal);
+ 292              		.loc 1 140 0
+ 293 00b8 2C00     		movs	r4, r5
+ 143:Generated_Source\PSoC4/usbUart.c ****             continue;
+ 294              		.loc 1 143 0
+ 295 00ba 31E0     		b	.L8
+ 296              	.LVL44:
+ 297              	.L18:
+ 144:Generated_Source\PSoC4/usbUart.c ****         }
+ 145:Generated_Source\PSoC4/usbUart.c ****         if(*pszFmt == 'x')
+ 298              		.loc 1 145 0
+ 299 00bc 782B     		cmp	r3, #120
+ 300 00be 2DD1     		bne	.L19
+ 146:Generated_Source\PSoC4/usbUart.c ****         {
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 9
+
+
+ 147:Generated_Source\PSoC4/usbUart.c ****             xVal = pArg[index++];
+ 301              		.loc 1 147 0
+ 302 00c0 651C     		adds	r5, r4, #1
+ 303              	.LVL45:
+ 304 00c2 A400     		lsls	r4, r4, #2
+ 305 00c4 12AB     		add	r3, sp, #72
+ 306              	.LVL46:
+ 307 00c6 9C46     		mov	ip, r3
+ 308 00c8 6444     		add	r4, r4, ip
+ 309 00ca 2368     		ldr	r3, [r4]
+ 310              	.LVL47:
+ 148:Generated_Source\PSoC4/usbUart.c ****             i = 0;
+ 311              		.loc 1 148 0
+ 312 00cc 0020     		movs	r0, #0
+ 313 00ce 00E0     		b	.L20
+ 314              	.LVL48:
+ 315              	.L27:
+ 149:Generated_Source\PSoC4/usbUart.c ****             do{
+ 150:Generated_Source\PSoC4/usbUart.c ****                 buffer[i++] = xVal % 16;
+ 316              		.loc 1 150 0
+ 317 00d0 2000     		movs	r0, r4
+ 318              	.LVL49:
+ 319              	.L20:
+ 320              		.loc 1 150 0 is_stmt 0 discriminator 1
+ 321 00d2 441C     		adds	r4, r0, #1
+ 322              	.LVL50:
+ 323 00d4 0F21     		movs	r1, #15
+ 324 00d6 1940     		ands	r1, r3
+ 325 00d8 8200     		lsls	r2, r0, #2
+ 326 00da 6E46     		mov	r6, sp
+ 327 00dc 9151     		str	r1, [r2, r6]
+ 151:Generated_Source\PSoC4/usbUart.c ****                 xVal /= 16;
+ 328              		.loc 1 151 0 is_stmt 1 discriminator 1
+ 329 00de 1B09     		lsrs	r3, r3, #4
+ 330              	.LVL51:
+ 152:Generated_Source\PSoC4/usbUart.c ****             }while(xVal);
+ 331              		.loc 1 152 0 discriminator 1
+ 332 00e0 F6D1     		bne	.L27
+ 153:Generated_Source\PSoC4/usbUart.c ****             if(i%2!=0)
+ 333              		.loc 1 153 0
+ 334 00e2 E307     		lsls	r3, r4, #31
+ 335 00e4 03D5     		bpl	.L21
+ 336              	.LVL52:
+ 154:Generated_Source\PSoC4/usbUart.c ****                 buffer[i++]=0;
+ 337              		.loc 1 154 0
+ 338 00e6 A400     		lsls	r4, r4, #2
+ 339 00e8 0023     		movs	r3, #0
+ 340 00ea A351     		str	r3, [r4, r6]
+ 341 00ec 841C     		adds	r4, r0, #2
+ 342              	.LVL53:
+ 343              	.L21:
+ 155:Generated_Source\PSoC4/usbUart.c ****             if(i<2)
+ 344              		.loc 1 155 0
+ 345 00ee 012C     		cmp	r4, #1
+ 346 00f0 0DD8     		bhi	.L23
+ 347              	.LVL54:
+ 156:Generated_Source\PSoC4/usbUart.c ****                 buffer[i++]=0;
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 10
+
+
+ 348              		.loc 1 156 0
+ 349 00f2 A300     		lsls	r3, r4, #2
+ 350 00f4 0022     		movs	r2, #0
+ 351 00f6 6946     		mov	r1, sp
+ 352 00f8 5A50     		str	r2, [r3, r1]
+ 353 00fa 0134     		adds	r4, r4, #1
+ 354              	.LVL55:
+ 355 00fc 07E0     		b	.L23
+ 356              	.LVL56:
+ 357              	.L24:
+ 157:Generated_Source\PSoC4/usbUart.c **** 
+ 158:Generated_Source\PSoC4/usbUart.c ****             while(i > 0)
+ 159:Generated_Source\PSoC4/usbUart.c ****             {
+ 160:Generated_Source\PSoC4/usbUart.c ****                 i--;
+ 358              		.loc 1 160 0
+ 359 00fe 013C     		subs	r4, r4, #1
+ 360              	.LVL57:
+ 161:Generated_Source\PSoC4/usbUart.c ****                 usbUart_putChar(*usbUart_changeBase(buffer[i]));
+ 361              		.loc 1 161 0
+ 362 0100 A300     		lsls	r3, r4, #2
+ 363 0102 6A46     		mov	r2, sp
+ 364 0104 9B58     		ldr	r3, [r3, r2]
+ 365              	.LVL58:
+ 366 0106 0B4A     		ldr	r2, .L28
+ 367 0108 D05C     		ldrb	r0, [r2, r3]
+ 368 010a FFF7FEFF 		bl	UART_USB_SpiUartWriteTxData
+ 369              	.LVL59:
+ 370              	.L23:
+ 158:Generated_Source\PSoC4/usbUart.c ****             {
+ 371              		.loc 1 158 0
+ 372 010e 002C     		cmp	r4, #0
+ 373 0110 F5D1     		bne	.L24
+ 162:Generated_Source\PSoC4/usbUart.c ****             }
+ 163:Generated_Source\PSoC4/usbUart.c ****             pszFmt++;
+ 374              		.loc 1 163 0
+ 375 0112 129B     		ldr	r3, [sp, #72]
+ 376 0114 0133     		adds	r3, r3, #1
+ 377 0116 1293     		str	r3, [sp, #72]
+ 147:Generated_Source\PSoC4/usbUart.c ****             i = 0;
+ 378              		.loc 1 147 0
+ 379 0118 2C00     		movs	r4, r5
+ 380              	.LVL60:
+ 164:Generated_Source\PSoC4/usbUart.c ****             continue;
+ 381              		.loc 1 164 0
+ 382 011a 01E0     		b	.L8
+ 383              	.LVL61:
+ 384              	.L19:
+ 165:Generated_Source\PSoC4/usbUart.c ****         }
+ 166:Generated_Source\PSoC4/usbUart.c ****         if(pszFmt == '\0')
+ 385              		.loc 1 166 0
+ 386 011c 002A     		cmp	r2, #0
+ 387 011e 04D0     		beq	.L7
+ 388              	.LVL62:
+ 389              	.L8:
+ 104:Generated_Source\PSoC4/usbUart.c ****     {
+ 390              		.loc 1 104 0
+ 391 0120 129B     		ldr	r3, [sp, #72]
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 11
+
+
+ 392 0122 1878     		ldrb	r0, [r3]
+ 393 0124 0028     		cmp	r0, #0
+ 394 0126 00D0     		beq	.LCB399
+ 395 0128 6FE7     		b	.L26	@long jump
+ 396              	.LCB399:
+ 397              	.L7:
+ 167:Generated_Source\PSoC4/usbUart.c ****         {
+ 168:Generated_Source\PSoC4/usbUart.c ****             break;
+ 169:Generated_Source\PSoC4/usbUart.c ****         }
+ 170:Generated_Source\PSoC4/usbUart.c ****     }
+ 171:Generated_Source\PSoC4/usbUart.c **** }
+ 398              		.loc 1 171 0
+ 399 012a 0DB0     		add	sp, sp, #52
+ 400              		@ sp needed
+ 401              	.LVL63:
+ 402 012c F0BC     		pop	{r4, r5, r6, r7}
+ 403 012e 08BC     		pop	{r3}
+ 404 0130 04B0     		add	sp, sp, #16
+ 405 0132 1847     		bx	r3
+ 406              	.L29:
+ 407              		.align	2
+ 408              	.L28:
+ 409 0134 00000000 		.word	.LC0
+ 410              		.cfi_endproc
+ 411              	.LFE5:
+ 412              		.size	usbUart_print, .-usbUart_print
+ 413              		.section	.text.usbUart_txTest,"ax",%progbits
+ 414              		.align	2
+ 415              		.global	usbUart_txTest
+ 416              		.code	16
+ 417              		.thumb_func
+ 418              		.type	usbUart_txTest, %function
+ 419              	usbUart_txTest:
+ 420              	.LFB6:
+ 172:Generated_Source\PSoC4/usbUart.c **** 
+ 173:Generated_Source\PSoC4/usbUart.c **** 
+ 174:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+ 175:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_txTest()
+ 176:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+ 177:Generated_Source\PSoC4/usbUart.c **** *
+ 178:Generated_Source\PSoC4/usbUart.c **** * \brief Transmits the a string listing the compile date and time out over the UART.
+ 179:Generated_Source\PSoC4/usbUart.c **** *
+ 180:Generated_Source\PSoC4/usbUart.c **** * \param runs
+ 181:Generated_Source\PSoC4/usbUart.c **** *    The number of times to execute the test function. Zero indicates
+ 182:Generated_Source\PSoC4/usbUart.c **** *       infinite runs. 
+ 183:Generated_Source\PSoC4/usbUart.c **** *
+ 184:Generated_Source\PSoC4/usbUart.c **** * \return
+ 185:Generated_Source\PSoC4/usbUart.c **** * None
+ 186:Generated_Source\PSoC4/usbUart.c **** *******************************************************************************/
+ 187:Generated_Source\PSoC4/usbUart.c **** void usbUart_txTest(uint8 runs) {
+ 421              		.loc 1 187 0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425              	.LVL64:
+ 426 0000 70B5     		push	{r4, r5, r6, lr}
+ 427              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 12
+
+
+ 428              		.cfi_offset 4, -16
+ 429              		.cfi_offset 5, -12
+ 430              		.cfi_offset 6, -8
+ 431              		.cfi_offset 14, -4
+ 432 0002 0500     		movs	r5, r0
+ 433              	.LVL65:
+ 188:Generated_Source\PSoC4/usbUart.c ****     uint8 i = ZERO;
+ 434              		.loc 1 188 0
+ 435 0004 0022     		movs	r2, #0
+ 189:Generated_Source\PSoC4/usbUart.c ****     /* Run through a specified number of times */
+ 190:Generated_Source\PSoC4/usbUart.c ****     while( (i++ < runs) || runs == ZERO) {
+ 436              		.loc 1 190 0
+ 437 0006 13E0     		b	.L31
+ 438              	.LVL66:
+ 439              	.L32:
+ 191:Generated_Source\PSoC4/usbUart.c ****         /* Print the date and time the program was compiled */
+ 192:Generated_Source\PSoC4/usbUart.c ****         usbUart_print("Compiled: ");
+ 440              		.loc 1 192 0
+ 441 0008 0D48     		ldr	r0, .L33
+ 442 000a FFF7FEFF 		bl	usbUart_print
+ 443              	.LVL67:
+ 193:Generated_Source\PSoC4/usbUart.c ****         usbUart_print(__TIME__);
+ 444              		.loc 1 193 0
+ 445 000e 0D48     		ldr	r0, .L33+4
+ 446 0010 FFF7FEFF 		bl	usbUart_print
+ 447              	.LVL68:
+ 194:Generated_Source\PSoC4/usbUart.c ****         usbUart_print(" ");
+ 448              		.loc 1 194 0
+ 449 0014 0C48     		ldr	r0, .L33+8
+ 450 0016 FFF7FEFF 		bl	usbUart_print
+ 451              	.LVL69:
+ 195:Generated_Source\PSoC4/usbUart.c ****         usbUart_print(__DATE__);
+ 452              		.loc 1 195 0
+ 453 001a 0C48     		ldr	r0, .L33+12
+ 454 001c FFF7FEFF 		bl	usbUart_print
+ 455              	.LVL70:
+ 196:Generated_Source\PSoC4/usbUart.c ****         usbUart_print("\r\n");
+ 456              		.loc 1 196 0
+ 457 0020 0B48     		ldr	r0, .L33+16
+ 458 0022 FFF7FEFF 		bl	usbUart_print
+ 459              	.LVL71:
+ 197:Generated_Source\PSoC4/usbUart.c ****         /* Delay */
+ 198:Generated_Source\PSoC4/usbUart.c ****         MICA_delayMs(MICA_DELAY_MS_SEC_ONE);
+ 460              		.loc 1 198 0
+ 461 0026 FA20     		movs	r0, #250
+ 462 0028 8000     		lsls	r0, r0, #2
+ 463 002a FFF7FEFF 		bl	CyDelay
+ 464              	.LVL72:
+ 190:Generated_Source\PSoC4/usbUart.c ****         /* Print the date and time the program was compiled */
+ 465              		.loc 1 190 0
+ 466 002e 2200     		movs	r2, r4
+ 467              	.LVL73:
+ 468              	.L31:
+ 469 0030 531C     		adds	r3, r2, #1
+ 470 0032 DCB2     		uxtb	r4, r3
+ 471              	.LVL74:
+ 472 0034 AA42     		cmp	r2, r5
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 13
+
+
+ 473 0036 E7D3     		bcc	.L32
+ 190:Generated_Source\PSoC4/usbUart.c ****         /* Print the date and time the program was compiled */
+ 474              		.loc 1 190 0 is_stmt 0 discriminator 1
+ 475 0038 002D     		cmp	r5, #0
+ 476 003a E5D0     		beq	.L32
+ 199:Generated_Source\PSoC4/usbUart.c ****     }
+ 200:Generated_Source\PSoC4/usbUart.c **** }  
+ 477              		.loc 1 200 0 is_stmt 1
+ 478              		@ sp needed
+ 479              	.LVL75:
+ 480 003c 70BD     		pop	{r4, r5, r6, pc}
+ 481              	.L34:
+ 482 003e C046     		.align	2
+ 483              	.L33:
+ 484 0040 14000000 		.word	.LC2
+ 485 0044 20000000 		.word	.LC4
+ 486 0048 2C000000 		.word	.LC6
+ 487 004c 30000000 		.word	.LC8
+ 488 0050 3C000000 		.word	.LC10
+ 489              		.cfi_endproc
+ 490              	.LFE6:
+ 491              		.size	usbUart_txTest, .-usbUart_txTest
+ 492              		.section	.text.usbUart_printHeader,"ax",%progbits
+ 493              		.align	2
+ 494              		.global	usbUart_printHeader
+ 495              		.code	16
+ 496              		.thumb_func
+ 497              		.type	usbUart_printHeader, %function
+ 498              	usbUart_printHeader:
+ 499              	.LFB7:
+ 201:Generated_Source\PSoC4/usbUart.c **** 
+ 202:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+ 203:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_printHeader()
+ 204:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+ 205:Generated_Source\PSoC4/usbUart.c **** *
+ 206:Generated_Source\PSoC4/usbUart.c **** * \brief Displays the program header
+ 207:Generated_Source\PSoC4/usbUart.c **** *
+ 208:Generated_Source\PSoC4/usbUart.c **** * \param time
+ 209:Generated_Source\PSoC4/usbUart.c **** *    Pass in __TIME__ macro
+ 210:Generated_Source\PSoC4/usbUart.c **** *
+ 211:Generated_Source\PSoC4/usbUart.c **** * \param date
+ 212:Generated_Source\PSoC4/usbUart.c **** *    Pass in __DATE__ macro
+ 213:Generated_Source\PSoC4/usbUart.c **** *
+ 214:Generated_Source\PSoC4/usbUart.c **** * \param name
+ 215:Generated_Source\PSoC4/usbUart.c **** *    Name of the program to display 
+ 216:Generated_Source\PSoC4/usbUart.c **** *
+ 217:Generated_Source\PSoC4/usbUart.c **** * \return
+ 218:Generated_Source\PSoC4/usbUart.c **** * None
+ 219:Generated_Source\PSoC4/usbUart.c **** *******************************************************************************/
+ 220:Generated_Source\PSoC4/usbUart.c ****     void usbUart_printHeader(char* time, char* date, char * name){
+ 500              		.loc 1 220 0
+ 501              		.cfi_startproc
+ 502              		@ args = 0, pretend = 0, frame = 0
+ 503              		@ frame_needed = 0, uses_anonymous_args = 0
+ 504              	.LVL76:
+ 505 0000 70B5     		push	{r4, r5, r6, lr}
+ 506              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 14
+
+
+ 507              		.cfi_offset 4, -16
+ 508              		.cfi_offset 5, -12
+ 509              		.cfi_offset 6, -8
+ 510              		.cfi_offset 14, -4
+ 511 0002 0500     		movs	r5, r0
+ 512 0004 0C00     		movs	r4, r1
+ 513 0006 1600     		movs	r6, r2
+ 221:Generated_Source\PSoC4/usbUart.c ****     usbUart_print("**************************************\r\n* ");
+ 514              		.loc 1 221 0
+ 515 0008 0A48     		ldr	r0, .L36
+ 516              	.LVL77:
+ 517 000a FFF7FEFF 		bl	usbUart_print
+ 518              	.LVL78:
+ 222:Generated_Source\PSoC4/usbUart.c ****     usbUart_print(name);
+ 519              		.loc 1 222 0
+ 520 000e 3000     		movs	r0, r6
+ 521 0010 FFF7FEFF 		bl	usbUart_print
+ 522              	.LVL79:
+ 223:Generated_Source\PSoC4/usbUart.c ****     usbUart_print("\r\n*\r\n* Compiled at: ");
+ 523              		.loc 1 223 0
+ 524 0014 0848     		ldr	r0, .L36+4
+ 525 0016 FFF7FEFF 		bl	usbUart_print
+ 526              	.LVL80:
+ 224:Generated_Source\PSoC4/usbUart.c ****     usbUart_print(time);
+ 527              		.loc 1 224 0
+ 528 001a 2800     		movs	r0, r5
+ 529 001c FFF7FEFF 		bl	usbUart_print
+ 530              	.LVL81:
+ 225:Generated_Source\PSoC4/usbUart.c ****     usbUart_print(" on ");
+ 531              		.loc 1 225 0
+ 532 0020 0648     		ldr	r0, .L36+8
+ 533 0022 FFF7FEFF 		bl	usbUart_print
+ 534              	.LVL82:
+ 226:Generated_Source\PSoC4/usbUart.c ****     usbUart_print(date);
+ 535              		.loc 1 226 0
+ 536 0026 2000     		movs	r0, r4
+ 537 0028 FFF7FEFF 		bl	usbUart_print
+ 538              	.LVL83:
+ 227:Generated_Source\PSoC4/usbUart.c ****     usbUart_print("\r\n**************************************\r\n");
+ 539              		.loc 1 227 0
+ 540 002c 0448     		ldr	r0, .L36+12
+ 541 002e FFF7FEFF 		bl	usbUart_print
+ 542              	.LVL84:
+ 228:Generated_Source\PSoC4/usbUart.c **** }
+ 543              		.loc 1 228 0
+ 544              		@ sp needed
+ 545              	.LVL85:
+ 546              	.LVL86:
+ 547              	.LVL87:
+ 548 0032 70BD     		pop	{r4, r5, r6, pc}
+ 549              	.L37:
+ 550              		.align	2
+ 551              	.L36:
+ 552 0034 40000000 		.word	.LC12
+ 553 0038 6C000000 		.word	.LC14
+ 554 003c 84000000 		.word	.LC16
+ 555 0040 8C000000 		.word	.LC18
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 15
+
+
+ 556              		.cfi_endproc
+ 557              	.LFE7:
+ 558              		.size	usbUart_printHeader, .-usbUart_printHeader
+ 559              		.section	.text.usbUart_dummyTxArray,"ax",%progbits
+ 560              		.align	2
+ 561              		.global	usbUart_dummyTxArray
+ 562              		.code	16
+ 563              		.thumb_func
+ 564              		.type	usbUart_dummyTxArray, %function
+ 565              	usbUart_dummyTxArray:
+ 566              	.LFB8:
+ 229:Generated_Source\PSoC4/usbUart.c **** /*******************************************************************************
+ 230:Generated_Source\PSoC4/usbUart.c **** * Function Name: usbUart_dummyTxArray()
+ 231:Generated_Source\PSoC4/usbUart.c **** ****************************************************************************//**
+ 232:Generated_Source\PSoC4/usbUart.c **** * \brief
+ 233:Generated_Source\PSoC4/usbUart.c **** *  Dummy tx function for supressing output. Has no effect.
+ 234:Generated_Source\PSoC4/usbUart.c **** *
+ 235:Generated_Source\PSoC4/usbUart.c **** *******************************************************************************/
+ 236:Generated_Source\PSoC4/usbUart.c **** void  usbUart_dummyTxArray(uint8 * array, uint16 len){
+ 567              		.loc 1 236 0
+ 568              		.cfi_startproc
+ 569              		@ args = 0, pretend = 0, frame = 0
+ 570              		@ frame_needed = 0, uses_anonymous_args = 0
+ 571              		@ link register save eliminated.
+ 572              	.LVL88:
+ 237:Generated_Source\PSoC4/usbUart.c ****     (void) array;
+ 238:Generated_Source\PSoC4/usbUart.c ****     (void) len;
+ 239:Generated_Source\PSoC4/usbUart.c **** }
+ 573              		.loc 1 239 0
+ 574              		@ sp needed
+ 575 0000 7047     		bx	lr
+ 576              		.cfi_endproc
+ 577              	.LFE8:
+ 578              		.size	usbUart_dummyTxArray, .-usbUart_dummyTxArray
+ 579 0002 C046     		.section	.rodata.str1.4,"aMS",%progbits,1
+ 580              		.align	2
+ 581              	.LC0:
+ 582 0000 30313233 		.ascii	"0123456789ABCDEF\000"
+ 582      34353637 
+ 582      38394142 
+ 582      43444546 
+ 582      00
+ 583 0011 000000   		.space	3
+ 584              	.LC2:
+ 585 0014 436F6D70 		.ascii	"Compiled: \000"
+ 585      696C6564 
+ 585      3A2000
+ 586 001f 00       		.space	1
+ 587              	.LC4:
+ 588 0020 31363A30 		.ascii	"16:00:33\000"
+ 588      303A3333 
+ 588      00
+ 589 0029 000000   		.space	3
+ 590              	.LC6:
+ 591 002c 2000     		.ascii	" \000"
+ 592 002e 0000     		.space	2
+ 593              	.LC8:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 16
+
+
+ 594 0030 53657020 		.ascii	"Sep 17 2018\000"
+ 594      31372032 
+ 594      30313800 
+ 595              	.LC10:
+ 596 003c 0D0A00   		.ascii	"\015\012\000"
+ 597 003f 00       		.space	1
+ 598              	.LC12:
+ 599 0040 2A2A2A2A 		.ascii	"**************************************\015\012* \000"
+ 599      2A2A2A2A 
+ 599      2A2A2A2A 
+ 599      2A2A2A2A 
+ 599      2A2A2A2A 
+ 600 006b 00       		.space	1
+ 601              	.LC14:
+ 602 006c 0D0A2A0D 		.ascii	"\015\012*\015\012* Compiled at: \000"
+ 602      0A2A2043 
+ 602      6F6D7069 
+ 602      6C656420 
+ 602      61743A20 
+ 603 0081 000000   		.space	3
+ 604              	.LC16:
+ 605 0084 206F6E20 		.ascii	" on \000"
+ 605      00
+ 606 0089 000000   		.space	3
+ 607              	.LC18:
+ 608 008c 0D0A2A2A 		.ascii	"\015\012**************************************\015\012"
+ 608      2A2A2A2A 
+ 608      2A2A2A2A 
+ 608      2A2A2A2A 
+ 608      2A2A2A2A 
+ 609 00b6 00       		.ascii	"\000"
+ 610              		.text
+ 611              	.Letext0:
+ 612              		.file 2 "Generated_Source\\PSoC4\\cytypes.h"
+ 613              		.file 3 "Generated_Source\\PSoC4\\UART_USB_SPI_UART.h"
+ 614              		.file 4 "Generated_Source\\PSoC4/CyLib.h"
+ 615              		.section	.debug_info,"",%progbits
+ 616              	.Ldebug_info0:
+ 617 0000 1A040000 		.4byte	0x41a
+ 618 0004 0400     		.2byte	0x4
+ 619 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 620 000a 04       		.byte	0x4
+ 621 000b 01       		.uleb128 0x1
+ 622 000c 3A010000 		.4byte	.LASF41
+ 623 0010 0C       		.byte	0xc
+ 624 0011 27000000 		.4byte	.LASF42
+ 625 0015 D1010000 		.4byte	.LASF43
+ 626 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 627 001d 00000000 		.4byte	0
+ 628 0021 00000000 		.4byte	.Ldebug_line0
+ 629 0025 02       		.uleb128 0x2
+ 630 0026 01       		.byte	0x1
+ 631 0027 06       		.byte	0x6
+ 632 0028 AF020000 		.4byte	.LASF0
+ 633 002c 02       		.uleb128 0x2
+ 634 002d 01       		.byte	0x1
+ 635 002e 08       		.byte	0x8
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 17
+
+
+ 636 002f C3000000 		.4byte	.LASF1
+ 637 0033 02       		.uleb128 0x2
+ 638 0034 02       		.byte	0x2
+ 639 0035 05       		.byte	0x5
+ 640 0036 84020000 		.4byte	.LASF2
+ 641 003a 02       		.uleb128 0x2
+ 642 003b 02       		.byte	0x2
+ 643 003c 07       		.byte	0x7
+ 644 003d 48000000 		.4byte	.LASF3
+ 645 0041 02       		.uleb128 0x2
+ 646 0042 04       		.byte	0x4
+ 647 0043 05       		.byte	0x5
+ 648 0044 95020000 		.4byte	.LASF4
+ 649 0048 02       		.uleb128 0x2
+ 650 0049 04       		.byte	0x4
+ 651 004a 07       		.byte	0x7
+ 652 004b A5000000 		.4byte	.LASF5
+ 653 004f 02       		.uleb128 0x2
+ 654 0050 08       		.byte	0x8
+ 655 0051 05       		.byte	0x5
+ 656 0052 4A020000 		.4byte	.LASF6
+ 657 0056 02       		.uleb128 0x2
+ 658 0057 08       		.byte	0x8
+ 659 0058 07       		.byte	0x7
+ 660 0059 19010000 		.4byte	.LASF7
+ 661 005d 03       		.uleb128 0x3
+ 662 005e 04       		.byte	0x4
+ 663 005f 05       		.byte	0x5
+ 664 0060 696E7400 		.ascii	"int\000"
+ 665 0064 02       		.uleb128 0x2
+ 666 0065 04       		.byte	0x4
+ 667 0066 07       		.byte	0x7
+ 668 0067 07010000 		.4byte	.LASF8
+ 669 006b 04       		.uleb128 0x4
+ 670 006c B7000000 		.4byte	.LASF9
+ 671 0070 02       		.byte	0x2
+ 672 0071 E401     		.2byte	0x1e4
+ 673 0073 2C000000 		.4byte	0x2c
+ 674 0077 04       		.uleb128 0x4
+ 675 0078 F9000000 		.4byte	.LASF10
+ 676 007c 02       		.byte	0x2
+ 677 007d E501     		.2byte	0x1e5
+ 678 007f 3A000000 		.4byte	0x3a
+ 679 0083 04       		.uleb128 0x4
+ 680 0084 00010000 		.4byte	.LASF11
+ 681 0088 02       		.byte	0x2
+ 682 0089 E601     		.2byte	0x1e6
+ 683 008b 48000000 		.4byte	0x48
+ 684 008f 02       		.uleb128 0x2
+ 685 0090 04       		.byte	0x4
+ 686 0091 04       		.byte	0x4
+ 687 0092 88000000 		.4byte	.LASF12
+ 688 0096 02       		.uleb128 0x2
+ 689 0097 08       		.byte	0x8
+ 690 0098 04       		.byte	0x4
+ 691 0099 E3000000 		.4byte	.LASF13
+ 692 009d 04       		.uleb128 0x4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 18
+
+
+ 693 009e 98000000 		.4byte	.LASF14
+ 694 00a2 02       		.byte	0x2
+ 695 00a3 F501     		.2byte	0x1f5
+ 696 00a5 A9000000 		.4byte	0xa9
+ 697 00a9 02       		.uleb128 0x2
+ 698 00aa 01       		.byte	0x1
+ 699 00ab 08       		.byte	0x8
+ 700 00ac 9E020000 		.4byte	.LASF15
+ 701 00b0 02       		.uleb128 0x2
+ 702 00b1 08       		.byte	0x8
+ 703 00b2 04       		.byte	0x4
+ 704 00b3 A3020000 		.4byte	.LASF16
+ 705 00b7 02       		.uleb128 0x2
+ 706 00b8 04       		.byte	0x4
+ 707 00b9 07       		.byte	0x7
+ 708 00ba C8010000 		.4byte	.LASF17
+ 709 00be 05       		.uleb128 0x5
+ 710 00bf 04       		.byte	0x4
+ 711 00c0 A9000000 		.4byte	0xa9
+ 712 00c4 05       		.uleb128 0x5
+ 713 00c5 04       		.byte	0x4
+ 714 00c6 6B000000 		.4byte	0x6b
+ 715 00ca 02       		.uleb128 0x2
+ 716 00cb 01       		.byte	0x1
+ 717 00cc 02       		.byte	0x2
+ 718 00cd C1020000 		.4byte	.LASF18
+ 719 00d1 06       		.uleb128 0x6
+ 720 00d2 37020000 		.4byte	.LASF44
+ 721 00d6 01       		.byte	0x1
+ 722 00d7 50       		.byte	0x50
+ 723 00d8 C4000000 		.4byte	0xc4
+ 724 00dc 03       		.byte	0x3
+ 725 00dd ED000000 		.4byte	0xed
+ 726 00e1 07       		.uleb128 0x7
+ 727 00e2 BB020000 		.4byte	.LASF45
+ 728 00e6 01       		.byte	0x1
+ 729 00e7 50       		.byte	0x50
+ 730 00e8 83000000 		.4byte	0x83
+ 731 00ec 00       		.byte	0
+ 732 00ed 08       		.uleb128 0x8
+ 733 00ee D1000000 		.4byte	.LASF19
+ 734 00f2 01       		.byte	0x1
+ 735 00f3 20       		.byte	0x20
+ 736 00f4 00000000 		.4byte	.LFB2
+ 737 00f8 14000000 		.4byte	.LFE2-.LFB2
+ 738 00fc 01       		.uleb128 0x1
+ 739 00fd 9C       		.byte	0x9c
+ 740 00fe 1B010000 		.4byte	0x11b
+ 741 0102 09       		.uleb128 0x9
+ 742 0103 73747200 		.ascii	"str\000"
+ 743 0107 01       		.byte	0x1
+ 744 0108 20       		.byte	0x20
+ 745 0109 BE000000 		.4byte	0xbe
+ 746 010d 00000000 		.4byte	.LLST0
+ 747 0111 0A       		.uleb128 0xa
+ 748 0112 0A000000 		.4byte	.LVL2
+ 749 0116 06040000 		.4byte	0x406
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 19
+
+
+ 750 011a 00       		.byte	0
+ 751 011b 08       		.uleb128 0x8
+ 752 011c 5B000000 		.4byte	.LASF20
+ 753 0120 01       		.byte	0x1
+ 754 0121 38       		.byte	0x38
+ 755 0122 00000000 		.4byte	.LFB3
+ 756 0126 1E000000 		.4byte	.LFE3-.LFB3
+ 757 012a 01       		.uleb128 0x1
+ 758 012b 9C       		.byte	0x9c
+ 759 012c 65010000 		.4byte	0x165
+ 760 0130 0B       		.uleb128 0xb
+ 761 0131 BD000000 		.4byte	.LASF21
+ 762 0135 01       		.byte	0x1
+ 763 0136 38       		.byte	0x38
+ 764 0137 C4000000 		.4byte	0xc4
+ 765 013b 1E000000 		.4byte	.LLST1
+ 766 013f 0B       		.uleb128 0xb
+ 767 0140 C7020000 		.4byte	.LASF22
+ 768 0144 01       		.byte	0x1
+ 769 0145 38       		.byte	0x38
+ 770 0146 77000000 		.4byte	0x77
+ 771 014a 3C000000 		.4byte	.LLST2
+ 772 014e 0C       		.uleb128 0xc
+ 773 014f 6900     		.ascii	"i\000"
+ 774 0151 01       		.byte	0x1
+ 775 0152 39       		.byte	0x39
+ 776 0153 6B000000 		.4byte	0x6b
+ 777 0157 5D000000 		.4byte	.LLST3
+ 778 015b 0A       		.uleb128 0xa
+ 779 015c 10000000 		.4byte	.LVL8
+ 780 0160 06040000 		.4byte	0x406
+ 781 0164 00       		.byte	0
+ 782 0165 0D       		.uleb128 0xd
+ 783 0166 14000000 		.4byte	.LASF23
+ 784 016a 01       		.byte	0x1
+ 785 016b 61       		.byte	0x61
+ 786 016c 00000000 		.4byte	.LFB5
+ 787 0170 38010000 		.4byte	.LFE5-.LFB5
+ 788 0174 01       		.uleb128 0x1
+ 789 0175 9C       		.byte	0x9c
+ 790 0176 2D020000 		.4byte	0x22d
+ 791 017a 0E       		.uleb128 0xe
+ 792 017b 6C000000 		.4byte	.LASF24
+ 793 017f 01       		.byte	0x1
+ 794 0180 61       		.byte	0x61
+ 795 0181 2D020000 		.4byte	0x22d
+ 796 0185 02       		.uleb128 0x2
+ 797 0186 91       		.byte	0x91
+ 798 0187 70       		.sleb128 -16
+ 799 0188 0F       		.uleb128 0xf
+ 800 0189 10       		.uleb128 0x10
+ 801 018a 9E000000 		.4byte	.LASF25
+ 802 018e 01       		.byte	0x1
+ 803 018f 62       		.byte	0x62
+ 804 0190 C4000000 		.4byte	0xc4
+ 805 0194 87000000 		.4byte	.LLST4
+ 806 0198 10       		.uleb128 0x10
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 20
+
+
+ 807 0199 14010000 		.4byte	.LASF26
+ 808 019d 01       		.byte	0x1
+ 809 019e 63       		.byte	0x63
+ 810 019f 83000000 		.4byte	0x83
+ 811 01a3 9A000000 		.4byte	.LLST5
+ 812 01a7 10       		.uleb128 0x10
+ 813 01a8 30010000 		.4byte	.LASF27
+ 814 01ac 01       		.byte	0x1
+ 815 01ad 63       		.byte	0x63
+ 816 01ae 83000000 		.4byte	0x83
+ 817 01b2 C3000000 		.4byte	.LLST6
+ 818 01b6 0C       		.uleb128 0xc
+ 819 01b7 6900     		.ascii	"i\000"
+ 820 01b9 01       		.byte	0x1
+ 821 01ba 63       		.byte	0x63
+ 822 01bb 83000000 		.4byte	0x83
+ 823 01bf D6000000 		.4byte	.LLST7
+ 824 01c3 11       		.uleb128 0x11
+ 825 01c4 8E020000 		.4byte	.LASF28
+ 826 01c8 01       		.byte	0x1
+ 827 01c9 63       		.byte	0x63
+ 828 01ca 33020000 		.4byte	0x233
+ 829 01ce 03       		.uleb128 0x3
+ 830 01cf 91       		.byte	0x91
+ 831 01d0 A87F     		.sleb128 -88
+ 832 01d2 10       		.uleb128 0x10
+ 833 01d3 62020000 		.4byte	.LASF29
+ 834 01d7 01       		.byte	0x1
+ 835 01d8 63       		.byte	0x63
+ 836 01d9 83000000 		.4byte	0x83
+ 837 01dd 69010000 		.4byte	.LLST8
+ 838 01e1 10       		.uleb128 0x10
+ 839 01e2 93000000 		.4byte	.LASF30
+ 840 01e6 01       		.byte	0x1
+ 841 01e7 64       		.byte	0x64
+ 842 01e8 6B000000 		.4byte	0x6b
+ 843 01ec E0010000 		.4byte	.LLST9
+ 844 01f0 10       		.uleb128 0x10
+ 845 01f1 58020000 		.4byte	.LASF31
+ 846 01f5 01       		.byte	0x1
+ 847 01f6 65       		.byte	0x65
+ 848 01f7 43020000 		.4byte	0x243
+ 849 01fb F3010000 		.4byte	.LLST10
+ 850 01ff 0A       		.uleb128 0xa
+ 851 0200 12000000 		.4byte	.LVL17
+ 852 0204 06040000 		.4byte	0x406
+ 853 0208 0A       		.uleb128 0xa
+ 854 0209 36000000 		.4byte	.LVL22
+ 855 020d 06040000 		.4byte	0x406
+ 856 0211 0A       		.uleb128 0xa
+ 857 0212 8C000000 		.4byte	.LVL37
+ 858 0216 06040000 		.4byte	0x406
+ 859 021a 0A       		.uleb128 0xa
+ 860 021b B2000000 		.4byte	.LVL43
+ 861 021f 06040000 		.4byte	0x406
+ 862 0223 0A       		.uleb128 0xa
+ 863 0224 0E010000 		.4byte	.LVL59
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 21
+
+
+ 864 0228 06040000 		.4byte	0x406
+ 865 022c 00       		.byte	0
+ 866 022d 05       		.uleb128 0x5
+ 867 022e 04       		.byte	0x4
+ 868 022f 9D000000 		.4byte	0x9d
+ 869 0233 12       		.uleb128 0x12
+ 870 0234 83000000 		.4byte	0x83
+ 871 0238 43020000 		.4byte	0x243
+ 872 023c 13       		.uleb128 0x13
+ 873 023d B7000000 		.4byte	0xb7
+ 874 0241 0B       		.byte	0xb
+ 875 0242 00       		.byte	0
+ 876 0243 05       		.uleb128 0x5
+ 877 0244 04       		.byte	0x4
+ 878 0245 83000000 		.4byte	0x83
+ 879 0249 08       		.uleb128 0x8
+ 880 024a EA000000 		.4byte	.LASF32
+ 881 024e 01       		.byte	0x1
+ 882 024f BB       		.byte	0xbb
+ 883 0250 00000000 		.4byte	.LFB6
+ 884 0254 54000000 		.4byte	.LFE6-.LFB6
+ 885 0258 01       		.uleb128 0x1
+ 886 0259 9C       		.byte	0x9c
+ 887 025a FF020000 		.4byte	0x2ff
+ 888 025e 0B       		.uleb128 0xb
+ 889 025f 22000000 		.4byte	.LASF33
+ 890 0263 01       		.byte	0x1
+ 891 0264 BB       		.byte	0xbb
+ 892 0265 6B000000 		.4byte	0x6b
+ 893 0269 7E020000 		.4byte	.LLST11
+ 894 026d 0C       		.uleb128 0xc
+ 895 026e 6900     		.ascii	"i\000"
+ 896 0270 01       		.byte	0x1
+ 897 0271 BC       		.byte	0xbc
+ 898 0272 6B000000 		.4byte	0x6b
+ 899 0276 9F020000 		.4byte	.LLST12
+ 900 027a 14       		.uleb128 0x14
+ 901 027b 0E000000 		.4byte	.LVL67
+ 902 027f 65010000 		.4byte	0x165
+ 903 0283 91020000 		.4byte	0x291
+ 904 0287 15       		.uleb128 0x15
+ 905 0288 01       		.uleb128 0x1
+ 906 0289 50       		.byte	0x50
+ 907 028a 05       		.uleb128 0x5
+ 908 028b 03       		.byte	0x3
+ 909 028c 14000000 		.4byte	.LC2
+ 910 0290 00       		.byte	0
+ 911 0291 14       		.uleb128 0x14
+ 912 0292 14000000 		.4byte	.LVL68
+ 913 0296 65010000 		.4byte	0x165
+ 914 029a A8020000 		.4byte	0x2a8
+ 915 029e 15       		.uleb128 0x15
+ 916 029f 01       		.uleb128 0x1
+ 917 02a0 50       		.byte	0x50
+ 918 02a1 05       		.uleb128 0x5
+ 919 02a2 03       		.byte	0x3
+ 920 02a3 20000000 		.4byte	.LC4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 22
+
+
+ 921 02a7 00       		.byte	0
+ 922 02a8 14       		.uleb128 0x14
+ 923 02a9 1A000000 		.4byte	.LVL69
+ 924 02ad 65010000 		.4byte	0x165
+ 925 02b1 BF020000 		.4byte	0x2bf
+ 926 02b5 15       		.uleb128 0x15
+ 927 02b6 01       		.uleb128 0x1
+ 928 02b7 50       		.byte	0x50
+ 929 02b8 05       		.uleb128 0x5
+ 930 02b9 03       		.byte	0x3
+ 931 02ba 2C000000 		.4byte	.LC6
+ 932 02be 00       		.byte	0
+ 933 02bf 14       		.uleb128 0x14
+ 934 02c0 20000000 		.4byte	.LVL70
+ 935 02c4 65010000 		.4byte	0x165
+ 936 02c8 D6020000 		.4byte	0x2d6
+ 937 02cc 15       		.uleb128 0x15
+ 938 02cd 01       		.uleb128 0x1
+ 939 02ce 50       		.byte	0x50
+ 940 02cf 05       		.uleb128 0x5
+ 941 02d0 03       		.byte	0x3
+ 942 02d1 30000000 		.4byte	.LC8
+ 943 02d5 00       		.byte	0
+ 944 02d6 14       		.uleb128 0x14
+ 945 02d7 26000000 		.4byte	.LVL71
+ 946 02db 65010000 		.4byte	0x165
+ 947 02df ED020000 		.4byte	0x2ed
+ 948 02e3 15       		.uleb128 0x15
+ 949 02e4 01       		.uleb128 0x1
+ 950 02e5 50       		.byte	0x50
+ 951 02e6 05       		.uleb128 0x5
+ 952 02e7 03       		.byte	0x3
+ 953 02e8 3C000000 		.4byte	.LC10
+ 954 02ec 00       		.byte	0
+ 955 02ed 16       		.uleb128 0x16
+ 956 02ee 2E000000 		.4byte	.LVL72
+ 957 02f2 12040000 		.4byte	0x412
+ 958 02f6 15       		.uleb128 0x15
+ 959 02f7 01       		.uleb128 0x1
+ 960 02f8 50       		.byte	0x50
+ 961 02f9 03       		.uleb128 0x3
+ 962 02fa 0A       		.byte	0xa
+ 963 02fb E803     		.2byte	0x3e8
+ 964 02fd 00       		.byte	0
+ 965 02fe 00       		.byte	0
+ 966 02ff 08       		.uleb128 0x8
+ 967 0300 00000000 		.4byte	.LASF34
+ 968 0304 01       		.byte	0x1
+ 969 0305 DC       		.byte	0xdc
+ 970 0306 00000000 		.4byte	.LFB7
+ 971 030a 44000000 		.4byte	.LFE7-.LFB7
+ 972 030e 01       		.uleb128 0x1
+ 973 030f 9C       		.byte	0x9c
+ 974 0310 D6030000 		.4byte	0x3d6
+ 975 0314 0B       		.uleb128 0xb
+ 976 0315 35010000 		.4byte	.LASF35
+ 977 0319 01       		.byte	0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 23
+
+
+ 978 031a DC       		.byte	0xdc
+ 979 031b BE000000 		.4byte	0xbe
+ 980 031f DF020000 		.4byte	.LLST13
+ 981 0323 0B       		.uleb128 0xb
+ 982 0324 8E000000 		.4byte	.LASF36
+ 983 0328 01       		.byte	0x1
+ 984 0329 DC       		.byte	0xdc
+ 985 032a BE000000 		.4byte	0xbe
+ 986 032e 0B030000 		.4byte	.LLST14
+ 987 0332 0B       		.uleb128 0xb
+ 988 0333 5D020000 		.4byte	.LASF37
+ 989 0337 01       		.byte	0x1
+ 990 0338 DC       		.byte	0xdc
+ 991 0339 BE000000 		.4byte	0xbe
+ 992 033d 37030000 		.4byte	.LLST15
+ 993 0341 14       		.uleb128 0x14
+ 994 0342 0E000000 		.4byte	.LVL78
+ 995 0346 65010000 		.4byte	0x165
+ 996 034a 58030000 		.4byte	0x358
+ 997 034e 15       		.uleb128 0x15
+ 998 034f 01       		.uleb128 0x1
+ 999 0350 50       		.byte	0x50
+ 1000 0351 05       		.uleb128 0x5
+ 1001 0352 03       		.byte	0x3
+ 1002 0353 40000000 		.4byte	.LC12
+ 1003 0357 00       		.byte	0
+ 1004 0358 14       		.uleb128 0x14
+ 1005 0359 14000000 		.4byte	.LVL79
+ 1006 035d 65010000 		.4byte	0x165
+ 1007 0361 6C030000 		.4byte	0x36c
+ 1008 0365 15       		.uleb128 0x15
+ 1009 0366 01       		.uleb128 0x1
+ 1010 0367 50       		.byte	0x50
+ 1011 0368 02       		.uleb128 0x2
+ 1012 0369 76       		.byte	0x76
+ 1013 036a 00       		.sleb128 0
+ 1014 036b 00       		.byte	0
+ 1015 036c 14       		.uleb128 0x14
+ 1016 036d 1A000000 		.4byte	.LVL80
+ 1017 0371 65010000 		.4byte	0x165
+ 1018 0375 83030000 		.4byte	0x383
+ 1019 0379 15       		.uleb128 0x15
+ 1020 037a 01       		.uleb128 0x1
+ 1021 037b 50       		.byte	0x50
+ 1022 037c 05       		.uleb128 0x5
+ 1023 037d 03       		.byte	0x3
+ 1024 037e 6C000000 		.4byte	.LC14
+ 1025 0382 00       		.byte	0
+ 1026 0383 14       		.uleb128 0x14
+ 1027 0384 20000000 		.4byte	.LVL81
+ 1028 0388 65010000 		.4byte	0x165
+ 1029 038c 97030000 		.4byte	0x397
+ 1030 0390 15       		.uleb128 0x15
+ 1031 0391 01       		.uleb128 0x1
+ 1032 0392 50       		.byte	0x50
+ 1033 0393 02       		.uleb128 0x2
+ 1034 0394 75       		.byte	0x75
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 24
+
+
+ 1035 0395 00       		.sleb128 0
+ 1036 0396 00       		.byte	0
+ 1037 0397 14       		.uleb128 0x14
+ 1038 0398 26000000 		.4byte	.LVL82
+ 1039 039c 65010000 		.4byte	0x165
+ 1040 03a0 AE030000 		.4byte	0x3ae
+ 1041 03a4 15       		.uleb128 0x15
+ 1042 03a5 01       		.uleb128 0x1
+ 1043 03a6 50       		.byte	0x50
+ 1044 03a7 05       		.uleb128 0x5
+ 1045 03a8 03       		.byte	0x3
+ 1046 03a9 84000000 		.4byte	.LC16
+ 1047 03ad 00       		.byte	0
+ 1048 03ae 14       		.uleb128 0x14
+ 1049 03af 2C000000 		.4byte	.LVL83
+ 1050 03b3 65010000 		.4byte	0x165
+ 1051 03b7 C2030000 		.4byte	0x3c2
+ 1052 03bb 15       		.uleb128 0x15
+ 1053 03bc 01       		.uleb128 0x1
+ 1054 03bd 50       		.byte	0x50
+ 1055 03be 02       		.uleb128 0x2
+ 1056 03bf 74       		.byte	0x74
+ 1057 03c0 00       		.sleb128 0
+ 1058 03c1 00       		.byte	0
+ 1059 03c2 16       		.uleb128 0x16
+ 1060 03c3 32000000 		.4byte	.LVL84
+ 1061 03c7 65010000 		.4byte	0x165
+ 1062 03cb 15       		.uleb128 0x15
+ 1063 03cc 01       		.uleb128 0x1
+ 1064 03cd 50       		.byte	0x50
+ 1065 03ce 05       		.uleb128 0x5
+ 1066 03cf 03       		.byte	0x3
+ 1067 03d0 8C000000 		.4byte	.LC18
+ 1068 03d4 00       		.byte	0
+ 1069 03d5 00       		.byte	0
+ 1070 03d6 08       		.uleb128 0x8
+ 1071 03d7 73000000 		.4byte	.LASF38
+ 1072 03db 01       		.byte	0x1
+ 1073 03dc EC       		.byte	0xec
+ 1074 03dd 00000000 		.4byte	.LFB8
+ 1075 03e1 02000000 		.4byte	.LFE8-.LFB8
+ 1076 03e5 01       		.uleb128 0x1
+ 1077 03e6 9C       		.byte	0x9c
+ 1078 03e7 06040000 		.4byte	0x406
+ 1079 03eb 0E       		.uleb128 0xe
+ 1080 03ec BD000000 		.4byte	.LASF21
+ 1081 03f0 01       		.byte	0x1
+ 1082 03f1 EC       		.byte	0xec
+ 1083 03f2 C4000000 		.4byte	0xc4
+ 1084 03f6 01       		.uleb128 0x1
+ 1085 03f7 50       		.byte	0x50
+ 1086 03f8 17       		.uleb128 0x17
+ 1087 03f9 6C656E00 		.ascii	"len\000"
+ 1088 03fd 01       		.byte	0x1
+ 1089 03fe EC       		.byte	0xec
+ 1090 03ff 77000000 		.4byte	0x77
+ 1091 0403 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 25
+
+
+ 1092 0404 51       		.byte	0x51
+ 1093 0405 00       		.byte	0
+ 1094 0406 18       		.uleb128 0x18
+ 1095 0407 68020000 		.4byte	.LASF39
+ 1096 040b 68020000 		.4byte	.LASF39
+ 1097 040f 03       		.byte	0x3
+ 1098 0410 4403     		.2byte	0x344
+ 1099 0412 19       		.uleb128 0x19
+ 1100 0413 CE020000 		.4byte	.LASF40
+ 1101 0417 CE020000 		.4byte	.LASF40
+ 1102 041b 04       		.byte	0x4
+ 1103 041c D9       		.byte	0xd9
+ 1104 041d 00       		.byte	0
+ 1105              		.section	.debug_abbrev,"",%progbits
+ 1106              	.Ldebug_abbrev0:
+ 1107 0000 01       		.uleb128 0x1
+ 1108 0001 11       		.uleb128 0x11
+ 1109 0002 01       		.byte	0x1
+ 1110 0003 25       		.uleb128 0x25
+ 1111 0004 0E       		.uleb128 0xe
+ 1112 0005 13       		.uleb128 0x13
+ 1113 0006 0B       		.uleb128 0xb
+ 1114 0007 03       		.uleb128 0x3
+ 1115 0008 0E       		.uleb128 0xe
+ 1116 0009 1B       		.uleb128 0x1b
+ 1117 000a 0E       		.uleb128 0xe
+ 1118 000b 55       		.uleb128 0x55
+ 1119 000c 17       		.uleb128 0x17
+ 1120 000d 11       		.uleb128 0x11
+ 1121 000e 01       		.uleb128 0x1
+ 1122 000f 10       		.uleb128 0x10
+ 1123 0010 17       		.uleb128 0x17
+ 1124 0011 00       		.byte	0
+ 1125 0012 00       		.byte	0
+ 1126 0013 02       		.uleb128 0x2
+ 1127 0014 24       		.uleb128 0x24
+ 1128 0015 00       		.byte	0
+ 1129 0016 0B       		.uleb128 0xb
+ 1130 0017 0B       		.uleb128 0xb
+ 1131 0018 3E       		.uleb128 0x3e
+ 1132 0019 0B       		.uleb128 0xb
+ 1133 001a 03       		.uleb128 0x3
+ 1134 001b 0E       		.uleb128 0xe
+ 1135 001c 00       		.byte	0
+ 1136 001d 00       		.byte	0
+ 1137 001e 03       		.uleb128 0x3
+ 1138 001f 24       		.uleb128 0x24
+ 1139 0020 00       		.byte	0
+ 1140 0021 0B       		.uleb128 0xb
+ 1141 0022 0B       		.uleb128 0xb
+ 1142 0023 3E       		.uleb128 0x3e
+ 1143 0024 0B       		.uleb128 0xb
+ 1144 0025 03       		.uleb128 0x3
+ 1145 0026 08       		.uleb128 0x8
+ 1146 0027 00       		.byte	0
+ 1147 0028 00       		.byte	0
+ 1148 0029 04       		.uleb128 0x4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 26
+
+
+ 1149 002a 16       		.uleb128 0x16
+ 1150 002b 00       		.byte	0
+ 1151 002c 03       		.uleb128 0x3
+ 1152 002d 0E       		.uleb128 0xe
+ 1153 002e 3A       		.uleb128 0x3a
+ 1154 002f 0B       		.uleb128 0xb
+ 1155 0030 3B       		.uleb128 0x3b
+ 1156 0031 05       		.uleb128 0x5
+ 1157 0032 49       		.uleb128 0x49
+ 1158 0033 13       		.uleb128 0x13
+ 1159 0034 00       		.byte	0
+ 1160 0035 00       		.byte	0
+ 1161 0036 05       		.uleb128 0x5
+ 1162 0037 0F       		.uleb128 0xf
+ 1163 0038 00       		.byte	0
+ 1164 0039 0B       		.uleb128 0xb
+ 1165 003a 0B       		.uleb128 0xb
+ 1166 003b 49       		.uleb128 0x49
+ 1167 003c 13       		.uleb128 0x13
+ 1168 003d 00       		.byte	0
+ 1169 003e 00       		.byte	0
+ 1170 003f 06       		.uleb128 0x6
+ 1171 0040 2E       		.uleb128 0x2e
+ 1172 0041 01       		.byte	0x1
+ 1173 0042 03       		.uleb128 0x3
+ 1174 0043 0E       		.uleb128 0xe
+ 1175 0044 3A       		.uleb128 0x3a
+ 1176 0045 0B       		.uleb128 0xb
+ 1177 0046 3B       		.uleb128 0x3b
+ 1178 0047 0B       		.uleb128 0xb
+ 1179 0048 27       		.uleb128 0x27
+ 1180 0049 19       		.uleb128 0x19
+ 1181 004a 49       		.uleb128 0x49
+ 1182 004b 13       		.uleb128 0x13
+ 1183 004c 20       		.uleb128 0x20
+ 1184 004d 0B       		.uleb128 0xb
+ 1185 004e 01       		.uleb128 0x1
+ 1186 004f 13       		.uleb128 0x13
+ 1187 0050 00       		.byte	0
+ 1188 0051 00       		.byte	0
+ 1189 0052 07       		.uleb128 0x7
+ 1190 0053 05       		.uleb128 0x5
+ 1191 0054 00       		.byte	0
+ 1192 0055 03       		.uleb128 0x3
+ 1193 0056 0E       		.uleb128 0xe
+ 1194 0057 3A       		.uleb128 0x3a
+ 1195 0058 0B       		.uleb128 0xb
+ 1196 0059 3B       		.uleb128 0x3b
+ 1197 005a 0B       		.uleb128 0xb
+ 1198 005b 49       		.uleb128 0x49
+ 1199 005c 13       		.uleb128 0x13
+ 1200 005d 00       		.byte	0
+ 1201 005e 00       		.byte	0
+ 1202 005f 08       		.uleb128 0x8
+ 1203 0060 2E       		.uleb128 0x2e
+ 1204 0061 01       		.byte	0x1
+ 1205 0062 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 27
+
+
+ 1206 0063 19       		.uleb128 0x19
+ 1207 0064 03       		.uleb128 0x3
+ 1208 0065 0E       		.uleb128 0xe
+ 1209 0066 3A       		.uleb128 0x3a
+ 1210 0067 0B       		.uleb128 0xb
+ 1211 0068 3B       		.uleb128 0x3b
+ 1212 0069 0B       		.uleb128 0xb
+ 1213 006a 27       		.uleb128 0x27
+ 1214 006b 19       		.uleb128 0x19
+ 1215 006c 11       		.uleb128 0x11
+ 1216 006d 01       		.uleb128 0x1
+ 1217 006e 12       		.uleb128 0x12
+ 1218 006f 06       		.uleb128 0x6
+ 1219 0070 40       		.uleb128 0x40
+ 1220 0071 18       		.uleb128 0x18
+ 1221 0072 9742     		.uleb128 0x2117
+ 1222 0074 19       		.uleb128 0x19
+ 1223 0075 01       		.uleb128 0x1
+ 1224 0076 13       		.uleb128 0x13
+ 1225 0077 00       		.byte	0
+ 1226 0078 00       		.byte	0
+ 1227 0079 09       		.uleb128 0x9
+ 1228 007a 05       		.uleb128 0x5
+ 1229 007b 00       		.byte	0
+ 1230 007c 03       		.uleb128 0x3
+ 1231 007d 08       		.uleb128 0x8
+ 1232 007e 3A       		.uleb128 0x3a
+ 1233 007f 0B       		.uleb128 0xb
+ 1234 0080 3B       		.uleb128 0x3b
+ 1235 0081 0B       		.uleb128 0xb
+ 1236 0082 49       		.uleb128 0x49
+ 1237 0083 13       		.uleb128 0x13
+ 1238 0084 02       		.uleb128 0x2
+ 1239 0085 17       		.uleb128 0x17
+ 1240 0086 00       		.byte	0
+ 1241 0087 00       		.byte	0
+ 1242 0088 0A       		.uleb128 0xa
+ 1243 0089 898201   		.uleb128 0x4109
+ 1244 008c 00       		.byte	0
+ 1245 008d 11       		.uleb128 0x11
+ 1246 008e 01       		.uleb128 0x1
+ 1247 008f 31       		.uleb128 0x31
+ 1248 0090 13       		.uleb128 0x13
+ 1249 0091 00       		.byte	0
+ 1250 0092 00       		.byte	0
+ 1251 0093 0B       		.uleb128 0xb
+ 1252 0094 05       		.uleb128 0x5
+ 1253 0095 00       		.byte	0
+ 1254 0096 03       		.uleb128 0x3
+ 1255 0097 0E       		.uleb128 0xe
+ 1256 0098 3A       		.uleb128 0x3a
+ 1257 0099 0B       		.uleb128 0xb
+ 1258 009a 3B       		.uleb128 0x3b
+ 1259 009b 0B       		.uleb128 0xb
+ 1260 009c 49       		.uleb128 0x49
+ 1261 009d 13       		.uleb128 0x13
+ 1262 009e 02       		.uleb128 0x2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 28
+
+
+ 1263 009f 17       		.uleb128 0x17
+ 1264 00a0 00       		.byte	0
+ 1265 00a1 00       		.byte	0
+ 1266 00a2 0C       		.uleb128 0xc
+ 1267 00a3 34       		.uleb128 0x34
+ 1268 00a4 00       		.byte	0
+ 1269 00a5 03       		.uleb128 0x3
+ 1270 00a6 08       		.uleb128 0x8
+ 1271 00a7 3A       		.uleb128 0x3a
+ 1272 00a8 0B       		.uleb128 0xb
+ 1273 00a9 3B       		.uleb128 0x3b
+ 1274 00aa 0B       		.uleb128 0xb
+ 1275 00ab 49       		.uleb128 0x49
+ 1276 00ac 13       		.uleb128 0x13
+ 1277 00ad 02       		.uleb128 0x2
+ 1278 00ae 17       		.uleb128 0x17
+ 1279 00af 00       		.byte	0
+ 1280 00b0 00       		.byte	0
+ 1281 00b1 0D       		.uleb128 0xd
+ 1282 00b2 2E       		.uleb128 0x2e
+ 1283 00b3 01       		.byte	0x1
+ 1284 00b4 3F       		.uleb128 0x3f
+ 1285 00b5 19       		.uleb128 0x19
+ 1286 00b6 03       		.uleb128 0x3
+ 1287 00b7 0E       		.uleb128 0xe
+ 1288 00b8 3A       		.uleb128 0x3a
+ 1289 00b9 0B       		.uleb128 0xb
+ 1290 00ba 3B       		.uleb128 0x3b
+ 1291 00bb 0B       		.uleb128 0xb
+ 1292 00bc 27       		.uleb128 0x27
+ 1293 00bd 19       		.uleb128 0x19
+ 1294 00be 11       		.uleb128 0x11
+ 1295 00bf 01       		.uleb128 0x1
+ 1296 00c0 12       		.uleb128 0x12
+ 1297 00c1 06       		.uleb128 0x6
+ 1298 00c2 40       		.uleb128 0x40
+ 1299 00c3 18       		.uleb128 0x18
+ 1300 00c4 9642     		.uleb128 0x2116
+ 1301 00c6 19       		.uleb128 0x19
+ 1302 00c7 01       		.uleb128 0x1
+ 1303 00c8 13       		.uleb128 0x13
+ 1304 00c9 00       		.byte	0
+ 1305 00ca 00       		.byte	0
+ 1306 00cb 0E       		.uleb128 0xe
+ 1307 00cc 05       		.uleb128 0x5
+ 1308 00cd 00       		.byte	0
+ 1309 00ce 03       		.uleb128 0x3
+ 1310 00cf 0E       		.uleb128 0xe
+ 1311 00d0 3A       		.uleb128 0x3a
+ 1312 00d1 0B       		.uleb128 0xb
+ 1313 00d2 3B       		.uleb128 0x3b
+ 1314 00d3 0B       		.uleb128 0xb
+ 1315 00d4 49       		.uleb128 0x49
+ 1316 00d5 13       		.uleb128 0x13
+ 1317 00d6 02       		.uleb128 0x2
+ 1318 00d7 18       		.uleb128 0x18
+ 1319 00d8 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 29
+
+
+ 1320 00d9 00       		.byte	0
+ 1321 00da 0F       		.uleb128 0xf
+ 1322 00db 18       		.uleb128 0x18
+ 1323 00dc 00       		.byte	0
+ 1324 00dd 00       		.byte	0
+ 1325 00de 00       		.byte	0
+ 1326 00df 10       		.uleb128 0x10
+ 1327 00e0 34       		.uleb128 0x34
+ 1328 00e1 00       		.byte	0
+ 1329 00e2 03       		.uleb128 0x3
+ 1330 00e3 0E       		.uleb128 0xe
+ 1331 00e4 3A       		.uleb128 0x3a
+ 1332 00e5 0B       		.uleb128 0xb
+ 1333 00e6 3B       		.uleb128 0x3b
+ 1334 00e7 0B       		.uleb128 0xb
+ 1335 00e8 49       		.uleb128 0x49
+ 1336 00e9 13       		.uleb128 0x13
+ 1337 00ea 02       		.uleb128 0x2
+ 1338 00eb 17       		.uleb128 0x17
+ 1339 00ec 00       		.byte	0
+ 1340 00ed 00       		.byte	0
+ 1341 00ee 11       		.uleb128 0x11
+ 1342 00ef 34       		.uleb128 0x34
+ 1343 00f0 00       		.byte	0
+ 1344 00f1 03       		.uleb128 0x3
+ 1345 00f2 0E       		.uleb128 0xe
+ 1346 00f3 3A       		.uleb128 0x3a
+ 1347 00f4 0B       		.uleb128 0xb
+ 1348 00f5 3B       		.uleb128 0x3b
+ 1349 00f6 0B       		.uleb128 0xb
+ 1350 00f7 49       		.uleb128 0x49
+ 1351 00f8 13       		.uleb128 0x13
+ 1352 00f9 02       		.uleb128 0x2
+ 1353 00fa 18       		.uleb128 0x18
+ 1354 00fb 00       		.byte	0
+ 1355 00fc 00       		.byte	0
+ 1356 00fd 12       		.uleb128 0x12
+ 1357 00fe 01       		.uleb128 0x1
+ 1358 00ff 01       		.byte	0x1
+ 1359 0100 49       		.uleb128 0x49
+ 1360 0101 13       		.uleb128 0x13
+ 1361 0102 01       		.uleb128 0x1
+ 1362 0103 13       		.uleb128 0x13
+ 1363 0104 00       		.byte	0
+ 1364 0105 00       		.byte	0
+ 1365 0106 13       		.uleb128 0x13
+ 1366 0107 21       		.uleb128 0x21
+ 1367 0108 00       		.byte	0
+ 1368 0109 49       		.uleb128 0x49
+ 1369 010a 13       		.uleb128 0x13
+ 1370 010b 2F       		.uleb128 0x2f
+ 1371 010c 0B       		.uleb128 0xb
+ 1372 010d 00       		.byte	0
+ 1373 010e 00       		.byte	0
+ 1374 010f 14       		.uleb128 0x14
+ 1375 0110 898201   		.uleb128 0x4109
+ 1376 0113 01       		.byte	0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 30
+
+
+ 1377 0114 11       		.uleb128 0x11
+ 1378 0115 01       		.uleb128 0x1
+ 1379 0116 31       		.uleb128 0x31
+ 1380 0117 13       		.uleb128 0x13
+ 1381 0118 01       		.uleb128 0x1
+ 1382 0119 13       		.uleb128 0x13
+ 1383 011a 00       		.byte	0
+ 1384 011b 00       		.byte	0
+ 1385 011c 15       		.uleb128 0x15
+ 1386 011d 8A8201   		.uleb128 0x410a
+ 1387 0120 00       		.byte	0
+ 1388 0121 02       		.uleb128 0x2
+ 1389 0122 18       		.uleb128 0x18
+ 1390 0123 9142     		.uleb128 0x2111
+ 1391 0125 18       		.uleb128 0x18
+ 1392 0126 00       		.byte	0
+ 1393 0127 00       		.byte	0
+ 1394 0128 16       		.uleb128 0x16
+ 1395 0129 898201   		.uleb128 0x4109
+ 1396 012c 01       		.byte	0x1
+ 1397 012d 11       		.uleb128 0x11
+ 1398 012e 01       		.uleb128 0x1
+ 1399 012f 31       		.uleb128 0x31
+ 1400 0130 13       		.uleb128 0x13
+ 1401 0131 00       		.byte	0
+ 1402 0132 00       		.byte	0
+ 1403 0133 17       		.uleb128 0x17
+ 1404 0134 05       		.uleb128 0x5
+ 1405 0135 00       		.byte	0
+ 1406 0136 03       		.uleb128 0x3
+ 1407 0137 08       		.uleb128 0x8
+ 1408 0138 3A       		.uleb128 0x3a
+ 1409 0139 0B       		.uleb128 0xb
+ 1410 013a 3B       		.uleb128 0x3b
+ 1411 013b 0B       		.uleb128 0xb
+ 1412 013c 49       		.uleb128 0x49
+ 1413 013d 13       		.uleb128 0x13
+ 1414 013e 02       		.uleb128 0x2
+ 1415 013f 18       		.uleb128 0x18
+ 1416 0140 00       		.byte	0
+ 1417 0141 00       		.byte	0
+ 1418 0142 18       		.uleb128 0x18
+ 1419 0143 2E       		.uleb128 0x2e
+ 1420 0144 00       		.byte	0
+ 1421 0145 3F       		.uleb128 0x3f
+ 1422 0146 19       		.uleb128 0x19
+ 1423 0147 3C       		.uleb128 0x3c
+ 1424 0148 19       		.uleb128 0x19
+ 1425 0149 6E       		.uleb128 0x6e
+ 1426 014a 0E       		.uleb128 0xe
+ 1427 014b 03       		.uleb128 0x3
+ 1428 014c 0E       		.uleb128 0xe
+ 1429 014d 3A       		.uleb128 0x3a
+ 1430 014e 0B       		.uleb128 0xb
+ 1431 014f 3B       		.uleb128 0x3b
+ 1432 0150 05       		.uleb128 0x5
+ 1433 0151 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 31
+
+
+ 1434 0152 00       		.byte	0
+ 1435 0153 19       		.uleb128 0x19
+ 1436 0154 2E       		.uleb128 0x2e
+ 1437 0155 00       		.byte	0
+ 1438 0156 3F       		.uleb128 0x3f
+ 1439 0157 19       		.uleb128 0x19
+ 1440 0158 3C       		.uleb128 0x3c
+ 1441 0159 19       		.uleb128 0x19
+ 1442 015a 6E       		.uleb128 0x6e
+ 1443 015b 0E       		.uleb128 0xe
+ 1444 015c 03       		.uleb128 0x3
+ 1445 015d 0E       		.uleb128 0xe
+ 1446 015e 3A       		.uleb128 0x3a
+ 1447 015f 0B       		.uleb128 0xb
+ 1448 0160 3B       		.uleb128 0x3b
+ 1449 0161 0B       		.uleb128 0xb
+ 1450 0162 00       		.byte	0
+ 1451 0163 00       		.byte	0
+ 1452 0164 00       		.byte	0
+ 1453              		.section	.debug_loc,"",%progbits
+ 1454              	.Ldebug_loc0:
+ 1455              	.LLST0:
+ 1456 0000 00000000 		.4byte	.LVL0
+ 1457 0004 06000000 		.4byte	.LVL1
+ 1458 0008 0100     		.2byte	0x1
+ 1459 000a 50       		.byte	0x50
+ 1460 000b 06000000 		.4byte	.LVL1
+ 1461 000f 12000000 		.4byte	.LVL4
+ 1462 0013 0100     		.2byte	0x1
+ 1463 0015 54       		.byte	0x54
+ 1464 0016 00000000 		.4byte	0
+ 1465 001a 00000000 		.4byte	0
+ 1466              	.LLST1:
+ 1467 001e 00000000 		.4byte	.LVL5
+ 1468 0022 0A000000 		.4byte	.LVL7
+ 1469 0026 0100     		.2byte	0x1
+ 1470 0028 50       		.byte	0x50
+ 1471 0029 0A000000 		.4byte	.LVL7
+ 1472 002d 1C000000 		.4byte	.LVL13
+ 1473 0031 0100     		.2byte	0x1
+ 1474 0033 55       		.byte	0x55
+ 1475 0034 00000000 		.4byte	0
+ 1476 0038 00000000 		.4byte	0
+ 1477              	.LLST2:
+ 1478 003c 00000000 		.4byte	.LVL5
+ 1479 0040 0A000000 		.4byte	.LVL7
+ 1480 0044 0100     		.2byte	0x1
+ 1481 0046 51       		.byte	0x51
+ 1482 0047 0A000000 		.4byte	.LVL7
+ 1483 004b 1E000000 		.4byte	.LFE3
+ 1484 004f 0400     		.2byte	0x4
+ 1485 0051 F3       		.byte	0xf3
+ 1486 0052 01       		.uleb128 0x1
+ 1487 0053 51       		.byte	0x51
+ 1488 0054 9F       		.byte	0x9f
+ 1489 0055 00000000 		.4byte	0
+ 1490 0059 00000000 		.4byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 32
+
+
+ 1491              	.LLST3:
+ 1492 005d 06000000 		.4byte	.LVL6
+ 1493 0061 0A000000 		.4byte	.LVL7
+ 1494 0065 0200     		.2byte	0x2
+ 1495 0067 30       		.byte	0x30
+ 1496 0068 9F       		.byte	0x9f
+ 1497 0069 0A000000 		.4byte	.LVL7
+ 1498 006d 14000000 		.4byte	.LVL10
+ 1499 0071 0100     		.2byte	0x1
+ 1500 0073 54       		.byte	0x54
+ 1501 0074 16000000 		.4byte	.LVL11
+ 1502 0078 1C000000 		.4byte	.LVL12
+ 1503 007c 0100     		.2byte	0x1
+ 1504 007e 54       		.byte	0x54
+ 1505 007f 00000000 		.4byte	0
+ 1506 0083 00000000 		.4byte	0
+ 1507              	.LLST4:
+ 1508 0087 30000000 		.4byte	.LVL20
+ 1509 008b 46000000 		.4byte	.LVL24
+ 1510 008f 0100     		.2byte	0x1
+ 1511 0091 54       		.byte	0x54
+ 1512 0092 00000000 		.4byte	0
+ 1513 0096 00000000 		.4byte	0
+ 1514              	.LLST5:
+ 1515 009a 58000000 		.4byte	.LVL28
+ 1516 009e 74000000 		.4byte	.LVL33
+ 1517 00a2 0100     		.2byte	0x1
+ 1518 00a4 56       		.byte	0x56
+ 1519 00a5 74000000 		.4byte	.LVL33
+ 1520 00a9 7C000000 		.4byte	.LVL34
+ 1521 00ad 0100     		.2byte	0x1
+ 1522 00af 50       		.byte	0x50
+ 1523 00b0 7C000000 		.4byte	.LVL34
+ 1524 00b4 9A000000 		.4byte	.LVL39
+ 1525 00b8 0100     		.2byte	0x1
+ 1526 00ba 56       		.byte	0x56
+ 1527 00bb 00000000 		.4byte	0
+ 1528 00bf 00000000 		.4byte	0
+ 1529              	.LLST6:
+ 1530 00c3 CC000000 		.4byte	.LVL47
+ 1531 00c7 E6000000 		.4byte	.LVL52
+ 1532 00cb 0100     		.2byte	0x1
+ 1533 00cd 53       		.byte	0x53
+ 1534 00ce 00000000 		.4byte	0
+ 1535 00d2 00000000 		.4byte	0
+ 1536              	.LLST7:
+ 1537 00d6 06000000 		.4byte	.LVL15
+ 1538 00da 0A000000 		.4byte	.LVL16
+ 1539 00de 0200     		.2byte	0x2
+ 1540 00e0 30       		.byte	0x30
+ 1541 00e1 9F       		.byte	0x9f
+ 1542 00e2 58000000 		.4byte	.LVL28
+ 1543 00e6 5A000000 		.4byte	.LVL29
+ 1544 00ea 0200     		.2byte	0x2
+ 1545 00ec 30       		.byte	0x30
+ 1546 00ed 9F       		.byte	0x9f
+ 1547 00ee 5A000000 		.4byte	.LVL29
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 33
+
+
+ 1548 00f2 5C000000 		.4byte	.LVL30
+ 1549 00f6 0100     		.2byte	0x1
+ 1550 00f8 55       		.byte	0x55
+ 1551 00f9 5C000000 		.4byte	.LVL30
+ 1552 00fd 98000000 		.4byte	.LVL38
+ 1553 0101 0100     		.2byte	0x1
+ 1554 0103 54       		.byte	0x54
+ 1555 0104 CC000000 		.4byte	.LVL47
+ 1556 0108 D0000000 		.4byte	.LVL48
+ 1557 010c 0200     		.2byte	0x2
+ 1558 010e 30       		.byte	0x30
+ 1559 010f 9F       		.byte	0x9f
+ 1560 0110 D0000000 		.4byte	.LVL48
+ 1561 0114 D2000000 		.4byte	.LVL49
+ 1562 0118 0100     		.2byte	0x1
+ 1563 011a 54       		.byte	0x54
+ 1564 011b D2000000 		.4byte	.LVL49
+ 1565 011f D4000000 		.4byte	.LVL50
+ 1566 0123 0100     		.2byte	0x1
+ 1567 0125 50       		.byte	0x50
+ 1568 0126 D4000000 		.4byte	.LVL50
+ 1569 012a E6000000 		.4byte	.LVL52
+ 1570 012e 0100     		.2byte	0x1
+ 1571 0130 54       		.byte	0x54
+ 1572 0131 E6000000 		.4byte	.LVL52
+ 1573 0135 EE000000 		.4byte	.LVL53
+ 1574 0139 0300     		.2byte	0x3
+ 1575 013b 70       		.byte	0x70
+ 1576 013c 02       		.sleb128 2
+ 1577 013d 9F       		.byte	0x9f
+ 1578 013e EE000000 		.4byte	.LVL53
+ 1579 0142 F2000000 		.4byte	.LVL54
+ 1580 0146 0100     		.2byte	0x1
+ 1581 0148 54       		.byte	0x54
+ 1582 0149 F2000000 		.4byte	.LVL54
+ 1583 014d FC000000 		.4byte	.LVL55
+ 1584 0151 0300     		.2byte	0x3
+ 1585 0153 74       		.byte	0x74
+ 1586 0154 01       		.sleb128 1
+ 1587 0155 9F       		.byte	0x9f
+ 1588 0156 FC000000 		.4byte	.LVL55
+ 1589 015a 1A010000 		.4byte	.LVL60
+ 1590 015e 0100     		.2byte	0x1
+ 1591 0160 54       		.byte	0x54
+ 1592 0161 00000000 		.4byte	0
+ 1593 0165 00000000 		.4byte	0
+ 1594              	.LLST8:
+ 1595 0169 06000000 		.4byte	.LVL15
+ 1596 016d 0A000000 		.4byte	.LVL16
+ 1597 0171 0200     		.2byte	0x2
+ 1598 0173 31       		.byte	0x31
+ 1599 0174 9F       		.byte	0x9f
+ 1600 0175 0A000000 		.4byte	.LVL16
+ 1601 0179 26000000 		.4byte	.LVL18
+ 1602 017d 0100     		.2byte	0x1
+ 1603 017f 54       		.byte	0x54
+ 1604 0180 26000000 		.4byte	.LVL18
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 34
+
+
+ 1605 0184 48000000 		.4byte	.LVL25
+ 1606 0188 0100     		.2byte	0x1
+ 1607 018a 55       		.byte	0x55
+ 1608 018b 48000000 		.4byte	.LVL25
+ 1609 018f 4E000000 		.4byte	.LVL26
+ 1610 0193 0100     		.2byte	0x1
+ 1611 0195 54       		.byte	0x54
+ 1612 0196 4E000000 		.4byte	.LVL26
+ 1613 019a 9A000000 		.4byte	.LVL39
+ 1614 019e 0100     		.2byte	0x1
+ 1615 01a0 57       		.byte	0x57
+ 1616 01a1 9A000000 		.4byte	.LVL39
+ 1617 01a5 A0000000 		.4byte	.LVL40
+ 1618 01a9 0100     		.2byte	0x1
+ 1619 01ab 54       		.byte	0x54
+ 1620 01ac A0000000 		.4byte	.LVL40
+ 1621 01b0 BC000000 		.4byte	.LVL44
+ 1622 01b4 0100     		.2byte	0x1
+ 1623 01b6 55       		.byte	0x55
+ 1624 01b7 BC000000 		.4byte	.LVL44
+ 1625 01bb C2000000 		.4byte	.LVL45
+ 1626 01bf 0100     		.2byte	0x1
+ 1627 01c1 54       		.byte	0x54
+ 1628 01c2 C2000000 		.4byte	.LVL45
+ 1629 01c6 1C010000 		.4byte	.LVL61
+ 1630 01ca 0100     		.2byte	0x1
+ 1631 01cc 55       		.byte	0x55
+ 1632 01cd 1C010000 		.4byte	.LVL61
+ 1633 01d1 2C010000 		.4byte	.LVL63
+ 1634 01d5 0100     		.2byte	0x1
+ 1635 01d7 54       		.byte	0x54
+ 1636 01d8 00000000 		.4byte	0
+ 1637 01dc 00000000 		.4byte	0
+ 1638              	.LLST9:
+ 1639 01e0 AA000000 		.4byte	.LVL42
+ 1640 01e4 B1000000 		.4byte	.LVL43-1
+ 1641 01e8 0100     		.2byte	0x1
+ 1642 01ea 53       		.byte	0x53
+ 1643 01eb 00000000 		.4byte	0
+ 1644 01ef 00000000 		.4byte	0
+ 1645              	.LLST10:
+ 1646 01f3 06000000 		.4byte	.LVL15
+ 1647 01f7 2A000000 		.4byte	.LVL19
+ 1648 01fb 0300     		.2byte	0x3
+ 1649 01fd 91       		.byte	0x91
+ 1650 01fe 50       		.sleb128 -48
+ 1651 01ff 9F       		.byte	0x9f
+ 1652 0200 2A000000 		.4byte	.LVL19
+ 1653 0204 32000000 		.4byte	.LVL21
+ 1654 0208 0100     		.2byte	0x1
+ 1655 020a 53       		.byte	0x53
+ 1656 020b 32000000 		.4byte	.LVL21
+ 1657 020f 52000000 		.4byte	.LVL27
+ 1658 0213 0300     		.2byte	0x3
+ 1659 0215 91       		.byte	0x91
+ 1660 0216 50       		.sleb128 -48
+ 1661 0217 9F       		.byte	0x9f
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 35
+
+
+ 1662 0218 52000000 		.4byte	.LVL27
+ 1663 021c 5A000000 		.4byte	.LVL29
+ 1664 0220 0100     		.2byte	0x1
+ 1665 0222 53       		.byte	0x53
+ 1666 0223 5A000000 		.4byte	.LVL29
+ 1667 0227 A4000000 		.4byte	.LVL41
+ 1668 022b 0300     		.2byte	0x3
+ 1669 022d 91       		.byte	0x91
+ 1670 022e 50       		.sleb128 -48
+ 1671 022f 9F       		.byte	0x9f
+ 1672 0230 A4000000 		.4byte	.LVL41
+ 1673 0234 AA000000 		.4byte	.LVL42
+ 1674 0238 0100     		.2byte	0x1
+ 1675 023a 53       		.byte	0x53
+ 1676 023b AA000000 		.4byte	.LVL42
+ 1677 023f B1000000 		.4byte	.LVL43-1
+ 1678 0243 0100     		.2byte	0x1
+ 1679 0245 5C       		.byte	0x5c
+ 1680 0246 B1000000 		.4byte	.LVL43-1
+ 1681 024a C6000000 		.4byte	.LVL46
+ 1682 024e 0300     		.2byte	0x3
+ 1683 0250 91       		.byte	0x91
+ 1684 0251 50       		.sleb128 -48
+ 1685 0252 9F       		.byte	0x9f
+ 1686 0253 C6000000 		.4byte	.LVL46
+ 1687 0257 CC000000 		.4byte	.LVL47
+ 1688 025b 0100     		.2byte	0x1
+ 1689 025d 53       		.byte	0x53
+ 1690 025e CC000000 		.4byte	.LVL47
+ 1691 0262 FE000000 		.4byte	.LVL56
+ 1692 0266 0100     		.2byte	0x1
+ 1693 0268 5C       		.byte	0x5c
+ 1694 0269 FE000000 		.4byte	.LVL56
+ 1695 026d 38010000 		.4byte	.LFE5
+ 1696 0271 0300     		.2byte	0x3
+ 1697 0273 91       		.byte	0x91
+ 1698 0274 50       		.sleb128 -48
+ 1699 0275 9F       		.byte	0x9f
+ 1700 0276 00000000 		.4byte	0
+ 1701 027a 00000000 		.4byte	0
+ 1702              	.LLST11:
+ 1703 027e 00000000 		.4byte	.LVL64
+ 1704 0282 08000000 		.4byte	.LVL66
+ 1705 0286 0100     		.2byte	0x1
+ 1706 0288 50       		.byte	0x50
+ 1707 0289 08000000 		.4byte	.LVL66
+ 1708 028d 54000000 		.4byte	.LFE6
+ 1709 0291 0400     		.2byte	0x4
+ 1710 0293 F3       		.byte	0xf3
+ 1711 0294 01       		.uleb128 0x1
+ 1712 0295 50       		.byte	0x50
+ 1713 0296 9F       		.byte	0x9f
+ 1714 0297 00000000 		.4byte	0
+ 1715 029b 00000000 		.4byte	0
+ 1716              	.LLST12:
+ 1717 029f 04000000 		.4byte	.LVL65
+ 1718 02a3 08000000 		.4byte	.LVL66
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 36
+
+
+ 1719 02a7 0200     		.2byte	0x2
+ 1720 02a9 30       		.byte	0x30
+ 1721 02aa 9F       		.byte	0x9f
+ 1722 02ab 08000000 		.4byte	.LVL66
+ 1723 02af 30000000 		.4byte	.LVL73
+ 1724 02b3 0100     		.2byte	0x1
+ 1725 02b5 54       		.byte	0x54
+ 1726 02b6 30000000 		.4byte	.LVL73
+ 1727 02ba 34000000 		.4byte	.LVL74
+ 1728 02be 0100     		.2byte	0x1
+ 1729 02c0 52       		.byte	0x52
+ 1730 02c1 34000000 		.4byte	.LVL74
+ 1731 02c5 3C000000 		.4byte	.LVL75
+ 1732 02c9 0100     		.2byte	0x1
+ 1733 02cb 54       		.byte	0x54
+ 1734 02cc 3C000000 		.4byte	.LVL75
+ 1735 02d0 54000000 		.4byte	.LFE6
+ 1736 02d4 0100     		.2byte	0x1
+ 1737 02d6 53       		.byte	0x53
+ 1738 02d7 00000000 		.4byte	0
+ 1739 02db 00000000 		.4byte	0
+ 1740              	.LLST13:
+ 1741 02df 00000000 		.4byte	.LVL76
+ 1742 02e3 0A000000 		.4byte	.LVL77
+ 1743 02e7 0100     		.2byte	0x1
+ 1744 02e9 50       		.byte	0x50
+ 1745 02ea 0A000000 		.4byte	.LVL77
+ 1746 02ee 32000000 		.4byte	.LVL86
+ 1747 02f2 0100     		.2byte	0x1
+ 1748 02f4 55       		.byte	0x55
+ 1749 02f5 32000000 		.4byte	.LVL86
+ 1750 02f9 44000000 		.4byte	.LFE7
+ 1751 02fd 0400     		.2byte	0x4
+ 1752 02ff F3       		.byte	0xf3
+ 1753 0300 01       		.uleb128 0x1
+ 1754 0301 50       		.byte	0x50
+ 1755 0302 9F       		.byte	0x9f
+ 1756 0303 00000000 		.4byte	0
+ 1757 0307 00000000 		.4byte	0
+ 1758              	.LLST14:
+ 1759 030b 00000000 		.4byte	.LVL76
+ 1760 030f 0D000000 		.4byte	.LVL78-1
+ 1761 0313 0100     		.2byte	0x1
+ 1762 0315 51       		.byte	0x51
+ 1763 0316 0D000000 		.4byte	.LVL78-1
+ 1764 031a 32000000 		.4byte	.LVL85
+ 1765 031e 0100     		.2byte	0x1
+ 1766 0320 54       		.byte	0x54
+ 1767 0321 32000000 		.4byte	.LVL85
+ 1768 0325 44000000 		.4byte	.LFE7
+ 1769 0329 0400     		.2byte	0x4
+ 1770 032b F3       		.byte	0xf3
+ 1771 032c 01       		.uleb128 0x1
+ 1772 032d 51       		.byte	0x51
+ 1773 032e 9F       		.byte	0x9f
+ 1774 032f 00000000 		.4byte	0
+ 1775 0333 00000000 		.4byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 37
+
+
+ 1776              	.LLST15:
+ 1777 0337 00000000 		.4byte	.LVL76
+ 1778 033b 0D000000 		.4byte	.LVL78-1
+ 1779 033f 0100     		.2byte	0x1
+ 1780 0341 52       		.byte	0x52
+ 1781 0342 0D000000 		.4byte	.LVL78-1
+ 1782 0346 32000000 		.4byte	.LVL87
+ 1783 034a 0100     		.2byte	0x1
+ 1784 034c 56       		.byte	0x56
+ 1785 034d 32000000 		.4byte	.LVL87
+ 1786 0351 44000000 		.4byte	.LFE7
+ 1787 0355 0400     		.2byte	0x4
+ 1788 0357 F3       		.byte	0xf3
+ 1789 0358 01       		.uleb128 0x1
+ 1790 0359 52       		.byte	0x52
+ 1791 035a 9F       		.byte	0x9f
+ 1792 035b 00000000 		.4byte	0
+ 1793 035f 00000000 		.4byte	0
+ 1794              		.section	.debug_aranges,"",%progbits
+ 1795 0000 44000000 		.4byte	0x44
+ 1796 0004 0200     		.2byte	0x2
+ 1797 0006 00000000 		.4byte	.Ldebug_info0
+ 1798 000a 04       		.byte	0x4
+ 1799 000b 00       		.byte	0
+ 1800 000c 0000     		.2byte	0
+ 1801 000e 0000     		.2byte	0
+ 1802 0010 00000000 		.4byte	.LFB2
+ 1803 0014 14000000 		.4byte	.LFE2-.LFB2
+ 1804 0018 00000000 		.4byte	.LFB3
+ 1805 001c 1E000000 		.4byte	.LFE3-.LFB3
+ 1806 0020 00000000 		.4byte	.LFB5
+ 1807 0024 38010000 		.4byte	.LFE5-.LFB5
+ 1808 0028 00000000 		.4byte	.LFB6
+ 1809 002c 54000000 		.4byte	.LFE6-.LFB6
+ 1810 0030 00000000 		.4byte	.LFB7
+ 1811 0034 44000000 		.4byte	.LFE7-.LFB7
+ 1812 0038 00000000 		.4byte	.LFB8
+ 1813 003c 02000000 		.4byte	.LFE8-.LFB8
+ 1814 0040 00000000 		.4byte	0
+ 1815 0044 00000000 		.4byte	0
+ 1816              		.section	.debug_ranges,"",%progbits
+ 1817              	.Ldebug_ranges0:
+ 1818 0000 00000000 		.4byte	.LFB2
+ 1819 0004 14000000 		.4byte	.LFE2
+ 1820 0008 00000000 		.4byte	.LFB3
+ 1821 000c 1E000000 		.4byte	.LFE3
+ 1822 0010 00000000 		.4byte	.LFB5
+ 1823 0014 38010000 		.4byte	.LFE5
+ 1824 0018 00000000 		.4byte	.LFB6
+ 1825 001c 54000000 		.4byte	.LFE6
+ 1826 0020 00000000 		.4byte	.LFB7
+ 1827 0024 44000000 		.4byte	.LFE7
+ 1828 0028 00000000 		.4byte	.LFB8
+ 1829 002c 02000000 		.4byte	.LFE8
+ 1830 0030 00000000 		.4byte	0
+ 1831 0034 00000000 		.4byte	0
+ 1832              		.section	.debug_line,"",%progbits
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 38
+
+
+ 1833              	.Ldebug_line0:
+ 1834 0000 75010000 		.section	.debug_str,"MS",%progbits,1
+ 1834      02006600 
+ 1834      00000201 
+ 1834      FB0E0D00 
+ 1834      01010101 
+ 1835              	.LASF34:
+ 1836 0000 75736255 		.ascii	"usbUart_printHeader\000"
+ 1836      6172745F 
+ 1836      7072696E 
+ 1836      74486561 
+ 1836      64657200 
+ 1837              	.LASF23:
+ 1838 0014 75736255 		.ascii	"usbUart_print\000"
+ 1838      6172745F 
+ 1838      7072696E 
+ 1838      7400
+ 1839              	.LASF33:
+ 1840 0022 72756E73 		.ascii	"runs\000"
+ 1840      00
+ 1841              	.LASF42:
+ 1842 0027 47656E65 		.ascii	"Generated_Source\\PSoC4\\usbUart.c\000"
+ 1842      72617465 
+ 1842      645F536F 
+ 1842      75726365 
+ 1842      5C50536F 
+ 1843              	.LASF3:
+ 1844 0048 73686F72 		.ascii	"short unsigned int\000"
+ 1844      7420756E 
+ 1844      7369676E 
+ 1844      65642069 
+ 1844      6E7400
+ 1845              	.LASF20:
+ 1846 005b 75736255 		.ascii	"usbUart_putArray\000"
+ 1846      6172745F 
+ 1846      70757441 
+ 1846      72726179 
+ 1846      00
+ 1847              	.LASF24:
+ 1848 006c 70737A46 		.ascii	"pszFmt\000"
+ 1848      6D7400
+ 1849              	.LASF38:
+ 1850 0073 75736255 		.ascii	"usbUart_dummyTxArray\000"
+ 1850      6172745F 
+ 1850      64756D6D 
+ 1850      79547841 
+ 1850      72726179 
+ 1851              	.LASF12:
+ 1852 0088 666C6F61 		.ascii	"float\000"
+ 1852      7400
+ 1853              	.LASF36:
+ 1854 008e 64617465 		.ascii	"date\000"
+ 1854      00
+ 1855              	.LASF30:
+ 1856 0093 6356616C 		.ascii	"cVal\000"
+ 1856      00
+ 1857              	.LASF14:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 39
+
+
+ 1858 0098 63686172 		.ascii	"char8\000"
+ 1858      3800
+ 1859              	.LASF25:
+ 1860 009e 70737A56 		.ascii	"pszVal\000"
+ 1860      616C00
+ 1861              	.LASF5:
+ 1862 00a5 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1862      20756E73 
+ 1862      69676E65 
+ 1862      6420696E 
+ 1862      7400
+ 1863              	.LASF9:
+ 1864 00b7 75696E74 		.ascii	"uint8\000"
+ 1864      3800
+ 1865              	.LASF21:
+ 1866 00bd 61727261 		.ascii	"array\000"
+ 1866      7900
+ 1867              	.LASF1:
+ 1868 00c3 756E7369 		.ascii	"unsigned char\000"
+ 1868      676E6564 
+ 1868      20636861 
+ 1868      7200
+ 1869              	.LASF19:
+ 1870 00d1 75736255 		.ascii	"usbUart_putString\000"
+ 1870      6172745F 
+ 1870      70757453 
+ 1870      7472696E 
+ 1870      6700
+ 1871              	.LASF13:
+ 1872 00e3 646F7562 		.ascii	"double\000"
+ 1872      6C6500
+ 1873              	.LASF32:
+ 1874 00ea 75736255 		.ascii	"usbUart_txTest\000"
+ 1874      6172745F 
+ 1874      74785465 
+ 1874      737400
+ 1875              	.LASF10:
+ 1876 00f9 75696E74 		.ascii	"uint16\000"
+ 1876      313600
+ 1877              	.LASF11:
+ 1878 0100 75696E74 		.ascii	"uint32\000"
+ 1878      333200
+ 1879              	.LASF8:
+ 1880 0107 756E7369 		.ascii	"unsigned int\000"
+ 1880      676E6564 
+ 1880      20696E74 
+ 1880      00
+ 1881              	.LASF26:
+ 1882 0114 6956616C 		.ascii	"iVal\000"
+ 1882      00
+ 1883              	.LASF7:
+ 1884 0119 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1884      206C6F6E 
+ 1884      6720756E 
+ 1884      7369676E 
+ 1884      65642069 
+ 1885              	.LASF27:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 40
+
+
+ 1886 0130 7856616C 		.ascii	"xVal\000"
+ 1886      00
+ 1887              	.LASF35:
+ 1888 0135 74696D65 		.ascii	"time\000"
+ 1888      00
+ 1889              	.LASF41:
+ 1890 013a 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1890      43313120 
+ 1890      352E342E 
+ 1890      31203230 
+ 1890      31363036 
+ 1891 016d 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1891      20726576 
+ 1891      6973696F 
+ 1891      6E203233 
+ 1891      37373135 
+ 1892 01a0 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1892      66756E63 
+ 1892      74696F6E 
+ 1892      2D736563 
+ 1892      74696F6E 
+ 1893              	.LASF17:
+ 1894 01c8 73697A65 		.ascii	"sizetype\000"
+ 1894      74797065 
+ 1894      00
+ 1895              	.LASF43:
+ 1896 01d1 433A5C55 		.ascii	"C:\\Users\\ccheney\\Dropbox (MIT)\\MICA\\Creator\\l"
+ 1896      73657273 
+ 1896      5C636368 
+ 1896      656E6579 
+ 1896      5C44726F 
+ 1897 01fe 69627261 		.ascii	"ibraries\\micaComponents_testing\\packetTesting_v1_"
+ 1897      72696573 
+ 1897      5C6D6963 
+ 1897      61436F6D 
+ 1897      706F6E65 
+ 1898 022f 332E6379 		.ascii	"3.cydsn\000"
+ 1898      64736E00 
+ 1899              	.LASF44:
+ 1900 0237 75736255 		.ascii	"usbUart_changeBase\000"
+ 1900      6172745F 
+ 1900      6368616E 
+ 1900      67654261 
+ 1900      736500
+ 1901              	.LASF6:
+ 1902 024a 6C6F6E67 		.ascii	"long long int\000"
+ 1902      206C6F6E 
+ 1902      6720696E 
+ 1902      7400
+ 1903              	.LASF31:
+ 1904 0258 70417267 		.ascii	"pArg\000"
+ 1904      00
+ 1905              	.LASF37:
+ 1906 025d 6E616D65 		.ascii	"name\000"
+ 1906      00
+ 1907              	.LASF29:
+ 1908 0262 696E6465 		.ascii	"index\000"
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccP2Ts0T.s 			page 41
+
+
+ 1908      7800
+ 1909              	.LASF39:
+ 1910 0268 55415254 		.ascii	"UART_USB_SpiUartWriteTxData\000"
+ 1910      5F555342 
+ 1910      5F537069 
+ 1910      55617274 
+ 1910      57726974 
+ 1911              	.LASF2:
+ 1912 0284 73686F72 		.ascii	"short int\000"
+ 1912      7420696E 
+ 1912      7400
+ 1913              	.LASF28:
+ 1914 028e 62756666 		.ascii	"buffer\000"
+ 1914      657200
+ 1915              	.LASF4:
+ 1916 0295 6C6F6E67 		.ascii	"long int\000"
+ 1916      20696E74 
+ 1916      00
+ 1917              	.LASF15:
+ 1918 029e 63686172 		.ascii	"char\000"
+ 1918      00
+ 1919              	.LASF16:
+ 1920 02a3 6C6F6E67 		.ascii	"long double\000"
+ 1920      20646F75 
+ 1920      626C6500 
+ 1921              	.LASF0:
+ 1922 02af 7369676E 		.ascii	"signed char\000"
+ 1922      65642063 
+ 1922      68617200 
+ 1923              	.LASF45:
+ 1924 02bb 496E6465 		.ascii	"Index\000"
+ 1924      7800
+ 1925              	.LASF18:
+ 1926 02c1 5F426F6F 		.ascii	"_Bool\000"
+ 1926      6C00
+ 1927              	.LASF22:
+ 1928 02c7 6C656E67 		.ascii	"length\000"
+ 1928      746800
+ 1929              	.LASF40:
+ 1930 02ce 43794465 		.ascii	"CyDelay\000"
+ 1930      6C617900 
+ 1931              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

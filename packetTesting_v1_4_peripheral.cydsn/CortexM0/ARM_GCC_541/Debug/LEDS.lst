@@ -1,0 +1,2080 @@
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"LEDS.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.LEDS_Write,"ax",%progbits
+  20              		.align	2
+  21              		.global	LEDS_Write
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	LEDS_Write, %function
+  25              	LEDS_Write:
+  26              	.LFB2:
+  27              		.file 1 "Generated_Source\\PSoC4\\LEDS.c"
+   1:Generated_Source\PSoC4/LEDS.c **** /***************************************************************************
+   2:Generated_Source\PSoC4/LEDS.c **** *                                       MICA
+   3:Generated_Source\PSoC4/LEDS.c **** * File: LED_RGB_pins.c
+   4:Generated_Source\PSoC4/LEDS.c **** * Workspace: micaCompnents
+   5:Generated_Source\PSoC4/LEDS.c **** * Project Name: libMica
+   6:Generated_Source\PSoC4/LEDS.c **** * Version: v1.0
+   7:Generated_Source\PSoC4/LEDS.c **** * Author: Craig Cheney
+   8:Generated_Source\PSoC4/LEDS.c **** *
+   9:Generated_Source\PSoC4/LEDS.c **** * Brief:
+  10:Generated_Source\PSoC4/LEDS.c **** *   Block API for controlling an RGB LED
+  11:Generated_Source\PSoC4/LEDS.c **** * 
+  12:Generated_Source\PSoC4/LEDS.c **** * Authors:
+  13:Generated_Source\PSoC4/LEDS.c **** *   Craig Cheney
+  14:Generated_Source\PSoC4/LEDS.c **** *
+  15:Generated_Source\PSoC4/LEDS.c **** * Change Log:
+  16:Generated_Source\PSoC4/LEDS.c **** *   2018.02.28 CC - Document created
+  17:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************/
+  18:Generated_Source\PSoC4/LEDS.c **** #include "LEDS.h"
+  19:Generated_Source\PSoC4/LEDS.c **** #include "LEDS_Control_reg.h"
+  20:Generated_Source\PSoC4/LEDS.c **** #include "CyLib.h"
+  21:Generated_Source\PSoC4/LEDS.c **** #include "micaCommon.h"
+  22:Generated_Source\PSoC4/LEDS.c **** 
+  23:Generated_Source\PSoC4/LEDS.c **** /* Set bit at position 'bitShift' to 'val' */
+  24:Generated_Source\PSoC4/LEDS.c **** #define SET_BIT_STATE(reg, bitShift, val) (reg = (reg & ~(1u << bitShift)) | (!!val << bitShift))
+  25:Generated_Source\PSoC4/LEDS.c **** 
+  26:Generated_Source\PSoC4/LEDS.c **** #define LEDS_ON_VAL             (LEDS_ACTIVE_VAL)
+  27:Generated_Source\PSoC4/LEDS.c **** #define LEDS_OFF_VAL            (!LEDS_ACTIVE_VAL)
+  28:Generated_Source\PSoC4/LEDS.c **** 
+  29:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+  30:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_Write()
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 2
+
+
+  31:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+  32:Generated_Source\PSoC4/LEDS.c **** * Summary:
+  33:Generated_Source\PSoC4/LEDS.c **** *   Sets the state of the LED control register
+  34:Generated_Source\PSoC4/LEDS.c **** *
+  35:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+  36:Generated_Source\PSoC4/LEDS.c **** *   uint8 State - The new state mask to write to the control register.
+  37:Generated_Source\PSoC4/LEDS.c **** *
+  38:Generated_Source\PSoC4/LEDS.c **** * Return:
+  39:Generated_Source\PSoC4/LEDS.c **** *   uint8: Value of the control register after it was written. 
+  40:Generated_Source\PSoC4/LEDS.c **** *
+  41:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+  42:Generated_Source\PSoC4/LEDS.c **** uint8 LEDS_Write(uint8 state) {
+  28              		.loc 1 42 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 10B5     		push	{r4, lr}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 14, -4
+  43:Generated_Source\PSoC4/LEDS.c ****     /* Set the State accounting for active mod */
+  44:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Write( (LEDS_ACTIVE_VAL ? state : ~state) & LEDS_CTRL_MASK );
+  37              		.loc 1 44 0
+  38 0002 0723     		movs	r3, #7
+  39 0004 8343     		bics	r3, r0
+  40 0006 1800     		movs	r0, r3
+  41              	.LVL1:
+  42 0008 FFF7FEFF 		bl	LEDS_Control_reg_Write
+  43              	.LVL2:
+  45:Generated_Source\PSoC4/LEDS.c ****     /* Return the value */
+  46:Generated_Source\PSoC4/LEDS.c ****     return LEDS_Control_reg_Read();
+  44              		.loc 1 46 0
+  45 000c FFF7FEFF 		bl	LEDS_Control_reg_Read
+  46              	.LVL3:
+  47:Generated_Source\PSoC4/LEDS.c **** }
+  47              		.loc 1 47 0
+  48              		@ sp needed
+  49 0010 10BD     		pop	{r4, pc}
+  50              		.cfi_endproc
+  51              	.LFE2:
+  52              		.size	LEDS_Write, .-LEDS_Write
+  53 0012 C046     		.section	.text.LEDS_R_Write,"ax",%progbits
+  54              		.align	2
+  55              		.global	LEDS_R_Write
+  56              		.code	16
+  57              		.thumb_func
+  58              		.type	LEDS_R_Write, %function
+  59              	LEDS_R_Write:
+  60              	.LFB3:
+  48:Generated_Source\PSoC4/LEDS.c **** 
+  49:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+  50:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_R_Write()
+  51:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+  52:Generated_Source\PSoC4/LEDS.c **** * Summary:
+  53:Generated_Source\PSoC4/LEDS.c **** *   Sets the state of the Red LED to the state passed in, Regardless of the 
+  54:Generated_Source\PSoC4/LEDS.c **** *   polarity of the LEDs. I.E. LEDS_R_Write(true) will always
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 3
+
+
+  55:Generated_Source\PSoC4/LEDS.c **** *   turn on the LED. 
+  56:Generated_Source\PSoC4/LEDS.c **** *
+  57:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+  58:Generated_Source\PSoC4/LEDS.c **** *   bool State - The new state to write.
+  59:Generated_Source\PSoC4/LEDS.c **** *
+  60:Generated_Source\PSoC4/LEDS.c **** * Return:
+  61:Generated_Source\PSoC4/LEDS.c **** *   The value stored in the control register
+  62:Generated_Source\PSoC4/LEDS.c **** *
+  63:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+  64:Generated_Source\PSoC4/LEDS.c **** uint8 LEDS_R_Write(bool state) {
+  61              		.loc 1 64 0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65              	.LVL4:
+  66 0000 70B5     		push	{r4, r5, r6, lr}
+  67              		.cfi_def_cfa_offset 16
+  68              		.cfi_offset 4, -16
+  69              		.cfi_offset 5, -12
+  70              		.cfi_offset 6, -8
+  71              		.cfi_offset 14, -4
+  72 0002 0500     		movs	r5, r0
+  65:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+  66:Generated_Source\PSoC4/LEDS.c ****     uint8 reg = LEDS_Control_reg_Read();
+  73              		.loc 1 66 0
+  74 0004 FFF7FEFF 		bl	LEDS_Control_reg_Read
+  75              	.LVL5:
+  67:Generated_Source\PSoC4/LEDS.c ****     /* Set the bit to the new state */
+  68:Generated_Source\PSoC4/LEDS.c ****     SET_BIT_STATE(reg, LEDS_R_PIN_SHIFT, state ? LEDS_ON_VAL: LEDS_OFF_VAL);
+  76              		.loc 1 68 0
+  77 0008 0123     		movs	r3, #1
+  78 000a 9843     		bics	r0, r3
+  79              	.LVL6:
+  80 000c C4B2     		uxtb	r4, r0
+  81 000e 0120     		movs	r0, #1
+  82 0010 6840     		eors	r0, r5
+  83 0012 0443     		orrs	r4, r0
+  84 0014 E4B2     		uxtb	r4, r4
+  85              	.LVL7:
+  69:Generated_Source\PSoC4/LEDS.c ****     /* Write the bits */
+  70:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Write(reg);
+  86              		.loc 1 70 0
+  87 0016 2000     		movs	r0, r4
+  88 0018 FFF7FEFF 		bl	LEDS_Control_reg_Write
+  89              	.LVL8:
+  71:Generated_Source\PSoC4/LEDS.c ****     /* Return the current state */
+  72:Generated_Source\PSoC4/LEDS.c ****     return reg;
+  73:Generated_Source\PSoC4/LEDS.c **** }
+  90              		.loc 1 73 0
+  91 001c 2000     		movs	r0, r4
+  92              		@ sp needed
+  93              	.LVL9:
+  94 001e 70BD     		pop	{r4, r5, r6, pc}
+  95              		.cfi_endproc
+  96              	.LFE3:
+  97              		.size	LEDS_R_Write, .-LEDS_R_Write
+  98              		.section	.text.LEDS_G_Write,"ax",%progbits
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 4
+
+
+  99              		.align	2
+ 100              		.global	LEDS_G_Write
+ 101              		.code	16
+ 102              		.thumb_func
+ 103              		.type	LEDS_G_Write, %function
+ 104              	LEDS_G_Write:
+ 105              	.LFB4:
+  74:Generated_Source\PSoC4/LEDS.c **** 
+  75:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+  76:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_G_Write()
+  77:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+  78:Generated_Source\PSoC4/LEDS.c **** * Summary:
+  79:Generated_Source\PSoC4/LEDS.c **** *   Sets the state of the Red LED to the state passed in, Regardless of the 
+  80:Generated_Source\PSoC4/LEDS.c **** *   polarity of the LEDs. I.E. LEDS_G_Write(true) will always
+  81:Generated_Source\PSoC4/LEDS.c **** *   turn on the LED. 
+  82:Generated_Source\PSoC4/LEDS.c **** *
+  83:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+  84:Generated_Source\PSoC4/LEDS.c **** *   bool State - The new state to write.
+  85:Generated_Source\PSoC4/LEDS.c **** *
+  86:Generated_Source\PSoC4/LEDS.c **** * Return:
+  87:Generated_Source\PSoC4/LEDS.c **** *   The value stored in the control register
+  88:Generated_Source\PSoC4/LEDS.c **** *
+  89:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+  90:Generated_Source\PSoC4/LEDS.c **** uint8 LEDS_G_Write(bool state) {
+ 106              		.loc 1 90 0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              	.LVL10:
+ 111 0000 10B5     		push	{r4, lr}
+ 112              		.cfi_def_cfa_offset 8
+ 113              		.cfi_offset 4, -8
+ 114              		.cfi_offset 14, -4
+ 115 0002 0400     		movs	r4, r0
+  91:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+  92:Generated_Source\PSoC4/LEDS.c ****     uint8 reg = LEDS_Control_reg_Read();
+ 116              		.loc 1 92 0
+ 117 0004 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 118              	.LVL11:
+  93:Generated_Source\PSoC4/LEDS.c ****     /* Set the bit to the new state */
+  94:Generated_Source\PSoC4/LEDS.c ****     SET_BIT_STATE(reg, LEDS_G_PIN_SHIFT, state ? LEDS_ON_VAL: LEDS_OFF_VAL);
+ 119              		.loc 1 94 0
+ 120 0008 0223     		movs	r3, #2
+ 121 000a 9843     		bics	r0, r3
+ 122              	.LVL12:
+ 123 000c C0B2     		uxtb	r0, r0
+ 124 000e 002C     		cmp	r4, #0
+ 125 0010 01D0     		beq	.L5
+ 126 0012 0024     		movs	r4, #0
+ 127 0014 00E0     		b	.L4
+ 128              	.L5:
+ 129 0016 0224     		movs	r4, #2
+ 130              	.L4:
+ 131              		.loc 1 94 0 is_stmt 0 discriminator 4
+ 132 0018 0443     		orrs	r4, r0
+ 133              	.LVL13:
+  95:Generated_Source\PSoC4/LEDS.c ****     /* Write the bits */
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 5
+
+
+  96:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Write(reg);
+ 134              		.loc 1 96 0 is_stmt 1 discriminator 4
+ 135 001a 2000     		movs	r0, r4
+ 136 001c FFF7FEFF 		bl	LEDS_Control_reg_Write
+ 137              	.LVL14:
+  97:Generated_Source\PSoC4/LEDS.c ****     /* Return the current state */
+  98:Generated_Source\PSoC4/LEDS.c ****     return reg;
+  99:Generated_Source\PSoC4/LEDS.c **** }
+ 138              		.loc 1 99 0 discriminator 4
+ 139 0020 2000     		movs	r0, r4
+ 140              		@ sp needed
+ 141              	.LVL15:
+ 142 0022 10BD     		pop	{r4, pc}
+ 143              		.cfi_endproc
+ 144              	.LFE4:
+ 145              		.size	LEDS_G_Write, .-LEDS_G_Write
+ 146              		.section	.text.LEDS_B_Write,"ax",%progbits
+ 147              		.align	2
+ 148              		.global	LEDS_B_Write
+ 149              		.code	16
+ 150              		.thumb_func
+ 151              		.type	LEDS_B_Write, %function
+ 152              	LEDS_B_Write:
+ 153              	.LFB5:
+ 100:Generated_Source\PSoC4/LEDS.c **** 
+ 101:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 102:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_B_Write()
+ 103:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 104:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 105:Generated_Source\PSoC4/LEDS.c **** *   Sets the state of the Red LED to the state passed in, Regardless of the 
+ 106:Generated_Source\PSoC4/LEDS.c **** *   polarity of the LEDs. I.E. LEDS_B_Write(true) will always
+ 107:Generated_Source\PSoC4/LEDS.c **** *   turn on the LED. 
+ 108:Generated_Source\PSoC4/LEDS.c **** *
+ 109:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 110:Generated_Source\PSoC4/LEDS.c **** *   bool State - The new state to write.
+ 111:Generated_Source\PSoC4/LEDS.c **** *
+ 112:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 113:Generated_Source\PSoC4/LEDS.c **** *   The value stored in the control register
+ 114:Generated_Source\PSoC4/LEDS.c **** *
+ 115:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 116:Generated_Source\PSoC4/LEDS.c **** uint8 LEDS_B_Write(bool state) {
+ 154              		.loc 1 116 0
+ 155              		.cfi_startproc
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158              	.LVL16:
+ 159 0000 10B5     		push	{r4, lr}
+ 160              		.cfi_def_cfa_offset 8
+ 161              		.cfi_offset 4, -8
+ 162              		.cfi_offset 14, -4
+ 163 0002 0400     		movs	r4, r0
+ 117:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+ 118:Generated_Source\PSoC4/LEDS.c ****     uint8 reg = LEDS_Control_reg_Read();
+ 164              		.loc 1 118 0
+ 165 0004 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 166              	.LVL17:
+ 119:Generated_Source\PSoC4/LEDS.c ****     /* Set the bit to the new state */
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 6
+
+
+ 120:Generated_Source\PSoC4/LEDS.c ****     SET_BIT_STATE(reg, LEDS_B_PIN_SHIFT, state ? LEDS_ACTIVE_VAL : !LEDS_ACTIVE_VAL);
+ 167              		.loc 1 120 0
+ 168 0008 0423     		movs	r3, #4
+ 169 000a 9843     		bics	r0, r3
+ 170              	.LVL18:
+ 171 000c C0B2     		uxtb	r0, r0
+ 172 000e 002C     		cmp	r4, #0
+ 173 0010 01D0     		beq	.L8
+ 174 0012 0024     		movs	r4, #0
+ 175 0014 00E0     		b	.L7
+ 176              	.L8:
+ 177 0016 0424     		movs	r4, #4
+ 178              	.L7:
+ 179              		.loc 1 120 0 is_stmt 0 discriminator 4
+ 180 0018 0443     		orrs	r4, r0
+ 181              	.LVL19:
+ 121:Generated_Source\PSoC4/LEDS.c ****     /* Write the bits */
+ 122:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Write(reg);
+ 182              		.loc 1 122 0 is_stmt 1 discriminator 4
+ 183 001a 2000     		movs	r0, r4
+ 184 001c FFF7FEFF 		bl	LEDS_Control_reg_Write
+ 185              	.LVL20:
+ 123:Generated_Source\PSoC4/LEDS.c ****     /* Return the current state */
+ 124:Generated_Source\PSoC4/LEDS.c ****     return reg;
+ 125:Generated_Source\PSoC4/LEDS.c **** }
+ 186              		.loc 1 125 0 discriminator 4
+ 187 0020 2000     		movs	r0, r4
+ 188              		@ sp needed
+ 189              	.LVL21:
+ 190 0022 10BD     		pop	{r4, pc}
+ 191              		.cfi_endproc
+ 192              	.LFE5:
+ 193              		.size	LEDS_B_Write, .-LEDS_B_Write
+ 194              		.section	.text.LEDS_Read,"ax",%progbits
+ 195              		.align	2
+ 196              		.global	LEDS_Read
+ 197              		.code	16
+ 198              		.thumb_func
+ 199              		.type	LEDS_Read, %function
+ 200              	LEDS_Read:
+ 201              	.LFB6:
+ 126:Generated_Source\PSoC4/LEDS.c **** 
+ 127:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 128:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_Read()
+ 129:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 130:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 131:Generated_Source\PSoC4/LEDS.c **** *   Returns the current value of the LED control register
+ 132:Generated_Source\PSoC4/LEDS.c **** *
+ 133:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 134:Generated_Source\PSoC4/LEDS.c **** *   None
+ 135:Generated_Source\PSoC4/LEDS.c **** *
+ 136:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 137:Generated_Source\PSoC4/LEDS.c **** *   uint8: Value held in the LED control register
+ 138:Generated_Source\PSoC4/LEDS.c **** *
+ 139:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 140:Generated_Source\PSoC4/LEDS.c **** uint8 LEDS_Read(void){
+ 202              		.loc 1 140 0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 7
+
+
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206 0000 10B5     		push	{r4, lr}
+ 207              		.cfi_def_cfa_offset 8
+ 208              		.cfi_offset 4, -8
+ 209              		.cfi_offset 14, -4
+ 141:Generated_Source\PSoC4/LEDS.c ****     return LEDS_Control_reg_Read() & LEDS_CTRL_MASK;
+ 210              		.loc 1 141 0
+ 211 0002 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 212              	.LVL22:
+ 213 0006 0723     		movs	r3, #7
+ 214 0008 1840     		ands	r0, r3
+ 142:Generated_Source\PSoC4/LEDS.c **** }
+ 215              		.loc 1 142 0
+ 216              		@ sp needed
+ 217 000a 10BD     		pop	{r4, pc}
+ 218              		.cfi_endproc
+ 219              	.LFE6:
+ 220              		.size	LEDS_Read, .-LEDS_Read
+ 221              		.section	.text.LEDS_R_Read,"ax",%progbits
+ 222              		.align	2
+ 223              		.global	LEDS_R_Read
+ 224              		.code	16
+ 225              		.thumb_func
+ 226              		.type	LEDS_R_Read, %function
+ 227              	LEDS_R_Read:
+ 228              	.LFB7:
+ 143:Generated_Source\PSoC4/LEDS.c **** 
+ 144:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 145:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_R_Read()
+ 146:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 147:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 148:Generated_Source\PSoC4/LEDS.c **** *   Return the current state of the Red LED
+ 149:Generated_Source\PSoC4/LEDS.c **** *
+ 150:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 151:Generated_Source\PSoC4/LEDS.c **** *   None
+ 152:Generated_Source\PSoC4/LEDS.c **** *
+ 153:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 154:Generated_Source\PSoC4/LEDS.c **** *   State of the Red LED. True if on, False if off, regardless of LED polarity
+ 155:Generated_Source\PSoC4/LEDS.c **** *
+ 156:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 157:Generated_Source\PSoC4/LEDS.c **** bool LEDS_R_Read(void) {
+ 229              		.loc 1 157 0
+ 230              		.cfi_startproc
+ 231              		@ args = 0, pretend = 0, frame = 0
+ 232              		@ frame_needed = 0, uses_anonymous_args = 0
+ 233 0000 10B5     		push	{r4, lr}
+ 234              		.cfi_def_cfa_offset 8
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+ 158:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+ 159:Generated_Source\PSoC4/LEDS.c ****     uint8 val = LEDS_Control_reg_Read();
+ 237              		.loc 1 159 0
+ 238 0002 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 239              	.LVL23:
+ 160:Generated_Source\PSoC4/LEDS.c ****     /* Mask with the bit value */
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 8
+
+
+ 161:Generated_Source\PSoC4/LEDS.c ****     val &= LEDS_ON_RED;
+ 240              		.loc 1 161 0
+ 241 0006 0123     		movs	r3, #1
+ 242 0008 1840     		ands	r0, r3
+ 243              	.LVL24:
+ 162:Generated_Source\PSoC4/LEDS.c ****     /* Take into effect the polarity */
+ 163:Generated_Source\PSoC4/LEDS.c ****     return (LEDS_ACTIVE_VAL ? (val) : !val);
+ 244              		.loc 1 163 0
+ 245 000a 4342     		rsbs	r3, r0, #0
+ 246 000c 5841     		adcs	r0, r0, r3
+ 247              	.LVL25:
+ 248 000e C0B2     		uxtb	r0, r0
+ 164:Generated_Source\PSoC4/LEDS.c **** }
+ 249              		.loc 1 164 0
+ 250              		@ sp needed
+ 251 0010 10BD     		pop	{r4, pc}
+ 252              		.cfi_endproc
+ 253              	.LFE7:
+ 254              		.size	LEDS_R_Read, .-LEDS_R_Read
+ 255 0012 C046     		.section	.text.LEDS_G_Read,"ax",%progbits
+ 256              		.align	2
+ 257              		.global	LEDS_G_Read
+ 258              		.code	16
+ 259              		.thumb_func
+ 260              		.type	LEDS_G_Read, %function
+ 261              	LEDS_G_Read:
+ 262              	.LFB8:
+ 165:Generated_Source\PSoC4/LEDS.c **** 
+ 166:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 167:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_G_Read()
+ 168:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 169:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 170:Generated_Source\PSoC4/LEDS.c **** *   Return the current state of the Green LED
+ 171:Generated_Source\PSoC4/LEDS.c **** *
+ 172:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 173:Generated_Source\PSoC4/LEDS.c **** *   None
+ 174:Generated_Source\PSoC4/LEDS.c **** *
+ 175:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 176:Generated_Source\PSoC4/LEDS.c **** *   State of the Green LED. True if on, False if off, regardless of LED polarity
+ 177:Generated_Source\PSoC4/LEDS.c **** *
+ 178:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 179:Generated_Source\PSoC4/LEDS.c **** bool LEDS_G_Read(void) {
+ 263              		.loc 1 179 0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267 0000 10B5     		push	{r4, lr}
+ 268              		.cfi_def_cfa_offset 8
+ 269              		.cfi_offset 4, -8
+ 270              		.cfi_offset 14, -4
+ 180:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+ 181:Generated_Source\PSoC4/LEDS.c ****     uint8 val = LEDS_Control_reg_Read();
+ 271              		.loc 1 181 0
+ 272 0002 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 273              	.LVL26:
+ 182:Generated_Source\PSoC4/LEDS.c ****     /* Mask with the bit value */
+ 183:Generated_Source\PSoC4/LEDS.c ****     val &= LEDS_ON_GREEN;
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 9
+
+
+ 274              		.loc 1 183 0
+ 275 0006 0223     		movs	r3, #2
+ 276 0008 1840     		ands	r0, r3
+ 277              	.LVL27:
+ 184:Generated_Source\PSoC4/LEDS.c ****     /* Take into effect the polarity */
+ 185:Generated_Source\PSoC4/LEDS.c ****     return (LEDS_ACTIVE_VAL ? (val) : !val);
+ 278              		.loc 1 185 0
+ 279 000a 4342     		rsbs	r3, r0, #0
+ 280 000c 5841     		adcs	r0, r0, r3
+ 281              	.LVL28:
+ 282 000e C0B2     		uxtb	r0, r0
+ 186:Generated_Source\PSoC4/LEDS.c **** }
+ 283              		.loc 1 186 0
+ 284              		@ sp needed
+ 285 0010 10BD     		pop	{r4, pc}
+ 286              		.cfi_endproc
+ 287              	.LFE8:
+ 288              		.size	LEDS_G_Read, .-LEDS_G_Read
+ 289 0012 C046     		.section	.text.LEDS_B_Read,"ax",%progbits
+ 290              		.align	2
+ 291              		.global	LEDS_B_Read
+ 292              		.code	16
+ 293              		.thumb_func
+ 294              		.type	LEDS_B_Read, %function
+ 295              	LEDS_B_Read:
+ 296              	.LFB9:
+ 187:Generated_Source\PSoC4/LEDS.c **** 
+ 188:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 189:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_B_Read()
+ 190:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 191:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 192:Generated_Source\PSoC4/LEDS.c **** *   Return the current state of the Blue LED
+ 193:Generated_Source\PSoC4/LEDS.c **** *
+ 194:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 195:Generated_Source\PSoC4/LEDS.c **** *   None
+ 196:Generated_Source\PSoC4/LEDS.c **** *
+ 197:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 198:Generated_Source\PSoC4/LEDS.c **** *   State of the Blue LED. True if on, False if off, regardless of LED polarity
+ 199:Generated_Source\PSoC4/LEDS.c **** *
+ 200:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 201:Generated_Source\PSoC4/LEDS.c **** bool LEDS_B_Read(void) {
+ 297              		.loc 1 201 0
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 0
+ 300              		@ frame_needed = 0, uses_anonymous_args = 0
+ 301 0000 10B5     		push	{r4, lr}
+ 302              		.cfi_def_cfa_offset 8
+ 303              		.cfi_offset 4, -8
+ 304              		.cfi_offset 14, -4
+ 202:Generated_Source\PSoC4/LEDS.c ****     /* Read the Current state */
+ 203:Generated_Source\PSoC4/LEDS.c ****     uint8 val = LEDS_Control_reg_Read();
+ 305              		.loc 1 203 0
+ 306 0002 FFF7FEFF 		bl	LEDS_Control_reg_Read
+ 307              	.LVL29:
+ 204:Generated_Source\PSoC4/LEDS.c ****     /* Mask with the bit value */
+ 205:Generated_Source\PSoC4/LEDS.c ****     val &= LEDS_ON_BLUE;
+ 308              		.loc 1 205 0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 10
+
+
+ 309 0006 0423     		movs	r3, #4
+ 310 0008 1840     		ands	r0, r3
+ 311              	.LVL30:
+ 206:Generated_Source\PSoC4/LEDS.c ****     /* Take into effect the polarity */
+ 207:Generated_Source\PSoC4/LEDS.c ****     return (LEDS_ACTIVE_VAL ? (val) : !val);
+ 312              		.loc 1 207 0
+ 313 000a 4342     		rsbs	r3, r0, #0
+ 314 000c 5841     		adcs	r0, r0, r3
+ 315              	.LVL31:
+ 316 000e C0B2     		uxtb	r0, r0
+ 208:Generated_Source\PSoC4/LEDS.c **** }
+ 317              		.loc 1 208 0
+ 318              		@ sp needed
+ 319 0010 10BD     		pop	{r4, pc}
+ 320              		.cfi_endproc
+ 321              	.LFE9:
+ 322              		.size	LEDS_B_Read, .-LEDS_B_Read
+ 323 0012 C046     		.section	.text.LEDS_Sleep,"ax",%progbits
+ 324              		.align	2
+ 325              		.global	LEDS_Sleep
+ 326              		.code	16
+ 327              		.thumb_func
+ 328              		.type	LEDS_Sleep, %function
+ 329              	LEDS_Sleep:
+ 330              	.LFB10:
+ 209:Generated_Source\PSoC4/LEDS.c **** 
+ 210:Generated_Source\PSoC4/LEDS.c **** 
+ 211:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 212:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_Sleep()
+ 213:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 214:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 215:Generated_Source\PSoC4/LEDS.c **** *   Prepares the component for sleep. Sleeps the control Register.
+ 216:Generated_Source\PSoC4/LEDS.c **** *
+ 217:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 218:Generated_Source\PSoC4/LEDS.c **** *   None
+ 219:Generated_Source\PSoC4/LEDS.c **** *
+ 220:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 221:Generated_Source\PSoC4/LEDS.c **** *   None
+ 222:Generated_Source\PSoC4/LEDS.c **** *
+ 223:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 224:Generated_Source\PSoC4/LEDS.c **** void LEDS_Sleep(void) {
+ 331              		.loc 1 224 0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335 0000 10B5     		push	{r4, lr}
+ 336              		.cfi_def_cfa_offset 8
+ 337              		.cfi_offset 4, -8
+ 338              		.cfi_offset 14, -4
+ 225:Generated_Source\PSoC4/LEDS.c ****     /* Sleep Control reg */
+ 226:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Sleep();
+ 339              		.loc 1 226 0
+ 340 0002 FFF7FEFF 		bl	LEDS_Control_reg_Sleep
+ 341              	.LVL32:
+ 227:Generated_Source\PSoC4/LEDS.c **** }
+ 342              		.loc 1 227 0
+ 343              		@ sp needed
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 11
+
+
+ 344 0006 10BD     		pop	{r4, pc}
+ 345              		.cfi_endproc
+ 346              	.LFE10:
+ 347              		.size	LEDS_Sleep, .-LEDS_Sleep
+ 348              		.section	.text.LEDS_Wakeup,"ax",%progbits
+ 349              		.align	2
+ 350              		.global	LEDS_Wakeup
+ 351              		.code	16
+ 352              		.thumb_func
+ 353              		.type	LEDS_Wakeup, %function
+ 354              	LEDS_Wakeup:
+ 355              	.LFB11:
+ 228:Generated_Source\PSoC4/LEDS.c **** 
+ 229:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 230:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_Wakeup()
+ 231:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 232:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 233:Generated_Source\PSoC4/LEDS.c **** *   Wakes up the component from sleep. Wakes the control Register.
+ 234:Generated_Source\PSoC4/LEDS.c **** *
+ 235:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 236:Generated_Source\PSoC4/LEDS.c **** *   None
+ 237:Generated_Source\PSoC4/LEDS.c **** *
+ 238:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 239:Generated_Source\PSoC4/LEDS.c **** *   None
+ 240:Generated_Source\PSoC4/LEDS.c **** *
+ 241:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 242:Generated_Source\PSoC4/LEDS.c **** void LEDS_Wakeup(void) {
+ 356              		.loc 1 242 0
+ 357              		.cfi_startproc
+ 358              		@ args = 0, pretend = 0, frame = 0
+ 359              		@ frame_needed = 0, uses_anonymous_args = 0
+ 360 0000 10B5     		push	{r4, lr}
+ 361              		.cfi_def_cfa_offset 8
+ 362              		.cfi_offset 4, -8
+ 363              		.cfi_offset 14, -4
+ 243:Generated_Source\PSoC4/LEDS.c ****     /* Wakeup Control reg */
+ 244:Generated_Source\PSoC4/LEDS.c ****     LEDS_Control_reg_Wakeup();
+ 364              		.loc 1 244 0
+ 365 0002 FFF7FEFF 		bl	LEDS_Control_reg_Wakeup
+ 366              	.LVL33:
+ 245:Generated_Source\PSoC4/LEDS.c **** }
+ 367              		.loc 1 245 0
+ 368              		@ sp needed
+ 369 0006 10BD     		pop	{r4, pc}
+ 370              		.cfi_endproc
+ 371              	.LFE11:
+ 372              		.size	LEDS_Wakeup, .-LEDS_Wakeup
+ 373              		.section	.text.LEDS_Test,"ax",%progbits
+ 374              		.align	2
+ 375              		.global	LEDS_Test
+ 376              		.code	16
+ 377              		.thumb_func
+ 378              		.type	LEDS_Test, %function
+ 379              	LEDS_Test:
+ 380              	.LFB12:
+ 246:Generated_Source\PSoC4/LEDS.c **** 
+ 247:Generated_Source\PSoC4/LEDS.c **** 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 12
+
+
+ 248:Generated_Source\PSoC4/LEDS.c **** 
+ 249:Generated_Source\PSoC4/LEDS.c **** 
+ 250:Generated_Source\PSoC4/LEDS.c **** /*******************************************************************************
+ 251:Generated_Source\PSoC4/LEDS.c **** * Function Name: LEDS_Test()
+ 252:Generated_Source\PSoC4/LEDS.c **** ********************************************************************************
+ 253:Generated_Source\PSoC4/LEDS.c **** * Summary:
+ 254:Generated_Source\PSoC4/LEDS.c **** *   Runs through the board level testing routine for the LEDs.
+ 255:Generated_Source\PSoC4/LEDS.c **** *
+ 256:Generated_Source\PSoC4/LEDS.c **** * Parameters:
+ 257:Generated_Source\PSoC4/LEDS.c **** *   uint8: The number of times to iterate through the test. 0 means infinite. 
+ 258:Generated_Source\PSoC4/LEDS.c **** *
+ 259:Generated_Source\PSoC4/LEDS.c **** * Expected Outcome: 
+ 260:Generated_Source\PSoC4/LEDS.c **** *   0. All LEDs off
+ 261:Generated_Source\PSoC4/LEDS.c **** *   1. Red LED on
+ 262:Generated_Source\PSoC4/LEDS.c **** *   2. Green LED on
+ 263:Generated_Source\PSoC4/LEDS.c **** *   3. Blue LED on
+ 264:Generated_Source\PSoC4/LEDS.c **** *   4. Yellow (RB)
+ 265:Generated_Source\PSoC4/LEDS.c **** *   5. Cyan (BG)
+ 266:Generated_Source\PSoC4/LEDS.c **** *   6. Magenta (RG)
+ 267:Generated_Source\PSoC4/LEDS.c **** *   7. White (RGB) LEDs on
+ 268:Generated_Source\PSoC4/LEDS.c **** *
+ 269:Generated_Source\PSoC4/LEDS.c **** * Return:
+ 270:Generated_Source\PSoC4/LEDS.c **** *   None
+ 271:Generated_Source\PSoC4/LEDS.c **** *
+ 272:Generated_Source\PSoC4/LEDS.c **** *******************************************************************************/
+ 273:Generated_Source\PSoC4/LEDS.c **** void LEDS_Test(uint8 runs){
+ 381              		.loc 1 273 0
+ 382              		.cfi_startproc
+ 383              		@ args = 0, pretend = 0, frame = 0
+ 384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 385              	.LVL34:
+ 386 0000 70B5     		push	{r4, r5, r6, lr}
+ 387              		.cfi_def_cfa_offset 16
+ 388              		.cfi_offset 4, -16
+ 389              		.cfi_offset 5, -12
+ 390              		.cfi_offset 6, -8
+ 391              		.cfi_offset 14, -4
+ 392 0002 0600     		movs	r6, r0
+ 393              	.LVL35:
+ 274:Generated_Source\PSoC4/LEDS.c ****     /* Iteration variable */
+ 275:Generated_Source\PSoC4/LEDS.c ****     uint8 i = ZERO;     
+ 394              		.loc 1 275 0
+ 395 0004 0025     		movs	r5, #0
+ 396              	.LVL36:
+ 397              	.L16:
+ 276:Generated_Source\PSoC4/LEDS.c ****     do{
+ 277:Generated_Source\PSoC4/LEDS.c ****         /* 0 - All LEDs off */
+ 278:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_NONE);
+ 398              		.loc 1 278 0 discriminator 3
+ 399 0006 0020     		movs	r0, #0
+ 400 0008 FFF7FEFF 		bl	LEDS_Write
+ 401              	.LVL37:
+ 279:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 402              		.loc 1 279 0 discriminator 3
+ 403 000c FA24     		movs	r4, #250
+ 404 000e 6400     		lsls	r4, r4, #1
+ 405 0010 2000     		movs	r0, r4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 13
+
+
+ 406 0012 FFF7FEFF 		bl	CyDelay
+ 407              	.LVL38:
+ 280:Generated_Source\PSoC4/LEDS.c ****         /* 1 - Red LED on */
+ 281:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_RED);
+ 408              		.loc 1 281 0 discriminator 3
+ 409 0016 0120     		movs	r0, #1
+ 410 0018 FFF7FEFF 		bl	LEDS_Write
+ 411              	.LVL39:
+ 282:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 412              		.loc 1 282 0 discriminator 3
+ 413 001c 2000     		movs	r0, r4
+ 414 001e FFF7FEFF 		bl	CyDelay
+ 415              	.LVL40:
+ 283:Generated_Source\PSoC4/LEDS.c ****         /* 2 - Green LED on */
+ 284:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_GREEN);
+ 416              		.loc 1 284 0 discriminator 3
+ 417 0022 0220     		movs	r0, #2
+ 418 0024 FFF7FEFF 		bl	LEDS_Write
+ 419              	.LVL41:
+ 285:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 420              		.loc 1 285 0 discriminator 3
+ 421 0028 2000     		movs	r0, r4
+ 422 002a FFF7FEFF 		bl	CyDelay
+ 423              	.LVL42:
+ 286:Generated_Source\PSoC4/LEDS.c ****         /* 3 - Blue LED on */
+ 287:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_BLUE);
+ 424              		.loc 1 287 0 discriminator 3
+ 425 002e 0420     		movs	r0, #4
+ 426 0030 FFF7FEFF 		bl	LEDS_Write
+ 427              	.LVL43:
+ 288:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 428              		.loc 1 288 0 discriminator 3
+ 429 0034 2000     		movs	r0, r4
+ 430 0036 FFF7FEFF 		bl	CyDelay
+ 431              	.LVL44:
+ 289:Generated_Source\PSoC4/LEDS.c ****         /* 4 - Yellow on */
+ 290:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_YELLOW);
+ 432              		.loc 1 290 0 discriminator 3
+ 433 003a 0320     		movs	r0, #3
+ 434 003c FFF7FEFF 		bl	LEDS_Write
+ 435              	.LVL45:
+ 291:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 436              		.loc 1 291 0 discriminator 3
+ 437 0040 2000     		movs	r0, r4
+ 438 0042 FFF7FEFF 		bl	CyDelay
+ 439              	.LVL46:
+ 292:Generated_Source\PSoC4/LEDS.c ****         /* 5 - Cyan on */
+ 293:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_CYAN);
+ 440              		.loc 1 293 0 discriminator 3
+ 441 0046 0620     		movs	r0, #6
+ 442 0048 FFF7FEFF 		bl	LEDS_Write
+ 443              	.LVL47:
+ 294:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 444              		.loc 1 294 0 discriminator 3
+ 445 004c 2000     		movs	r0, r4
+ 446 004e FFF7FEFF 		bl	CyDelay
+ 447              	.LVL48:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 14
+
+
+ 295:Generated_Source\PSoC4/LEDS.c ****         /* 6 - Magneta on */
+ 296:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_MAGENTA);
+ 448              		.loc 1 296 0 discriminator 3
+ 449 0052 0520     		movs	r0, #5
+ 450 0054 FFF7FEFF 		bl	LEDS_Write
+ 451              	.LVL49:
+ 297:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 452              		.loc 1 297 0 discriminator 3
+ 453 0058 2000     		movs	r0, r4
+ 454 005a FFF7FEFF 		bl	CyDelay
+ 455              	.LVL50:
+ 298:Generated_Source\PSoC4/LEDS.c ****         /* 7 -White on*/
+ 299:Generated_Source\PSoC4/LEDS.c ****         LEDS_Write(LEDS_ON_WHITE);
+ 456              		.loc 1 299 0 discriminator 3
+ 457 005e 0720     		movs	r0, #7
+ 458 0060 FFF7FEFF 		bl	LEDS_Write
+ 459              	.LVL51:
+ 300:Generated_Source\PSoC4/LEDS.c ****         CyDelay(LEDS_DELAY_TEST);
+ 460              		.loc 1 300 0 discriminator 3
+ 461 0064 2000     		movs	r0, r4
+ 462 0066 FFF7FEFF 		bl	CyDelay
+ 463              	.LVL52:
+ 301:Generated_Source\PSoC4/LEDS.c ****         /* Increment the iteration */
+ 302:Generated_Source\PSoC4/LEDS.c ****         i++;
+ 464              		.loc 1 302 0 discriminator 3
+ 465 006a 0135     		adds	r5, r5, #1
+ 466              	.LVL53:
+ 467 006c EDB2     		uxtb	r5, r5
+ 468              	.LVL54:
+ 303:Generated_Source\PSoC4/LEDS.c ****     } while(runs == ZERO || (i < runs));
+ 469              		.loc 1 303 0 discriminator 3
+ 470 006e 002E     		cmp	r6, #0
+ 471 0070 C9D0     		beq	.L16
+ 472              		.loc 1 303 0 is_stmt 0 discriminator 2
+ 473 0072 B542     		cmp	r5, r6
+ 474 0074 C7D3     		bcc	.L16
+ 304:Generated_Source\PSoC4/LEDS.c ****     
+ 305:Generated_Source\PSoC4/LEDS.c **** }
+ 475              		.loc 1 305 0 is_stmt 1
+ 476              		@ sp needed
+ 477              	.LVL55:
+ 478 0076 70BD     		pop	{r4, r5, r6, pc}
+ 479              		.cfi_endproc
+ 480              	.LFE12:
+ 481              		.size	LEDS_Test, .-LEDS_Test
+ 482              		.text
+ 483              	.Letext0:
+ 484              		.file 2 "Generated_Source\\PSoC4\\LEDS_Control_reg.h"
+ 485              		.file 3 "Generated_Source\\PSoC4\\CyLib.h"
+ 486              		.file 4 "Generated_Source\\PSoC4\\cytypes.h"
+ 487              		.section	.debug_info,"",%progbits
+ 488              	.Ldebug_info0:
+ 489 0000 63040000 		.4byte	0x463
+ 490 0004 0400     		.2byte	0x4
+ 491 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 492 000a 04       		.byte	0x4
+ 493 000b 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 15
+
+
+ 494 000c 85010000 		.4byte	.LASF33
+ 495 0010 0C       		.byte	0xc
+ 496 0011 A0000000 		.4byte	.LASF34
+ 497 0015 C4000000 		.4byte	.LASF35
+ 498 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 499 001d 00000000 		.4byte	0
+ 500 0021 00000000 		.4byte	.Ldebug_line0
+ 501 0025 02       		.uleb128 0x2
+ 502 0026 01       		.byte	0x1
+ 503 0027 06       		.byte	0x6
+ 504 0028 9F020000 		.4byte	.LASF0
+ 505 002c 02       		.uleb128 0x2
+ 506 002d 01       		.byte	0x1
+ 507 002e 08       		.byte	0x8
+ 508 002f 74000000 		.4byte	.LASF1
+ 509 0033 02       		.uleb128 0x2
+ 510 0034 02       		.byte	0x2
+ 511 0035 05       		.byte	0x5
+ 512 0036 45020000 		.4byte	.LASF2
+ 513 003a 02       		.uleb128 0x2
+ 514 003b 02       		.byte	0x2
+ 515 003c 07       		.byte	0x7
+ 516 003d 2C000000 		.4byte	.LASF3
+ 517 0041 02       		.uleb128 0x2
+ 518 0042 04       		.byte	0x4
+ 519 0043 05       		.byte	0x5
+ 520 0044 8A020000 		.4byte	.LASF4
+ 521 0048 02       		.uleb128 0x2
+ 522 0049 04       		.byte	0x4
+ 523 004a 07       		.byte	0x7
+ 524 004b 8E000000 		.4byte	.LASF5
+ 525 004f 02       		.uleb128 0x2
+ 526 0050 08       		.byte	0x8
+ 527 0051 05       		.byte	0x5
+ 528 0052 1C020000 		.4byte	.LASF6
+ 529 0056 02       		.uleb128 0x2
+ 530 0057 08       		.byte	0x8
+ 531 0058 07       		.byte	0x7
+ 532 0059 6E010000 		.4byte	.LASF7
+ 533 005d 03       		.uleb128 0x3
+ 534 005e 04       		.byte	0x4
+ 535 005f 05       		.byte	0x5
+ 536 0060 696E7400 		.ascii	"int\000"
+ 537 0064 02       		.uleb128 0x2
+ 538 0065 04       		.byte	0x4
+ 539 0066 07       		.byte	0x7
+ 540 0067 61010000 		.4byte	.LASF8
+ 541 006b 04       		.uleb128 0x4
+ 542 006c BE000000 		.4byte	.LASF36
+ 543 0070 04       		.byte	0x4
+ 544 0071 E401     		.2byte	0x1e4
+ 545 0073 2C000000 		.4byte	0x2c
+ 546 0077 02       		.uleb128 0x2
+ 547 0078 04       		.byte	0x4
+ 548 0079 04       		.byte	0x4
+ 549 007a 6E000000 		.4byte	.LASF9
+ 550 007e 02       		.uleb128 0x2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 16
+
+
+ 551 007f 08       		.byte	0x8
+ 552 0080 04       		.byte	0x4
+ 553 0081 35010000 		.4byte	.LASF10
+ 554 0085 02       		.uleb128 0x2
+ 555 0086 01       		.byte	0x1
+ 556 0087 08       		.byte	0x8
+ 557 0088 2A020000 		.4byte	.LASF11
+ 558 008c 02       		.uleb128 0x2
+ 559 008d 08       		.byte	0x8
+ 560 008e 04       		.byte	0x4
+ 561 008f 93020000 		.4byte	.LASF12
+ 562 0093 02       		.uleb128 0x2
+ 563 0094 04       		.byte	0x4
+ 564 0095 07       		.byte	0x7
+ 565 0096 13020000 		.4byte	.LASF13
+ 566 009a 02       		.uleb128 0x2
+ 567 009b 01       		.byte	0x1
+ 568 009c 02       		.byte	0x2
+ 569 009d AB020000 		.4byte	.LASF14
+ 570 00a1 05       		.uleb128 0x5
+ 571 00a2 B9020000 		.4byte	.LASF15
+ 572 00a6 01       		.byte	0x1
+ 573 00a7 2A       		.byte	0x2a
+ 574 00a8 6B000000 		.4byte	0x6b
+ 575 00ac 00000000 		.4byte	.LFB2
+ 576 00b0 12000000 		.4byte	.LFE2-.LFB2
+ 577 00b4 01       		.uleb128 0x1
+ 578 00b5 9C       		.byte	0x9c
+ 579 00b6 DC000000 		.4byte	0xdc
+ 580 00ba 06       		.uleb128 0x6
+ 581 00bb 0F000000 		.4byte	.LASF17
+ 582 00bf 01       		.byte	0x1
+ 583 00c0 2A       		.byte	0x2a
+ 584 00c1 6B000000 		.4byte	0x6b
+ 585 00c5 00000000 		.4byte	.LLST0
+ 586 00c9 07       		.uleb128 0x7
+ 587 00ca 0C000000 		.4byte	.LVL2
+ 588 00ce 2F040000 		.4byte	0x42f
+ 589 00d2 07       		.uleb128 0x7
+ 590 00d3 10000000 		.4byte	.LVL3
+ 591 00d7 3A040000 		.4byte	0x43a
+ 592 00db 00       		.byte	0
+ 593 00dc 05       		.uleb128 0x5
+ 594 00dd 54010000 		.4byte	.LASF16
+ 595 00e1 01       		.byte	0x1
+ 596 00e2 40       		.byte	0x40
+ 597 00e3 6B000000 		.4byte	0x6b
+ 598 00e7 00000000 		.4byte	.LFB3
+ 599 00eb 20000000 		.4byte	.LFE3-.LFB3
+ 600 00ef 01       		.uleb128 0x1
+ 601 00f0 9C       		.byte	0x9c
+ 602 00f1 2D010000 		.4byte	0x12d
+ 603 00f5 06       		.uleb128 0x6
+ 604 00f6 0F000000 		.4byte	.LASF17
+ 605 00fa 01       		.byte	0x1
+ 606 00fb 40       		.byte	0x40
+ 607 00fc 9A000000 		.4byte	0x9a
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 17
+
+
+ 608 0100 21000000 		.4byte	.LLST1
+ 609 0104 08       		.uleb128 0x8
+ 610 0105 72656700 		.ascii	"reg\000"
+ 611 0109 01       		.byte	0x1
+ 612 010a 42       		.byte	0x42
+ 613 010b 6B000000 		.4byte	0x6b
+ 614 010f 42000000 		.4byte	.LLST2
+ 615 0113 07       		.uleb128 0x7
+ 616 0114 08000000 		.4byte	.LVL5
+ 617 0118 3A040000 		.4byte	0x43a
+ 618 011c 09       		.uleb128 0x9
+ 619 011d 1C000000 		.4byte	.LVL8
+ 620 0121 2F040000 		.4byte	0x42f
+ 621 0125 0A       		.uleb128 0xa
+ 622 0126 01       		.uleb128 0x1
+ 623 0127 50       		.byte	0x50
+ 624 0128 02       		.uleb128 0x2
+ 625 0129 74       		.byte	0x74
+ 626 012a 00       		.sleb128 0
+ 627 012b 00       		.byte	0
+ 628 012c 00       		.byte	0
+ 629 012d 05       		.uleb128 0x5
+ 630 012e 3C010000 		.4byte	.LASF18
+ 631 0132 01       		.byte	0x1
+ 632 0133 5A       		.byte	0x5a
+ 633 0134 6B000000 		.4byte	0x6b
+ 634 0138 00000000 		.4byte	.LFB4
+ 635 013c 24000000 		.4byte	.LFE4-.LFB4
+ 636 0140 01       		.uleb128 0x1
+ 637 0141 9C       		.byte	0x9c
+ 638 0142 7E010000 		.4byte	0x17e
+ 639 0146 06       		.uleb128 0x6
+ 640 0147 0F000000 		.4byte	.LASF17
+ 641 014b 01       		.byte	0x1
+ 642 014c 5A       		.byte	0x5a
+ 643 014d 9A000000 		.4byte	0x9a
+ 644 0151 6B000000 		.4byte	.LLST3
+ 645 0155 08       		.uleb128 0x8
+ 646 0156 72656700 		.ascii	"reg\000"
+ 647 015a 01       		.byte	0x1
+ 648 015b 5C       		.byte	0x5c
+ 649 015c 6B000000 		.4byte	0x6b
+ 650 0160 8C000000 		.4byte	.LLST4
+ 651 0164 07       		.uleb128 0x7
+ 652 0165 08000000 		.4byte	.LVL11
+ 653 0169 3A040000 		.4byte	0x43a
+ 654 016d 09       		.uleb128 0x9
+ 655 016e 20000000 		.4byte	.LVL14
+ 656 0172 2F040000 		.4byte	0x42f
+ 657 0176 0A       		.uleb128 0xa
+ 658 0177 01       		.uleb128 0x1
+ 659 0178 50       		.byte	0x50
+ 660 0179 02       		.uleb128 0x2
+ 661 017a 74       		.byte	0x74
+ 662 017b 00       		.sleb128 0
+ 663 017c 00       		.byte	0
+ 664 017d 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 18
+
+
+ 665 017e 05       		.uleb128 0x5
+ 666 017f 1F000000 		.4byte	.LASF19
+ 667 0183 01       		.byte	0x1
+ 668 0184 74       		.byte	0x74
+ 669 0185 6B000000 		.4byte	0x6b
+ 670 0189 00000000 		.4byte	.LFB5
+ 671 018d 24000000 		.4byte	.LFE5-.LFB5
+ 672 0191 01       		.uleb128 0x1
+ 673 0192 9C       		.byte	0x9c
+ 674 0193 CF010000 		.4byte	0x1cf
+ 675 0197 06       		.uleb128 0x6
+ 676 0198 0F000000 		.4byte	.LASF17
+ 677 019c 01       		.byte	0x1
+ 678 019d 74       		.byte	0x74
+ 679 019e 9A000000 		.4byte	0x9a
+ 680 01a2 B5000000 		.4byte	.LLST5
+ 681 01a6 08       		.uleb128 0x8
+ 682 01a7 72656700 		.ascii	"reg\000"
+ 683 01ab 01       		.byte	0x1
+ 684 01ac 76       		.byte	0x76
+ 685 01ad 6B000000 		.4byte	0x6b
+ 686 01b1 D6000000 		.4byte	.LLST6
+ 687 01b5 07       		.uleb128 0x7
+ 688 01b6 08000000 		.4byte	.LVL17
+ 689 01ba 3A040000 		.4byte	0x43a
+ 690 01be 09       		.uleb128 0x9
+ 691 01bf 20000000 		.4byte	.LVL20
+ 692 01c3 2F040000 		.4byte	0x42f
+ 693 01c7 0A       		.uleb128 0xa
+ 694 01c8 01       		.uleb128 0x1
+ 695 01c9 50       		.byte	0x50
+ 696 01ca 02       		.uleb128 0x2
+ 697 01cb 74       		.byte	0x74
+ 698 01cc 00       		.sleb128 0
+ 699 01cd 00       		.byte	0
+ 700 01ce 00       		.byte	0
+ 701 01cf 05       		.uleb128 0x5
+ 702 01d0 05000000 		.4byte	.LASF20
+ 703 01d4 01       		.byte	0x1
+ 704 01d5 8C       		.byte	0x8c
+ 705 01d6 6B000000 		.4byte	0x6b
+ 706 01da 00000000 		.4byte	.LFB6
+ 707 01de 0C000000 		.4byte	.LFE6-.LFB6
+ 708 01e2 01       		.uleb128 0x1
+ 709 01e3 9C       		.byte	0x9c
+ 710 01e4 F2010000 		.4byte	0x1f2
+ 711 01e8 07       		.uleb128 0x7
+ 712 01e9 06000000 		.4byte	.LVL22
+ 713 01ed 3A040000 		.4byte	0x43a
+ 714 01f1 00       		.byte	0
+ 715 01f2 05       		.uleb128 0x5
+ 716 01f3 67020000 		.4byte	.LASF21
+ 717 01f7 01       		.byte	0x1
+ 718 01f8 9D       		.byte	0x9d
+ 719 01f9 9A000000 		.4byte	0x9a
+ 720 01fd 00000000 		.4byte	.LFB7
+ 721 0201 12000000 		.4byte	.LFE7-.LFB7
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 19
+
+
+ 722 0205 01       		.uleb128 0x1
+ 723 0206 9C       		.byte	0x9c
+ 724 0207 24020000 		.4byte	0x224
+ 725 020b 08       		.uleb128 0x8
+ 726 020c 76616C00 		.ascii	"val\000"
+ 727 0210 01       		.byte	0x1
+ 728 0211 9F       		.byte	0x9f
+ 729 0212 6B000000 		.4byte	0x6b
+ 730 0216 FF000000 		.4byte	.LLST7
+ 731 021a 07       		.uleb128 0x7
+ 732 021b 06000000 		.4byte	.LVL23
+ 733 021f 3A040000 		.4byte	0x43a
+ 734 0223 00       		.byte	0
+ 735 0224 05       		.uleb128 0x5
+ 736 0225 82000000 		.4byte	.LASF22
+ 737 0229 01       		.byte	0x1
+ 738 022a B3       		.byte	0xb3
+ 739 022b 9A000000 		.4byte	0x9a
+ 740 022f 00000000 		.4byte	.LFB8
+ 741 0233 12000000 		.4byte	.LFE8-.LFB8
+ 742 0237 01       		.uleb128 0x1
+ 743 0238 9C       		.byte	0x9c
+ 744 0239 56020000 		.4byte	0x256
+ 745 023d 08       		.uleb128 0x8
+ 746 023e 76616C00 		.ascii	"val\000"
+ 747 0242 01       		.byte	0x1
+ 748 0243 B5       		.byte	0xb5
+ 749 0244 6B000000 		.4byte	0x6b
+ 750 0248 12010000 		.4byte	.LLST8
+ 751 024c 07       		.uleb128 0x7
+ 752 024d 06000000 		.4byte	.LVL26
+ 753 0251 3A040000 		.4byte	0x43a
+ 754 0255 00       		.byte	0
+ 755 0256 05       		.uleb128 0x5
+ 756 0257 4F020000 		.4byte	.LASF23
+ 757 025b 01       		.byte	0x1
+ 758 025c C9       		.byte	0xc9
+ 759 025d 9A000000 		.4byte	0x9a
+ 760 0261 00000000 		.4byte	.LFB9
+ 761 0265 12000000 		.4byte	.LFE9-.LFB9
+ 762 0269 01       		.uleb128 0x1
+ 763 026a 9C       		.byte	0x9c
+ 764 026b 88020000 		.4byte	0x288
+ 765 026f 08       		.uleb128 0x8
+ 766 0270 76616C00 		.ascii	"val\000"
+ 767 0274 01       		.byte	0x1
+ 768 0275 CB       		.byte	0xcb
+ 769 0276 6B000000 		.4byte	0x6b
+ 770 027a 25010000 		.4byte	.LLST9
+ 771 027e 07       		.uleb128 0x7
+ 772 027f 06000000 		.4byte	.LVL29
+ 773 0283 3A040000 		.4byte	0x43a
+ 774 0287 00       		.byte	0
+ 775 0288 0B       		.uleb128 0xb
+ 776 0289 49010000 		.4byte	.LASF24
+ 777 028d 01       		.byte	0x1
+ 778 028e E0       		.byte	0xe0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 20
+
+
+ 779 028f 00000000 		.4byte	.LFB10
+ 780 0293 08000000 		.4byte	.LFE10-.LFB10
+ 781 0297 01       		.uleb128 0x1
+ 782 0298 9C       		.byte	0x9c
+ 783 0299 A7020000 		.4byte	0x2a7
+ 784 029d 07       		.uleb128 0x7
+ 785 029e 06000000 		.4byte	.LVL32
+ 786 02a2 45040000 		.4byte	0x445
+ 787 02a6 00       		.byte	0
+ 788 02a7 0B       		.uleb128 0xb
+ 789 02a8 5B020000 		.4byte	.LASF25
+ 790 02ac 01       		.byte	0x1
+ 791 02ad F2       		.byte	0xf2
+ 792 02ae 00000000 		.4byte	.LFB11
+ 793 02b2 08000000 		.4byte	.LFE11-.LFB11
+ 794 02b6 01       		.uleb128 0x1
+ 795 02b7 9C       		.byte	0x9c
+ 796 02b8 C6020000 		.4byte	0x2c6
+ 797 02bc 07       		.uleb128 0x7
+ 798 02bd 06000000 		.4byte	.LVL33
+ 799 02c1 50040000 		.4byte	0x450
+ 800 02c5 00       		.byte	0
+ 801 02c6 0C       		.uleb128 0xc
+ 802 02c7 15000000 		.4byte	.LASF26
+ 803 02cb 01       		.byte	0x1
+ 804 02cc 1101     		.2byte	0x111
+ 805 02ce 00000000 		.4byte	.LFB12
+ 806 02d2 78000000 		.4byte	.LFE12-.LFB12
+ 807 02d6 01       		.uleb128 0x1
+ 808 02d7 9C       		.byte	0x9c
+ 809 02d8 2F040000 		.4byte	0x42f
+ 810 02dc 0D       		.uleb128 0xd
+ 811 02dd 00000000 		.4byte	.LASF27
+ 812 02e1 01       		.byte	0x1
+ 813 02e2 1101     		.2byte	0x111
+ 814 02e4 6B000000 		.4byte	0x6b
+ 815 02e8 38010000 		.4byte	.LLST10
+ 816 02ec 0E       		.uleb128 0xe
+ 817 02ed 6900     		.ascii	"i\000"
+ 818 02ef 01       		.byte	0x1
+ 819 02f0 1301     		.2byte	0x113
+ 820 02f2 6B000000 		.4byte	0x6b
+ 821 02f6 59010000 		.4byte	.LLST11
+ 822 02fa 0F       		.uleb128 0xf
+ 823 02fb 0C000000 		.4byte	.LVL37
+ 824 02ff A1000000 		.4byte	0xa1
+ 825 0303 0D030000 		.4byte	0x30d
+ 826 0307 0A       		.uleb128 0xa
+ 827 0308 01       		.uleb128 0x1
+ 828 0309 50       		.byte	0x50
+ 829 030a 01       		.uleb128 0x1
+ 830 030b 30       		.byte	0x30
+ 831 030c 00       		.byte	0
+ 832 030d 0F       		.uleb128 0xf
+ 833 030e 16000000 		.4byte	.LVL38
+ 834 0312 5B040000 		.4byte	0x45b
+ 835 0316 21030000 		.4byte	0x321
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 21
+
+
+ 836 031a 0A       		.uleb128 0xa
+ 837 031b 01       		.uleb128 0x1
+ 838 031c 50       		.byte	0x50
+ 839 031d 02       		.uleb128 0x2
+ 840 031e 74       		.byte	0x74
+ 841 031f 00       		.sleb128 0
+ 842 0320 00       		.byte	0
+ 843 0321 0F       		.uleb128 0xf
+ 844 0322 1C000000 		.4byte	.LVL39
+ 845 0326 A1000000 		.4byte	0xa1
+ 846 032a 34030000 		.4byte	0x334
+ 847 032e 0A       		.uleb128 0xa
+ 848 032f 01       		.uleb128 0x1
+ 849 0330 50       		.byte	0x50
+ 850 0331 01       		.uleb128 0x1
+ 851 0332 31       		.byte	0x31
+ 852 0333 00       		.byte	0
+ 853 0334 0F       		.uleb128 0xf
+ 854 0335 22000000 		.4byte	.LVL40
+ 855 0339 5B040000 		.4byte	0x45b
+ 856 033d 48030000 		.4byte	0x348
+ 857 0341 0A       		.uleb128 0xa
+ 858 0342 01       		.uleb128 0x1
+ 859 0343 50       		.byte	0x50
+ 860 0344 02       		.uleb128 0x2
+ 861 0345 74       		.byte	0x74
+ 862 0346 00       		.sleb128 0
+ 863 0347 00       		.byte	0
+ 864 0348 0F       		.uleb128 0xf
+ 865 0349 28000000 		.4byte	.LVL41
+ 866 034d A1000000 		.4byte	0xa1
+ 867 0351 5B030000 		.4byte	0x35b
+ 868 0355 0A       		.uleb128 0xa
+ 869 0356 01       		.uleb128 0x1
+ 870 0357 50       		.byte	0x50
+ 871 0358 01       		.uleb128 0x1
+ 872 0359 32       		.byte	0x32
+ 873 035a 00       		.byte	0
+ 874 035b 0F       		.uleb128 0xf
+ 875 035c 2E000000 		.4byte	.LVL42
+ 876 0360 5B040000 		.4byte	0x45b
+ 877 0364 6F030000 		.4byte	0x36f
+ 878 0368 0A       		.uleb128 0xa
+ 879 0369 01       		.uleb128 0x1
+ 880 036a 50       		.byte	0x50
+ 881 036b 02       		.uleb128 0x2
+ 882 036c 74       		.byte	0x74
+ 883 036d 00       		.sleb128 0
+ 884 036e 00       		.byte	0
+ 885 036f 0F       		.uleb128 0xf
+ 886 0370 34000000 		.4byte	.LVL43
+ 887 0374 A1000000 		.4byte	0xa1
+ 888 0378 82030000 		.4byte	0x382
+ 889 037c 0A       		.uleb128 0xa
+ 890 037d 01       		.uleb128 0x1
+ 891 037e 50       		.byte	0x50
+ 892 037f 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 22
+
+
+ 893 0380 34       		.byte	0x34
+ 894 0381 00       		.byte	0
+ 895 0382 0F       		.uleb128 0xf
+ 896 0383 3A000000 		.4byte	.LVL44
+ 897 0387 5B040000 		.4byte	0x45b
+ 898 038b 96030000 		.4byte	0x396
+ 899 038f 0A       		.uleb128 0xa
+ 900 0390 01       		.uleb128 0x1
+ 901 0391 50       		.byte	0x50
+ 902 0392 02       		.uleb128 0x2
+ 903 0393 74       		.byte	0x74
+ 904 0394 00       		.sleb128 0
+ 905 0395 00       		.byte	0
+ 906 0396 0F       		.uleb128 0xf
+ 907 0397 40000000 		.4byte	.LVL45
+ 908 039b A1000000 		.4byte	0xa1
+ 909 039f A9030000 		.4byte	0x3a9
+ 910 03a3 0A       		.uleb128 0xa
+ 911 03a4 01       		.uleb128 0x1
+ 912 03a5 50       		.byte	0x50
+ 913 03a6 01       		.uleb128 0x1
+ 914 03a7 33       		.byte	0x33
+ 915 03a8 00       		.byte	0
+ 916 03a9 0F       		.uleb128 0xf
+ 917 03aa 46000000 		.4byte	.LVL46
+ 918 03ae 5B040000 		.4byte	0x45b
+ 919 03b2 BD030000 		.4byte	0x3bd
+ 920 03b6 0A       		.uleb128 0xa
+ 921 03b7 01       		.uleb128 0x1
+ 922 03b8 50       		.byte	0x50
+ 923 03b9 02       		.uleb128 0x2
+ 924 03ba 74       		.byte	0x74
+ 925 03bb 00       		.sleb128 0
+ 926 03bc 00       		.byte	0
+ 927 03bd 0F       		.uleb128 0xf
+ 928 03be 4C000000 		.4byte	.LVL47
+ 929 03c2 A1000000 		.4byte	0xa1
+ 930 03c6 D0030000 		.4byte	0x3d0
+ 931 03ca 0A       		.uleb128 0xa
+ 932 03cb 01       		.uleb128 0x1
+ 933 03cc 50       		.byte	0x50
+ 934 03cd 01       		.uleb128 0x1
+ 935 03ce 36       		.byte	0x36
+ 936 03cf 00       		.byte	0
+ 937 03d0 0F       		.uleb128 0xf
+ 938 03d1 52000000 		.4byte	.LVL48
+ 939 03d5 5B040000 		.4byte	0x45b
+ 940 03d9 E4030000 		.4byte	0x3e4
+ 941 03dd 0A       		.uleb128 0xa
+ 942 03de 01       		.uleb128 0x1
+ 943 03df 50       		.byte	0x50
+ 944 03e0 02       		.uleb128 0x2
+ 945 03e1 74       		.byte	0x74
+ 946 03e2 00       		.sleb128 0
+ 947 03e3 00       		.byte	0
+ 948 03e4 0F       		.uleb128 0xf
+ 949 03e5 58000000 		.4byte	.LVL49
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 23
+
+
+ 950 03e9 A1000000 		.4byte	0xa1
+ 951 03ed F7030000 		.4byte	0x3f7
+ 952 03f1 0A       		.uleb128 0xa
+ 953 03f2 01       		.uleb128 0x1
+ 954 03f3 50       		.byte	0x50
+ 955 03f4 01       		.uleb128 0x1
+ 956 03f5 35       		.byte	0x35
+ 957 03f6 00       		.byte	0
+ 958 03f7 0F       		.uleb128 0xf
+ 959 03f8 5E000000 		.4byte	.LVL50
+ 960 03fc 5B040000 		.4byte	0x45b
+ 961 0400 0B040000 		.4byte	0x40b
+ 962 0404 0A       		.uleb128 0xa
+ 963 0405 01       		.uleb128 0x1
+ 964 0406 50       		.byte	0x50
+ 965 0407 02       		.uleb128 0x2
+ 966 0408 74       		.byte	0x74
+ 967 0409 00       		.sleb128 0
+ 968 040a 00       		.byte	0
+ 969 040b 0F       		.uleb128 0xf
+ 970 040c 64000000 		.4byte	.LVL51
+ 971 0410 A1000000 		.4byte	0xa1
+ 972 0414 1E040000 		.4byte	0x41e
+ 973 0418 0A       		.uleb128 0xa
+ 974 0419 01       		.uleb128 0x1
+ 975 041a 50       		.byte	0x50
+ 976 041b 01       		.uleb128 0x1
+ 977 041c 37       		.byte	0x37
+ 978 041d 00       		.byte	0
+ 979 041e 09       		.uleb128 0x9
+ 980 041f 6A000000 		.4byte	.LVL52
+ 981 0423 5B040000 		.4byte	0x45b
+ 982 0427 0A       		.uleb128 0xa
+ 983 0428 01       		.uleb128 0x1
+ 984 0429 50       		.byte	0x50
+ 985 042a 02       		.uleb128 0x2
+ 986 042b 74       		.byte	0x74
+ 987 042c 00       		.sleb128 0
+ 988 042d 00       		.byte	0
+ 989 042e 00       		.byte	0
+ 990 042f 10       		.uleb128 0x10
+ 991 0430 3F000000 		.4byte	.LASF28
+ 992 0434 3F000000 		.4byte	.LASF28
+ 993 0438 02       		.byte	0x2
+ 994 0439 2F       		.byte	0x2f
+ 995 043a 10       		.uleb128 0x10
+ 996 043b 2F020000 		.4byte	.LASF29
+ 997 043f 2F020000 		.4byte	.LASF29
+ 998 0443 02       		.byte	0x2
+ 999 0444 30       		.byte	0x30
+ 1000 0445 10       		.uleb128 0x10
+ 1001 0446 73020000 		.4byte	.LASF30
+ 1002 044a 73020000 		.4byte	.LASF30
+ 1003 044e 02       		.byte	0x2
+ 1004 044f 34       		.byte	0x34
+ 1005 0450 10       		.uleb128 0x10
+ 1006 0451 56000000 		.4byte	.LASF31
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 24
+
+
+ 1007 0455 56000000 		.4byte	.LASF31
+ 1008 0459 02       		.byte	0x2
+ 1009 045a 35       		.byte	0x35
+ 1010 045b 10       		.uleb128 0x10
+ 1011 045c B1020000 		.4byte	.LASF32
+ 1012 0460 B1020000 		.4byte	.LASF32
+ 1013 0464 03       		.byte	0x3
+ 1014 0465 D9       		.byte	0xd9
+ 1015 0466 00       		.byte	0
+ 1016              		.section	.debug_abbrev,"",%progbits
+ 1017              	.Ldebug_abbrev0:
+ 1018 0000 01       		.uleb128 0x1
+ 1019 0001 11       		.uleb128 0x11
+ 1020 0002 01       		.byte	0x1
+ 1021 0003 25       		.uleb128 0x25
+ 1022 0004 0E       		.uleb128 0xe
+ 1023 0005 13       		.uleb128 0x13
+ 1024 0006 0B       		.uleb128 0xb
+ 1025 0007 03       		.uleb128 0x3
+ 1026 0008 0E       		.uleb128 0xe
+ 1027 0009 1B       		.uleb128 0x1b
+ 1028 000a 0E       		.uleb128 0xe
+ 1029 000b 55       		.uleb128 0x55
+ 1030 000c 17       		.uleb128 0x17
+ 1031 000d 11       		.uleb128 0x11
+ 1032 000e 01       		.uleb128 0x1
+ 1033 000f 10       		.uleb128 0x10
+ 1034 0010 17       		.uleb128 0x17
+ 1035 0011 00       		.byte	0
+ 1036 0012 00       		.byte	0
+ 1037 0013 02       		.uleb128 0x2
+ 1038 0014 24       		.uleb128 0x24
+ 1039 0015 00       		.byte	0
+ 1040 0016 0B       		.uleb128 0xb
+ 1041 0017 0B       		.uleb128 0xb
+ 1042 0018 3E       		.uleb128 0x3e
+ 1043 0019 0B       		.uleb128 0xb
+ 1044 001a 03       		.uleb128 0x3
+ 1045 001b 0E       		.uleb128 0xe
+ 1046 001c 00       		.byte	0
+ 1047 001d 00       		.byte	0
+ 1048 001e 03       		.uleb128 0x3
+ 1049 001f 24       		.uleb128 0x24
+ 1050 0020 00       		.byte	0
+ 1051 0021 0B       		.uleb128 0xb
+ 1052 0022 0B       		.uleb128 0xb
+ 1053 0023 3E       		.uleb128 0x3e
+ 1054 0024 0B       		.uleb128 0xb
+ 1055 0025 03       		.uleb128 0x3
+ 1056 0026 08       		.uleb128 0x8
+ 1057 0027 00       		.byte	0
+ 1058 0028 00       		.byte	0
+ 1059 0029 04       		.uleb128 0x4
+ 1060 002a 16       		.uleb128 0x16
+ 1061 002b 00       		.byte	0
+ 1062 002c 03       		.uleb128 0x3
+ 1063 002d 0E       		.uleb128 0xe
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 25
+
+
+ 1064 002e 3A       		.uleb128 0x3a
+ 1065 002f 0B       		.uleb128 0xb
+ 1066 0030 3B       		.uleb128 0x3b
+ 1067 0031 05       		.uleb128 0x5
+ 1068 0032 49       		.uleb128 0x49
+ 1069 0033 13       		.uleb128 0x13
+ 1070 0034 00       		.byte	0
+ 1071 0035 00       		.byte	0
+ 1072 0036 05       		.uleb128 0x5
+ 1073 0037 2E       		.uleb128 0x2e
+ 1074 0038 01       		.byte	0x1
+ 1075 0039 3F       		.uleb128 0x3f
+ 1076 003a 19       		.uleb128 0x19
+ 1077 003b 03       		.uleb128 0x3
+ 1078 003c 0E       		.uleb128 0xe
+ 1079 003d 3A       		.uleb128 0x3a
+ 1080 003e 0B       		.uleb128 0xb
+ 1081 003f 3B       		.uleb128 0x3b
+ 1082 0040 0B       		.uleb128 0xb
+ 1083 0041 27       		.uleb128 0x27
+ 1084 0042 19       		.uleb128 0x19
+ 1085 0043 49       		.uleb128 0x49
+ 1086 0044 13       		.uleb128 0x13
+ 1087 0045 11       		.uleb128 0x11
+ 1088 0046 01       		.uleb128 0x1
+ 1089 0047 12       		.uleb128 0x12
+ 1090 0048 06       		.uleb128 0x6
+ 1091 0049 40       		.uleb128 0x40
+ 1092 004a 18       		.uleb128 0x18
+ 1093 004b 9742     		.uleb128 0x2117
+ 1094 004d 19       		.uleb128 0x19
+ 1095 004e 01       		.uleb128 0x1
+ 1096 004f 13       		.uleb128 0x13
+ 1097 0050 00       		.byte	0
+ 1098 0051 00       		.byte	0
+ 1099 0052 06       		.uleb128 0x6
+ 1100 0053 05       		.uleb128 0x5
+ 1101 0054 00       		.byte	0
+ 1102 0055 03       		.uleb128 0x3
+ 1103 0056 0E       		.uleb128 0xe
+ 1104 0057 3A       		.uleb128 0x3a
+ 1105 0058 0B       		.uleb128 0xb
+ 1106 0059 3B       		.uleb128 0x3b
+ 1107 005a 0B       		.uleb128 0xb
+ 1108 005b 49       		.uleb128 0x49
+ 1109 005c 13       		.uleb128 0x13
+ 1110 005d 02       		.uleb128 0x2
+ 1111 005e 17       		.uleb128 0x17
+ 1112 005f 00       		.byte	0
+ 1113 0060 00       		.byte	0
+ 1114 0061 07       		.uleb128 0x7
+ 1115 0062 898201   		.uleb128 0x4109
+ 1116 0065 00       		.byte	0
+ 1117 0066 11       		.uleb128 0x11
+ 1118 0067 01       		.uleb128 0x1
+ 1119 0068 31       		.uleb128 0x31
+ 1120 0069 13       		.uleb128 0x13
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 26
+
+
+ 1121 006a 00       		.byte	0
+ 1122 006b 00       		.byte	0
+ 1123 006c 08       		.uleb128 0x8
+ 1124 006d 34       		.uleb128 0x34
+ 1125 006e 00       		.byte	0
+ 1126 006f 03       		.uleb128 0x3
+ 1127 0070 08       		.uleb128 0x8
+ 1128 0071 3A       		.uleb128 0x3a
+ 1129 0072 0B       		.uleb128 0xb
+ 1130 0073 3B       		.uleb128 0x3b
+ 1131 0074 0B       		.uleb128 0xb
+ 1132 0075 49       		.uleb128 0x49
+ 1133 0076 13       		.uleb128 0x13
+ 1134 0077 02       		.uleb128 0x2
+ 1135 0078 17       		.uleb128 0x17
+ 1136 0079 00       		.byte	0
+ 1137 007a 00       		.byte	0
+ 1138 007b 09       		.uleb128 0x9
+ 1139 007c 898201   		.uleb128 0x4109
+ 1140 007f 01       		.byte	0x1
+ 1141 0080 11       		.uleb128 0x11
+ 1142 0081 01       		.uleb128 0x1
+ 1143 0082 31       		.uleb128 0x31
+ 1144 0083 13       		.uleb128 0x13
+ 1145 0084 00       		.byte	0
+ 1146 0085 00       		.byte	0
+ 1147 0086 0A       		.uleb128 0xa
+ 1148 0087 8A8201   		.uleb128 0x410a
+ 1149 008a 00       		.byte	0
+ 1150 008b 02       		.uleb128 0x2
+ 1151 008c 18       		.uleb128 0x18
+ 1152 008d 9142     		.uleb128 0x2111
+ 1153 008f 18       		.uleb128 0x18
+ 1154 0090 00       		.byte	0
+ 1155 0091 00       		.byte	0
+ 1156 0092 0B       		.uleb128 0xb
+ 1157 0093 2E       		.uleb128 0x2e
+ 1158 0094 01       		.byte	0x1
+ 1159 0095 3F       		.uleb128 0x3f
+ 1160 0096 19       		.uleb128 0x19
+ 1161 0097 03       		.uleb128 0x3
+ 1162 0098 0E       		.uleb128 0xe
+ 1163 0099 3A       		.uleb128 0x3a
+ 1164 009a 0B       		.uleb128 0xb
+ 1165 009b 3B       		.uleb128 0x3b
+ 1166 009c 0B       		.uleb128 0xb
+ 1167 009d 27       		.uleb128 0x27
+ 1168 009e 19       		.uleb128 0x19
+ 1169 009f 11       		.uleb128 0x11
+ 1170 00a0 01       		.uleb128 0x1
+ 1171 00a1 12       		.uleb128 0x12
+ 1172 00a2 06       		.uleb128 0x6
+ 1173 00a3 40       		.uleb128 0x40
+ 1174 00a4 18       		.uleb128 0x18
+ 1175 00a5 9742     		.uleb128 0x2117
+ 1176 00a7 19       		.uleb128 0x19
+ 1177 00a8 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 27
+
+
+ 1178 00a9 13       		.uleb128 0x13
+ 1179 00aa 00       		.byte	0
+ 1180 00ab 00       		.byte	0
+ 1181 00ac 0C       		.uleb128 0xc
+ 1182 00ad 2E       		.uleb128 0x2e
+ 1183 00ae 01       		.byte	0x1
+ 1184 00af 3F       		.uleb128 0x3f
+ 1185 00b0 19       		.uleb128 0x19
+ 1186 00b1 03       		.uleb128 0x3
+ 1187 00b2 0E       		.uleb128 0xe
+ 1188 00b3 3A       		.uleb128 0x3a
+ 1189 00b4 0B       		.uleb128 0xb
+ 1190 00b5 3B       		.uleb128 0x3b
+ 1191 00b6 05       		.uleb128 0x5
+ 1192 00b7 27       		.uleb128 0x27
+ 1193 00b8 19       		.uleb128 0x19
+ 1194 00b9 11       		.uleb128 0x11
+ 1195 00ba 01       		.uleb128 0x1
+ 1196 00bb 12       		.uleb128 0x12
+ 1197 00bc 06       		.uleb128 0x6
+ 1198 00bd 40       		.uleb128 0x40
+ 1199 00be 18       		.uleb128 0x18
+ 1200 00bf 9742     		.uleb128 0x2117
+ 1201 00c1 19       		.uleb128 0x19
+ 1202 00c2 01       		.uleb128 0x1
+ 1203 00c3 13       		.uleb128 0x13
+ 1204 00c4 00       		.byte	0
+ 1205 00c5 00       		.byte	0
+ 1206 00c6 0D       		.uleb128 0xd
+ 1207 00c7 05       		.uleb128 0x5
+ 1208 00c8 00       		.byte	0
+ 1209 00c9 03       		.uleb128 0x3
+ 1210 00ca 0E       		.uleb128 0xe
+ 1211 00cb 3A       		.uleb128 0x3a
+ 1212 00cc 0B       		.uleb128 0xb
+ 1213 00cd 3B       		.uleb128 0x3b
+ 1214 00ce 05       		.uleb128 0x5
+ 1215 00cf 49       		.uleb128 0x49
+ 1216 00d0 13       		.uleb128 0x13
+ 1217 00d1 02       		.uleb128 0x2
+ 1218 00d2 17       		.uleb128 0x17
+ 1219 00d3 00       		.byte	0
+ 1220 00d4 00       		.byte	0
+ 1221 00d5 0E       		.uleb128 0xe
+ 1222 00d6 34       		.uleb128 0x34
+ 1223 00d7 00       		.byte	0
+ 1224 00d8 03       		.uleb128 0x3
+ 1225 00d9 08       		.uleb128 0x8
+ 1226 00da 3A       		.uleb128 0x3a
+ 1227 00db 0B       		.uleb128 0xb
+ 1228 00dc 3B       		.uleb128 0x3b
+ 1229 00dd 05       		.uleb128 0x5
+ 1230 00de 49       		.uleb128 0x49
+ 1231 00df 13       		.uleb128 0x13
+ 1232 00e0 02       		.uleb128 0x2
+ 1233 00e1 17       		.uleb128 0x17
+ 1234 00e2 00       		.byte	0
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 28
+
+
+ 1235 00e3 00       		.byte	0
+ 1236 00e4 0F       		.uleb128 0xf
+ 1237 00e5 898201   		.uleb128 0x4109
+ 1238 00e8 01       		.byte	0x1
+ 1239 00e9 11       		.uleb128 0x11
+ 1240 00ea 01       		.uleb128 0x1
+ 1241 00eb 31       		.uleb128 0x31
+ 1242 00ec 13       		.uleb128 0x13
+ 1243 00ed 01       		.uleb128 0x1
+ 1244 00ee 13       		.uleb128 0x13
+ 1245 00ef 00       		.byte	0
+ 1246 00f0 00       		.byte	0
+ 1247 00f1 10       		.uleb128 0x10
+ 1248 00f2 2E       		.uleb128 0x2e
+ 1249 00f3 00       		.byte	0
+ 1250 00f4 3F       		.uleb128 0x3f
+ 1251 00f5 19       		.uleb128 0x19
+ 1252 00f6 3C       		.uleb128 0x3c
+ 1253 00f7 19       		.uleb128 0x19
+ 1254 00f8 6E       		.uleb128 0x6e
+ 1255 00f9 0E       		.uleb128 0xe
+ 1256 00fa 03       		.uleb128 0x3
+ 1257 00fb 0E       		.uleb128 0xe
+ 1258 00fc 3A       		.uleb128 0x3a
+ 1259 00fd 0B       		.uleb128 0xb
+ 1260 00fe 3B       		.uleb128 0x3b
+ 1261 00ff 0B       		.uleb128 0xb
+ 1262 0100 00       		.byte	0
+ 1263 0101 00       		.byte	0
+ 1264 0102 00       		.byte	0
+ 1265              		.section	.debug_loc,"",%progbits
+ 1266              	.Ldebug_loc0:
+ 1267              	.LLST0:
+ 1268 0000 00000000 		.4byte	.LVL0
+ 1269 0004 08000000 		.4byte	.LVL1
+ 1270 0008 0100     		.2byte	0x1
+ 1271 000a 50       		.byte	0x50
+ 1272 000b 08000000 		.4byte	.LVL1
+ 1273 000f 12000000 		.4byte	.LFE2
+ 1274 0013 0400     		.2byte	0x4
+ 1275 0015 F3       		.byte	0xf3
+ 1276 0016 01       		.uleb128 0x1
+ 1277 0017 50       		.byte	0x50
+ 1278 0018 9F       		.byte	0x9f
+ 1279 0019 00000000 		.4byte	0
+ 1280 001d 00000000 		.4byte	0
+ 1281              	.LLST1:
+ 1282 0021 00000000 		.4byte	.LVL4
+ 1283 0025 07000000 		.4byte	.LVL5-1
+ 1284 0029 0100     		.2byte	0x1
+ 1285 002b 50       		.byte	0x50
+ 1286 002c 07000000 		.4byte	.LVL5-1
+ 1287 0030 20000000 		.4byte	.LFE3
+ 1288 0034 0400     		.2byte	0x4
+ 1289 0036 F3       		.byte	0xf3
+ 1290 0037 01       		.uleb128 0x1
+ 1291 0038 50       		.byte	0x50
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 29
+
+
+ 1292 0039 9F       		.byte	0x9f
+ 1293 003a 00000000 		.4byte	0
+ 1294 003e 00000000 		.4byte	0
+ 1295              	.LLST2:
+ 1296 0042 08000000 		.4byte	.LVL5
+ 1297 0046 0C000000 		.4byte	.LVL6
+ 1298 004a 0100     		.2byte	0x1
+ 1299 004c 50       		.byte	0x50
+ 1300 004d 16000000 		.4byte	.LVL7
+ 1301 0051 1E000000 		.4byte	.LVL9
+ 1302 0055 0100     		.2byte	0x1
+ 1303 0057 54       		.byte	0x54
+ 1304 0058 1E000000 		.4byte	.LVL9
+ 1305 005c 20000000 		.4byte	.LFE3
+ 1306 0060 0100     		.2byte	0x1
+ 1307 0062 50       		.byte	0x50
+ 1308 0063 00000000 		.4byte	0
+ 1309 0067 00000000 		.4byte	0
+ 1310              	.LLST3:
+ 1311 006b 00000000 		.4byte	.LVL10
+ 1312 006f 07000000 		.4byte	.LVL11-1
+ 1313 0073 0100     		.2byte	0x1
+ 1314 0075 50       		.byte	0x50
+ 1315 0076 07000000 		.4byte	.LVL11-1
+ 1316 007a 24000000 		.4byte	.LFE4
+ 1317 007e 0400     		.2byte	0x4
+ 1318 0080 F3       		.byte	0xf3
+ 1319 0081 01       		.uleb128 0x1
+ 1320 0082 50       		.byte	0x50
+ 1321 0083 9F       		.byte	0x9f
+ 1322 0084 00000000 		.4byte	0
+ 1323 0088 00000000 		.4byte	0
+ 1324              	.LLST4:
+ 1325 008c 08000000 		.4byte	.LVL11
+ 1326 0090 0C000000 		.4byte	.LVL12
+ 1327 0094 0100     		.2byte	0x1
+ 1328 0096 50       		.byte	0x50
+ 1329 0097 1A000000 		.4byte	.LVL13
+ 1330 009b 22000000 		.4byte	.LVL15
+ 1331 009f 0100     		.2byte	0x1
+ 1332 00a1 54       		.byte	0x54
+ 1333 00a2 22000000 		.4byte	.LVL15
+ 1334 00a6 24000000 		.4byte	.LFE4
+ 1335 00aa 0100     		.2byte	0x1
+ 1336 00ac 50       		.byte	0x50
+ 1337 00ad 00000000 		.4byte	0
+ 1338 00b1 00000000 		.4byte	0
+ 1339              	.LLST5:
+ 1340 00b5 00000000 		.4byte	.LVL16
+ 1341 00b9 07000000 		.4byte	.LVL17-1
+ 1342 00bd 0100     		.2byte	0x1
+ 1343 00bf 50       		.byte	0x50
+ 1344 00c0 07000000 		.4byte	.LVL17-1
+ 1345 00c4 24000000 		.4byte	.LFE5
+ 1346 00c8 0400     		.2byte	0x4
+ 1347 00ca F3       		.byte	0xf3
+ 1348 00cb 01       		.uleb128 0x1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 30
+
+
+ 1349 00cc 50       		.byte	0x50
+ 1350 00cd 9F       		.byte	0x9f
+ 1351 00ce 00000000 		.4byte	0
+ 1352 00d2 00000000 		.4byte	0
+ 1353              	.LLST6:
+ 1354 00d6 08000000 		.4byte	.LVL17
+ 1355 00da 0C000000 		.4byte	.LVL18
+ 1356 00de 0100     		.2byte	0x1
+ 1357 00e0 50       		.byte	0x50
+ 1358 00e1 1A000000 		.4byte	.LVL19
+ 1359 00e5 22000000 		.4byte	.LVL21
+ 1360 00e9 0100     		.2byte	0x1
+ 1361 00eb 54       		.byte	0x54
+ 1362 00ec 22000000 		.4byte	.LVL21
+ 1363 00f0 24000000 		.4byte	.LFE5
+ 1364 00f4 0100     		.2byte	0x1
+ 1365 00f6 50       		.byte	0x50
+ 1366 00f7 00000000 		.4byte	0
+ 1367 00fb 00000000 		.4byte	0
+ 1368              	.LLST7:
+ 1369 00ff 06000000 		.4byte	.LVL23
+ 1370 0103 0E000000 		.4byte	.LVL25
+ 1371 0107 0100     		.2byte	0x1
+ 1372 0109 50       		.byte	0x50
+ 1373 010a 00000000 		.4byte	0
+ 1374 010e 00000000 		.4byte	0
+ 1375              	.LLST8:
+ 1376 0112 06000000 		.4byte	.LVL26
+ 1377 0116 0E000000 		.4byte	.LVL28
+ 1378 011a 0100     		.2byte	0x1
+ 1379 011c 50       		.byte	0x50
+ 1380 011d 00000000 		.4byte	0
+ 1381 0121 00000000 		.4byte	0
+ 1382              	.LLST9:
+ 1383 0125 06000000 		.4byte	.LVL29
+ 1384 0129 0E000000 		.4byte	.LVL31
+ 1385 012d 0100     		.2byte	0x1
+ 1386 012f 50       		.byte	0x50
+ 1387 0130 00000000 		.4byte	0
+ 1388 0134 00000000 		.4byte	0
+ 1389              	.LLST10:
+ 1390 0138 00000000 		.4byte	.LVL34
+ 1391 013c 06000000 		.4byte	.LVL36
+ 1392 0140 0100     		.2byte	0x1
+ 1393 0142 50       		.byte	0x50
+ 1394 0143 06000000 		.4byte	.LVL36
+ 1395 0147 78000000 		.4byte	.LFE12
+ 1396 014b 0400     		.2byte	0x4
+ 1397 014d F3       		.byte	0xf3
+ 1398 014e 01       		.uleb128 0x1
+ 1399 014f 50       		.byte	0x50
+ 1400 0150 9F       		.byte	0x9f
+ 1401 0151 00000000 		.4byte	0
+ 1402 0155 00000000 		.4byte	0
+ 1403              	.LLST11:
+ 1404 0159 04000000 		.4byte	.LVL35
+ 1405 015d 06000000 		.4byte	.LVL36
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 31
+
+
+ 1406 0161 0200     		.2byte	0x2
+ 1407 0163 30       		.byte	0x30
+ 1408 0164 9F       		.byte	0x9f
+ 1409 0165 06000000 		.4byte	.LVL36
+ 1410 0169 6C000000 		.4byte	.LVL53
+ 1411 016d 0100     		.2byte	0x1
+ 1412 016f 55       		.byte	0x55
+ 1413 0170 6E000000 		.4byte	.LVL54
+ 1414 0174 76000000 		.4byte	.LVL55
+ 1415 0178 0100     		.2byte	0x1
+ 1416 017a 55       		.byte	0x55
+ 1417 017b 00000000 		.4byte	0
+ 1418 017f 00000000 		.4byte	0
+ 1419              		.section	.debug_aranges,"",%progbits
+ 1420 0000 6C000000 		.4byte	0x6c
+ 1421 0004 0200     		.2byte	0x2
+ 1422 0006 00000000 		.4byte	.Ldebug_info0
+ 1423 000a 04       		.byte	0x4
+ 1424 000b 00       		.byte	0
+ 1425 000c 0000     		.2byte	0
+ 1426 000e 0000     		.2byte	0
+ 1427 0010 00000000 		.4byte	.LFB2
+ 1428 0014 12000000 		.4byte	.LFE2-.LFB2
+ 1429 0018 00000000 		.4byte	.LFB3
+ 1430 001c 20000000 		.4byte	.LFE3-.LFB3
+ 1431 0020 00000000 		.4byte	.LFB4
+ 1432 0024 24000000 		.4byte	.LFE4-.LFB4
+ 1433 0028 00000000 		.4byte	.LFB5
+ 1434 002c 24000000 		.4byte	.LFE5-.LFB5
+ 1435 0030 00000000 		.4byte	.LFB6
+ 1436 0034 0C000000 		.4byte	.LFE6-.LFB6
+ 1437 0038 00000000 		.4byte	.LFB7
+ 1438 003c 12000000 		.4byte	.LFE7-.LFB7
+ 1439 0040 00000000 		.4byte	.LFB8
+ 1440 0044 12000000 		.4byte	.LFE8-.LFB8
+ 1441 0048 00000000 		.4byte	.LFB9
+ 1442 004c 12000000 		.4byte	.LFE9-.LFB9
+ 1443 0050 00000000 		.4byte	.LFB10
+ 1444 0054 08000000 		.4byte	.LFE10-.LFB10
+ 1445 0058 00000000 		.4byte	.LFB11
+ 1446 005c 08000000 		.4byte	.LFE11-.LFB11
+ 1447 0060 00000000 		.4byte	.LFB12
+ 1448 0064 78000000 		.4byte	.LFE12-.LFB12
+ 1449 0068 00000000 		.4byte	0
+ 1450 006c 00000000 		.4byte	0
+ 1451              		.section	.debug_ranges,"",%progbits
+ 1452              	.Ldebug_ranges0:
+ 1453 0000 00000000 		.4byte	.LFB2
+ 1454 0004 12000000 		.4byte	.LFE2
+ 1455 0008 00000000 		.4byte	.LFB3
+ 1456 000c 20000000 		.4byte	.LFE3
+ 1457 0010 00000000 		.4byte	.LFB4
+ 1458 0014 24000000 		.4byte	.LFE4
+ 1459 0018 00000000 		.4byte	.LFB5
+ 1460 001c 24000000 		.4byte	.LFE5
+ 1461 0020 00000000 		.4byte	.LFB6
+ 1462 0024 0C000000 		.4byte	.LFE6
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 32
+
+
+ 1463 0028 00000000 		.4byte	.LFB7
+ 1464 002c 12000000 		.4byte	.LFE7
+ 1465 0030 00000000 		.4byte	.LFB8
+ 1466 0034 12000000 		.4byte	.LFE8
+ 1467 0038 00000000 		.4byte	.LFB9
+ 1468 003c 12000000 		.4byte	.LFE9
+ 1469 0040 00000000 		.4byte	.LFB10
+ 1470 0044 08000000 		.4byte	.LFE10
+ 1471 0048 00000000 		.4byte	.LFB11
+ 1472 004c 08000000 		.4byte	.LFE11
+ 1473 0050 00000000 		.4byte	.LFB12
+ 1474 0054 78000000 		.4byte	.LFE12
+ 1475 0058 00000000 		.4byte	0
+ 1476 005c 00000000 		.4byte	0
+ 1477              		.section	.debug_line,"",%progbits
+ 1478              	.Ldebug_line0:
+ 1479 0000 B8010000 		.section	.debug_str,"MS",%progbits,1
+ 1479      02006200 
+ 1479      00000201 
+ 1479      FB0E0D00 
+ 1479      01010101 
+ 1480              	.LASF27:
+ 1481 0000 72756E73 		.ascii	"runs\000"
+ 1481      00
+ 1482              	.LASF20:
+ 1483 0005 4C454453 		.ascii	"LEDS_Read\000"
+ 1483      5F526561 
+ 1483      6400
+ 1484              	.LASF17:
+ 1485 000f 73746174 		.ascii	"state\000"
+ 1485      6500
+ 1486              	.LASF26:
+ 1487 0015 4C454453 		.ascii	"LEDS_Test\000"
+ 1487      5F546573 
+ 1487      7400
+ 1488              	.LASF19:
+ 1489 001f 4C454453 		.ascii	"LEDS_B_Write\000"
+ 1489      5F425F57 
+ 1489      72697465 
+ 1489      00
+ 1490              	.LASF3:
+ 1491 002c 73686F72 		.ascii	"short unsigned int\000"
+ 1491      7420756E 
+ 1491      7369676E 
+ 1491      65642069 
+ 1491      6E7400
+ 1492              	.LASF28:
+ 1493 003f 4C454453 		.ascii	"LEDS_Control_reg_Write\000"
+ 1493      5F436F6E 
+ 1493      74726F6C 
+ 1493      5F726567 
+ 1493      5F577269 
+ 1494              	.LASF31:
+ 1495 0056 4C454453 		.ascii	"LEDS_Control_reg_Wakeup\000"
+ 1495      5F436F6E 
+ 1495      74726F6C 
+ 1495      5F726567 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 33
+
+
+ 1495      5F57616B 
+ 1496              	.LASF9:
+ 1497 006e 666C6F61 		.ascii	"float\000"
+ 1497      7400
+ 1498              	.LASF1:
+ 1499 0074 756E7369 		.ascii	"unsigned char\000"
+ 1499      676E6564 
+ 1499      20636861 
+ 1499      7200
+ 1500              	.LASF22:
+ 1501 0082 4C454453 		.ascii	"LEDS_G_Read\000"
+ 1501      5F475F52 
+ 1501      65616400 
+ 1502              	.LASF5:
+ 1503 008e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1503      20756E73 
+ 1503      69676E65 
+ 1503      6420696E 
+ 1503      7400
+ 1504              	.LASF34:
+ 1505 00a0 47656E65 		.ascii	"Generated_Source\\PSoC4\\LEDS.c\000"
+ 1505      72617465 
+ 1505      645F536F 
+ 1505      75726365 
+ 1505      5C50536F 
+ 1506              	.LASF36:
+ 1507 00be 75696E74 		.ascii	"uint8\000"
+ 1507      3800
+ 1508              	.LASF35:
+ 1509 00c4 433A5C55 		.ascii	"C:\\Users\\ccheney\\Dropbox (MIT)\\MICA\\Creator\\l"
+ 1509      73657273 
+ 1509      5C636368 
+ 1509      656E6579 
+ 1509      5C44726F 
+ 1510 00f1 69627261 		.ascii	"ibraries\\micaComponents_testing\\packetTesting_v1_"
+ 1510      72696573 
+ 1510      5C6D6963 
+ 1510      61436F6D 
+ 1510      706F6E65 
+ 1511 0122 345F7065 		.ascii	"4_peripheral.cydsn\000"
+ 1511      72697068 
+ 1511      6572616C 
+ 1511      2E637964 
+ 1511      736E00
+ 1512              	.LASF10:
+ 1513 0135 646F7562 		.ascii	"double\000"
+ 1513      6C6500
+ 1514              	.LASF18:
+ 1515 013c 4C454453 		.ascii	"LEDS_G_Write\000"
+ 1515      5F475F57 
+ 1515      72697465 
+ 1515      00
+ 1516              	.LASF24:
+ 1517 0149 4C454453 		.ascii	"LEDS_Sleep\000"
+ 1517      5F536C65 
+ 1517      657000
+ 1518              	.LASF16:
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 34
+
+
+ 1519 0154 4C454453 		.ascii	"LEDS_R_Write\000"
+ 1519      5F525F57 
+ 1519      72697465 
+ 1519      00
+ 1520              	.LASF8:
+ 1521 0161 756E7369 		.ascii	"unsigned int\000"
+ 1521      676E6564 
+ 1521      20696E74 
+ 1521      00
+ 1522              	.LASF7:
+ 1523 016e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1523      206C6F6E 
+ 1523      6720756E 
+ 1523      7369676E 
+ 1523      65642069 
+ 1524              	.LASF33:
+ 1525 0185 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1525      43313120 
+ 1525      352E342E 
+ 1525      31203230 
+ 1525      31363036 
+ 1526 01b8 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1526      20726576 
+ 1526      6973696F 
+ 1526      6E203233 
+ 1526      37373135 
+ 1527 01eb 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1527      66756E63 
+ 1527      74696F6E 
+ 1527      2D736563 
+ 1527      74696F6E 
+ 1528              	.LASF13:
+ 1529 0213 73697A65 		.ascii	"sizetype\000"
+ 1529      74797065 
+ 1529      00
+ 1530              	.LASF6:
+ 1531 021c 6C6F6E67 		.ascii	"long long int\000"
+ 1531      206C6F6E 
+ 1531      6720696E 
+ 1531      7400
+ 1532              	.LASF11:
+ 1533 022a 63686172 		.ascii	"char\000"
+ 1533      00
+ 1534              	.LASF29:
+ 1535 022f 4C454453 		.ascii	"LEDS_Control_reg_Read\000"
+ 1535      5F436F6E 
+ 1535      74726F6C 
+ 1535      5F726567 
+ 1535      5F526561 
+ 1536              	.LASF2:
+ 1537 0245 73686F72 		.ascii	"short int\000"
+ 1537      7420696E 
+ 1537      7400
+ 1538              	.LASF23:
+ 1539 024f 4C454453 		.ascii	"LEDS_B_Read\000"
+ 1539      5F425F52 
+ 1539      65616400 
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccczsNYC.s 			page 35
+
+
+ 1540              	.LASF25:
+ 1541 025b 4C454453 		.ascii	"LEDS_Wakeup\000"
+ 1541      5F57616B 
+ 1541      65757000 
+ 1542              	.LASF21:
+ 1543 0267 4C454453 		.ascii	"LEDS_R_Read\000"
+ 1543      5F525F52 
+ 1543      65616400 
+ 1544              	.LASF30:
+ 1545 0273 4C454453 		.ascii	"LEDS_Control_reg_Sleep\000"
+ 1545      5F436F6E 
+ 1545      74726F6C 
+ 1545      5F726567 
+ 1545      5F536C65 
+ 1546              	.LASF4:
+ 1547 028a 6C6F6E67 		.ascii	"long int\000"
+ 1547      20696E74 
+ 1547      00
+ 1548              	.LASF12:
+ 1549 0293 6C6F6E67 		.ascii	"long double\000"
+ 1549      20646F75 
+ 1549      626C6500 
+ 1550              	.LASF0:
+ 1551 029f 7369676E 		.ascii	"signed char\000"
+ 1551      65642063 
+ 1551      68617200 
+ 1552              	.LASF14:
+ 1553 02ab 5F426F6F 		.ascii	"_Bool\000"
+ 1553      6C00
+ 1554              	.LASF32:
+ 1555 02b1 43794465 		.ascii	"CyDelay\000"
+ 1555      6C617900 
+ 1556              	.LASF15:
+ 1557 02b9 4C454453 		.ascii	"LEDS_Write\000"
+ 1557      5F577269 
+ 1557      746500
+ 1558              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

@@ -6,3 +6,7 @@ codegentemp/
 CortexM0/
 Generated_Source/
 *.log
+*.cycdx
+*.rpt
+*.svd
+*.html

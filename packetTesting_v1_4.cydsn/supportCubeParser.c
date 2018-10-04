@@ -18,6 +18,44 @@
 ********************************************************************************/
 #include "supportCubeParser.h"
 #include "micaCommon.h"
+#include "project.h"
+
+
+
+/*******************************************************************************
+* Function Name: printCmdPacket()
+****************************************************************************//**
+* \brief
+*  Prints a Received Command packet
+*
+* \param packet [in]
+*  Pointer to the received packet
+* 
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t printCmdPacket(packets_PACKET_S* packet){
+    usbUart_print("Packet Command:");
+    packets_printPacket(packet, usbUart_print);
+    return packets_ERR_SUCCESS;
+}
+/*******************************************************************************
+* Function Name: printAckPacket()
+****************************************************************************//**
+* \brief
+*  Prints a Received Command packet
+*
+* \param packet [in]
+*  Pointer to the received packet
+* 
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t printAckPacket(packets_PACKET_S* packet){
+    usbUart_print("Packet Acknowledged:");
+    packets_printPacket(packet, usbUart_print);
+    return packets_ERR_SUCCESS;
+}
 
 
 

@@ -61,11 +61,11 @@
 * Testing will only occur when MICA_TEST is defined
 */
 #ifdef MICA_TEST
-//    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
+    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
 //    #define MICA_TEST_PACKETS           /* Test Packet communication */
 //    #define MICA_TEST_PACKETS_ISR        /* Receive packets from IMU via interrupt and print results */
 //    #define MICA_TEST_PERIPHERAL_ID         /* Request the ID from the peripheral and display the results over USB */
-    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
+//    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
     
 #endif
 /* -------------- END TEST LEVEL --------------  */
@@ -409,6 +409,8 @@ int main(void) {
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.ackCallback = printCmdPacket;
+            packetBuffer.comms.cmdCallback = printCmdPacket;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFE, 0xAA};
             mock_clearRxQueue();

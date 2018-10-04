@@ -57,7 +57,9 @@
     uint32_t processPacketEvents(packets_BUFFER_FULL_S* packet);
 
     
-  
+    uint32_t printCmdPacket(packets_PACKET_S* packet);
+    uint32_t printAckPacket(packets_PACKET_S* packet);
+    
 
 #endif /* supportCubeParser_H */
 /* [] END OF FILE */

@@ -29,6 +29,7 @@
 #include "packet_testing.h"
 #include "testRunner.h"
 #include "supportCubeParser.h"
+#include "mockFunctions.h"
 
 /*  -------------- DEBUGGING --------------
 * Uncomment MICA_DEBUG to enable general debugging.
@@ -342,25 +343,55 @@ int main(void) {
         
         /* ### Process RX Byte Test Suite ### */
         {
-            usbUart_print("\r\n*** Process RX Byte - State Errors ***\r\n");
+            usbUart_print("\r\n*** Process RX Byte - State Errors ***\r\n"); 
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            /* No buffers generated */
-            uint8 bytes[1] = {packets_SYM_START};
-            testRunner_run(test_processRxByte_stateError(&packetBuffer, bytes, 1, "No Buffers", packets_ERR_MEMORY));
-            /* Generate buffer */
+            /* No buffers or RX Functions */
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "No Buffers or RX Functions", packets_ERR_MEMORY | packets_ERR_CALLBACK));
+            /* No RX Functions */
             packets_generateBuffers(&packetBuffer, 100);
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX Functions", packets_ERR_CALLBACK));
+            /*  No RX get byte */
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX get byte function", packets_ERR_CALLBACK));
+            /* No RX get pending */
+            packetBuffer.comms.rxGetBytesPending = NULL;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX get pending function", packets_ERR_CALLBACK));
+            /* Valid RX functions */
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid RX functions", packets_ERR_SUCCESS));
             /* Buffer overflow */
             packetBuffer.receive.processBuffer.bufferIndex = 100;
-            bytes[0] = packets_SYM_START;
-            testRunner_run(test_processRxByte_stateError(&packetBuffer, bytes, 1, "Buffer overflow", packets_ERR_MEMORY));
-            /* Valid Start Byte */
-            bytes[0] = packets_SYM_START;
-            testRunner_run(test_processRxByte_stateError(&packetBuffer, bytes, 1, "Valid Start", packets_ERR_SUCCESS));
-            /* Invalid Start Byte */
-            bytes[0] = packets_SYM_START + 1;
-            testRunner_run(test_processRxByte_stateError(&packetBuffer, bytes, 1, "invalid Start", packets_ERR_START_SYM));
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Buffer overflow", packets_ERR_MEMORY));
+            /* mock tests - should move to their own test space */
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            mock_queueRxByte(0x01);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            mock_queueRxByte(0x02);
+//            mock_queueRxByte(0x03);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            uint8_t arr[10] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
+//            mock_queueArray(arr, 6);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+            /* Valid Start */
+            mock_queueRxByte(packets_SYM_START);
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid Start", packets_ERR_SUCCESS));
+            mock_clearRxQueue();
+            /* Invalid start */
+            mock_queueRxByte(packets_SYM_START + 1);
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid Start", packets_ERR_START_SYM));
             
             /* Clean up */
             packets_destoryBuffers(&packetBuffer);

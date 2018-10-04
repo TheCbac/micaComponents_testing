@@ -39,9 +39,11 @@
           <File BuildType="BUILD" Toolchain="">main.c</File>
           <File BuildType="BUILD" Toolchain="">packet_testing.c</File>
           <File BuildType="BUILD" Toolchain="">supportCubeParser.c</File>
+          <File BuildType="BUILD" Toolchain="">mockFunctions.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
           <File BuildType="BUILD" Toolchain="">packet_testing.h</File>
           <File BuildType="BUILD" Toolchain="">supportCubeParser.h</File>
+          <File BuildType="BUILD" Toolchain="">mockFunctions.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\packetTesting_v1_4.cydsn\Generated_Source\PSoC4">

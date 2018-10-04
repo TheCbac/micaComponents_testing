@@ -31,7 +31,7 @@
     bool test_packetCreation_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult);
     bool test_packetCreation_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint8_t* expectedPacket);
     bool test_sendPacket(void (*txFunction)(uint8* src, uint16_t len), char* testName, uint32_t expectedResult);
-    bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, uint8_t * dataArr, uint16 len, char* testName, uint32_t expectedResult);
+    bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult);
     bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult);
     bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedPacket);
     bool test_commandToModule(char* testName, uint8_t cmd, uint8_t expectedModule);
@@ -43,6 +43,8 @@
     bool comparePacketBuffer(packets_BUFFER_FULL_S* b1, packets_BUFFER_FULL_S* b2);
     bool comparePackets(packets_PACKET_S* p1, packets_PACKET_S* p2);
     bool compareProcessBuffer(packets_BUFFER_PROCESS_S* p1, packets_BUFFER_PROCESS_S* p2);
+
+    
 #endif /* PACKET_TESTING_H */
 
 /* [] END OF FILE */

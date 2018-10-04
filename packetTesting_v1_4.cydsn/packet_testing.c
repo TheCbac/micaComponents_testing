@@ -216,7 +216,7 @@ bool test_sendPacket(void (*txFunction)(uint8* src, uint16_t len), char* testNam
     packets_BUFFER_FULL_S packetBuffer;
     packets_initialize(&packetBuffer);
     packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-    /* No TX function */
+    /*Set TX function */
     packetBuffer.comms.txPutArray = txFunction;
     /* Send the packet */
     packetBuffer.send.packet.cmd = 0x01;
@@ -254,19 +254,28 @@ bool test_sendPacket(void (*txFunction)(uint8* src, uint16_t len), char* testNam
 * \return
 *   Boolean indicating if the test passed
 *******************************************************************************/
-bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, uint8_t * dataArr, uint16 len, char* testName, uint32_t expectedResult){
-    uint32_t error = ZERO;
-    uint16 i;
-    for(i = ZERO; i < len; i++){
-        error |= packets_processRxByte(packetBuffer, dataArr[i]);
-    }
-
+bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult){
+    /* Process the RX Byte */
+    uint32_t error = packets_processRxByte(packetBuffer);
     /* flush the buffers */
     packets_flushBuffers(packetBuffer);
     /* Record the result */
     return testRunner_printResults(testName, error, expectedResult, testRunner_MSG_NONE);
     
 }
+//bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, uint8_t * dataArr, uint16 len, char* testName, uint32_t expectedResult){
+//    uint32_t error = ZERO;
+//    uint16 i;
+//    for(i = ZERO; i < len; i++){
+//        error |= packets_processRxByte(packetBuffer, dataArr[i]);
+//    }
+//
+//    /* flush the buffers */
+//    packets_flushBuffers(packetBuffer);
+//    /* Record the result */
+//    return testRunner_printResults(testName, error, expectedResult, testRunner_MSG_NONE);
+//    
+//}
 
 /*******************************************************************************
 * Function Name: test_packetParsing_stateErrors()
@@ -297,7 +306,7 @@ bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* t
     for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
         if(!error){
             uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
-            error |= packets_processRxByte(packetBuffer, dataByte);
+//            error |= packets_processRxByte(packetBuffer, dataByte);
         }
     }
     if(!error){
@@ -339,7 +348,7 @@ bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* te
     for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
         if(!error){
             uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
-            error |= packets_processRxByte(packetBuffer, dataByte);
+//            error |= packets_processRxByte(packetBuffer, dataByte);
         }
     }
     if(!error){
@@ -458,7 +467,7 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
     uint8_t len = UART_IMU_SpiUartGetRxBufferSize();
     uint8_t i;
     for(i=ZERO; i<len; i++){
-        error |= packets_processRxByte(packetBuffer, imuUart_getChar());
+//        error |= packets_processRxByte(packetBuffer, imuUart_getChar());
     }
         
     if(!error){

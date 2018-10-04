@@ -1,9 +1,0 @@
-C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\packetTesting_v1_4.cydsn\packetTesting_v1_4.cyprj|671ed4a1-6bd2-475a-9f5e-bdd7f5f996f6
-C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\libMica.cyprj|cc4655e8-c596-45b6-a2aa-2ce7f0e49523
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|c6b4612d-863c-43a1-9643-3542154d5038
-C:\Users\ccheney\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|fa92eb50-1eb1-4c12-ab46-046524763bd8
-C:\Users\ccheney\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|50c093bd-0246-4484-9e22-cca52811ac0c
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|6d5a9531-daf0-4f76-b03a-5a036540587c
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|afd9bbfb-9f2e-4ac0-ae35-9172d8c94f96
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|9fc3a565-9277-4eb6-93f9-be14bf1e31e5
-C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\packetTesting_v1_3.cydsn\packetTesting_v1_3.cyprj|7c85561a-da98-46c9-b0d8-2e2d0c743d01

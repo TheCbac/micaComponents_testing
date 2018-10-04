@@ -2,3 +2,7 @@
 micaComponents.cywrk.ccheney
 .vscode
 Backup
+codegentemp/
+CortexM0/
+Generated_Source/
+*.log

@@ -78,7 +78,7 @@ bool test_generateBuffers_iteration(packets_BUFFER_FULL_S* packetBuffer, char* t
     uint16 i;
     /* Create and destroy a whole buch of times */
     for(i = ZERO; i < iterations; i++){
-        packets_generateBuffers(packetBuffer, packets_LEN_BLOCK_PACKET);
+        packets_generateBuffers(packetBuffer, packets_LEN_PACKET_128);
         packets_destoryBuffers(packetBuffer);
     }
     /* Succeed if we get here */

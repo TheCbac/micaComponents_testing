@@ -113,7 +113,7 @@ int main(void) {
             packets_initialize(&packetBuffer);
             usbUart_print("\r\n*** Buffer generation ***\r\n");
             /* Nominal Case */
-            testRunner_run(test_generateBuffers(&packetBuffer, "Normal", packets_LEN_BLOCK_PACKET, packets_ERR_SUCCESS));
+            testRunner_run(test_generateBuffers(&packetBuffer, "Normal", packets_LEN_PACKET_128, packets_ERR_SUCCESS));
             /* Long test */
             testRunner_run(test_generateBuffers(&packetBuffer, "Long", 1000, packets_ERR_MEMORY));
             /* Multiple create */
@@ -133,7 +133,7 @@ int main(void) {
             /* Buffer not generated */
             testRunner_run( test_destroyBuffers(&packetBuffer, "Non-generated", packets_ERR_MEMORY));
             /* Normal packet */
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             testRunner_run(test_destroyBuffers(&packetBuffer, "Normal", packets_ERR_SUCCESS));
             /* Too long buffer */
             packets_generateBuffers(&packetBuffer, 2000);
@@ -162,7 +162,7 @@ int main(void) {
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local reference to sending buffer */
             packets_PACKET_S* sendPacket = &(packetBuffer.send.packet); 
             /* Define dummy data */
@@ -185,7 +185,7 @@ int main(void) {
             sendPacket->payloadLen = ZERO;
             testRunner_run(test_packetCreation_stateErrors(&packetBuffer, "No Payload", packets_ERR_SUCCESS));
             /* Long Packet - no memory */
-            sendPacket->payloadLen = packets_LEN_BLOCK_PACKET + 1;
+            sendPacket->payloadLen = packets_LEN_PACKET_128 + 1;
             testRunner_run(test_packetCreation_stateErrors(&packetBuffer, "Long Payload - no memory", ( packets_ERR_MEMORY )));
             /* Long Packet - max payload, and memory */
             sendPacket->payloadLen = 1024;
@@ -201,7 +201,7 @@ int main(void) {
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local reference to sending buffer */
             packets_PACKET_S* sendPacket = &(packetBuffer.send.packet); 
             /* Define valid dummy data */
@@ -239,7 +239,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Basic Packet */
             testRunner_run(test_sendPacket(&packetBuffer, "Send Basic Packet", packets_ERR_SUCCESS));
             testRunner_run(test_sendPacket(&packetBuffer, "Send Basic Packet 2", packets_ERR_SUCCESS));
@@ -282,7 +282,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local references */
             packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer.send.processBuffer);
             /* No Payload, success */
@@ -331,7 +331,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer1;
             packets_initialize(&packetBuffer1);
-            packets_generateBuffers(&packetBuffer1, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
             /* Local references */
             packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer1.send.processBuffer);
             /* No Payload, success */
@@ -344,7 +344,7 @@ int main(void) {
                 .cmd = 0xCC,
                 .payload = payload,
                 .payloadLen = 0,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -361,7 +361,7 @@ int main(void) {
                 .cmd = 0xCC,
                 .payload = payload2,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -394,7 +394,7 @@ int main(void) {
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
         packets_initialize(&packetBuffer);
-        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
         /* Ensure packet buffers were created properly */
         if(error){
             LEDS_Write(LEDS_ON_RED);
@@ -439,7 +439,7 @@ int main(void) {
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
         packets_initialize(&packetBuffer);
-        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
         /* Ensure packet buffers were created properly */
         if(error){
             LEDS_Write(LEDS_ON_RED);

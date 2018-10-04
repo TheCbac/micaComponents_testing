@@ -53,6 +53,9 @@
     ***************************************/
     uint32_t acknowledgePacket(packets_BUFFER_FULL_S* rxPacket);
     uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket);
+
+    uint32_t processPacketEvents(packets_BUFFER_FULL_S* packet);
+
     
   
 

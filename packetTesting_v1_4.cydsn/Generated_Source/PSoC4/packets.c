@@ -17,7 +17,6 @@
 ********************************************************************************/
 #include "packets.h"
 #include "micaCommon.h"
-#include "imuUart.h"
 #include <stdlib.h>
 
 
@@ -37,47 +36,13 @@
 *   packets_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
 uint32_t packets_initialize(packets_BUFFER_FULL_S *packetBuffer) {
-    uint32_t error = packets_ERR_SUCCESS;
-    /*  Receive Local references */
-    packets_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
-    packets_PACKET_S* rxPacket = &(packetBuffer->receive.packet);
-    /* Set send process buffer to zero */
-    rxBuffer->buffer = NULL;
-    rxBuffer->bufferLen = ZERO;
-    rxBuffer->timeCount = ZERO;
-    rxBuffer->bufferIndex = ZERO;
-    /* Set packet values */
-    rxPacket->moduleId = ZERO;
-    rxPacket->cmd = ZERO;
-    rxPacket->payload = NULL;
-    rxPacket->payloadLen = ZERO;
-    rxPacket->payloadMax = ZERO;
-    rxPacket->flags = ZERO;
-    rxPacket->error = ZERO;
-
+    /* Set everything to zero */
+    memset(packetBuffer, ZERO, sizeof(packets_BUFFER_FULL_S ));
     /* Reset the state */ 
     packetBuffer->receive.bufferState = packets_BUFFER_RECEIVE_WAIT_FOR_START;
-
-    /*  Receive Local references */
-    packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
-    packets_PACKET_S* txPacket = &(packetBuffer->send.packet);
-    /* Set receive process buffer to zero */
-    txBuffer->buffer = NULL;
-    txBuffer->bufferLen = ZERO;
-    txBuffer->timeCount = ZERO;
-    txBuffer->bufferIndex = ZERO;
-    /* Set the packet values */
-    txPacket->moduleId = ZERO;
-    txPacket->cmd = ZERO;
-    txPacket->payload = NULL;
-    txPacket->payloadLen = ZERO;
-    txPacket->payloadMax = ZERO;
-    txPacket->flags = ZERO;
-    txPacket->error = ZERO;
     /* Reset the tx state */
     packetBuffer->send.bufferState = packets_BUFFER_SEND_WAIT;
-
-    return error;
+    return packets_ERR_SUCCESS;
 }
 
 /*******************************************************************************
@@ -372,13 +337,20 @@ uint32_t packets_sendPacket(packets_BUFFER_FULL_S *buffer){
     if(*bufferState != packets_BUFFER_SEND_READY) {
        error |= packets_ERR_STATE;
     }
+    /* Ensure valid txFunction */
+    if(buffer->comms.txPutArray == NULL){
+        error |= packets_ERR_CALLBACK;
+    }
     if(!error) {
         /* Write out the function */
-        imuUart_putArray(txBuffer->buffer, txBuffer->bufferIndex );
+        // (txBuffer->buffer, txBuffer->bufferIndex );
+        // @TODO: check available buffer size first
+        buffer->comms.txPutArray(txBuffer->buffer, txBuffer->bufferIndex );
         /* Move back to the original state */
         *bufferState = packets_BUFFER_SEND_WAIT;
         /* Flush the TX buffer */
         packets_flushTxBuffers(buffer);   
+
     }
     return error;
 }

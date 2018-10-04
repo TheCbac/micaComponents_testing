@@ -78,7 +78,7 @@ bool test_generateBuffers_iteration(packets_BUFFER_FULL_S* packetBuffer, char* t
     uint16 i;
     /* Create and destroy a whole buch of times */
     for(i = ZERO; i < iterations; i++){
-        packets_generateBuffers(packetBuffer, packets_LEN_BLOCK_PACKET);
+        packets_generateBuffers(packetBuffer, packets_LEN_PACKET_128);
         packets_destoryBuffers(packetBuffer);
     }
     /* Succeed if we get here */
@@ -211,9 +211,23 @@ bool test_packetCreation_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* t
 * \return
 *   Boolean indicating if the test passed
 *******************************************************************************/
-bool test_sendPacket(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult){
+bool test_sendPacket(void (*txFunction)(uint8* src, uint16_t len), char* testName, uint32_t expectedResult){
+    /* Setup - Create a packet object and initialize */
+    packets_BUFFER_FULL_S packetBuffer;
+    packets_initialize(&packetBuffer);
+    packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+    /* No TX function */
+    packetBuffer.comms.txPutArray = txFunction;
     /* Send the packet */
-    uint32 error = packets_sendPacket(packetBuffer);
+    packetBuffer.send.packet.cmd = 0x01;
+    uint32 error = packets_sendPacket(&packetBuffer);
+    if(error){
+        packets_flushTxBuffers(&packetBuffer);   
+    }
+    packetBuffer.send.packet.cmd = 0x02;
+    error |= packets_sendPacket(&packetBuffer);
+    /* Clean Up */
+    packets_destoryBuffers(&packetBuffer);
     /* Display the results */
     return testRunner_printResults(testName, error, expectedResult, testRunner_MSG_NONE);
 }
@@ -413,7 +427,7 @@ bool test_uartSelf(char* testName, uint8_t* data, uint16_t len){
 }
 
 /*******************************************************************************
-* Function Name: test_selfPacketParsing()
+* Function Name: test_selfPacket_wait()
 ****************************************************************************//**
 * \brief
 *  Takes the data in the tx process buffer, passes it to the processRxByte,
@@ -431,7 +445,7 @@ bool test_uartSelf(char* testName, uint8_t* data, uint16_t len){
 * \return
 *   Boolean indicating if the test passed
 *******************************************************************************/
-bool test_selfPacketParsing(packets_BUFFER_FULL_S* packetBuffer, char* testName){
+bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
        /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
     /* Send data to txProcessBuffer */
@@ -461,6 +475,65 @@ bool test_selfPacketParsing(packets_BUFFER_FULL_S* packetBuffer, char* testName)
     /* Flush TX buffers */
     packets_flushTxBuffers(packetBuffer);
     return testRunner_printResults(testName, error, ZERO, msg);
+}
+
+
+/*******************************************************************************
+* Function Name: test_selfPacket_async()
+****************************************************************************//**
+* \brief
+*  Takes the data in the tx process buffer, passes it to the processRxByte
+*   async
+*
+* \param packetBuffer
+*   Pointer to buffers
+*
+* \param testName
+*   Name of test
+*
+* \param expectedResult
+*   The Error code of the expected result
+*
+* \return
+*   Boolean indicating if the test passed
+*******************************************************************************/
+bool test_selfPacket_async(packets_BUFFER_FULL_S* p1, packets_BUFFER_FULL_S* p2, char* testName){
+    /* Reset the RX & TX Buffers on both 'devices' */
+    packets_flushBuffers(p1);
+    packets_flushBuffers(p2);
+
+//    /* Status variable */
+//    uint32 error = packets_ERR_SUCCESS;
+//     /* Transfer the data */
+//    packets_sendPacket(p1);
+//    
+//    while(p1.acknowledged == false) {
+//
+//
+//    }
+//
+//
+//    uint8_t len = UART_IMU_SpiUartGetRxBufferSize();
+//    uint8_t i;
+//    for(i=ZERO; i<len; i++){
+//        error |= packets_processRxByte(packetBuffer, imuUart_getChar());
+//    }
+//        
+//    if(!error){
+//        /* Parse the packet */
+//        error |= packets_parsePacket(packetBuffer);
+//    }
+//    
+//    /* Compare the packets */
+//    bool match = comparePackets( &(packetBuffer->receive.packet), &(packetBuffer->send.packet));
+//    char msg[20] = "";
+//    if(!match){
+//        sprintf(msg, "Packets do not match");
+//    }
+//    /* Flush TX buffers */
+//    packets_flushTxBuffers(packetBuffer);
+//    return testRunner_printResults(testName, error, ZERO, msg);
+
 }
 
 

@@ -42,7 +42,7 @@
     #define packets_LEN_MAX_PACKET      (packets_LEN_OVERHEAD + packets_LEN_MAX_PAYLOAD) /**< Maximum length of the entire packet */
 
     #define packets_LEN_BLOCK_PAYLOAD  (0x80u)
-    #define packets_LEN_BLOCK_PACKET   (packets_LEN_OVERHEAD  + packets_LEN_BLOCK_PAYLOAD )
+    #define packets_LEN_PACKET_128   (packets_LEN_OVERHEAD  + packets_LEN_BLOCK_PAYLOAD )
 
     #define packets_INDEX_START         (0u) /**< Index of the start of packet symbol*/
     #define packets_INDEX_CMD           (1u) /**< Index of the command to issue */

@@ -41,8 +41,8 @@
     #define packets_LEN_MAX_PAYLOAD     (256) /**< Maximum length of the payload */
     #define packets_LEN_MAX_PACKET      (packets_LEN_OVERHEAD + packets_LEN_MAX_PAYLOAD) /**< Maximum length of the entire packet */
 
-    #define packets_LEN_BLOCK_PAYLOAD  (0x80u)
-    #define packets_LEN_BLOCK_PACKET   (packets_LEN_OVERHEAD  + packets_LEN_BLOCK_PAYLOAD )
+    #define packets_LEN_PAYLOAD_128     (0x80u)
+    #define packets_LEN_PACKET_128      (packets_LEN_OVERHEAD  + packets_LEN_PAYLOAD_128 )
 
     #define packets_INDEX_START         (0u) /**< Index of the start of packet symbol*/
     #define packets_INDEX_CMD           (1u) /**< Index of the command to issue */
@@ -75,6 +75,9 @@
     #define packets_ERR_CHECKSUM       (1u << packets_ERR_SHIFT_CHECKSUM)    /**< The packet checksum does not match the expected value */
     #define packets_ERR_STATE          (1u << packets_ERR_SHIFT_STATE)     /**< Device was in the incorrect state to execute the command */
     #define packets_ERR_DEVICE         (1u << packets_ERR_SHIFT_DEVICE)     /**< An Unknown device was addressed */
+    #define packets_ERR_CALLBACK       (1u << packets_ERR_SHIFT_CALLBACK)     /**< An invalid callback was attempted */
+    #define packets_ERR_UNKNOWN        (1u << packets_ERR_SHIFT_UNKNOWN)     /**< An unknown error occurred - End of error space */
+
 
     #define packets_ERR_SHIFT_MEMORY         (0u)    /**< Failed to allocate memory */
     #define packets_ERR_SHIFT_START_SYM      (1u)     /**< Incorrect start symbol was received */
@@ -88,7 +91,8 @@
     #define packets_ERR_SHIFT_CHECKSUM       (9u)     /**< The packet checksum does not match the expected value */
     #define packets_ERR_SHIFT_STATE          (10u)     /**< Device was in the incorrect state to execute the command */
     #define packets_ERR_SHIFT_DEVICE         (11u)     /**< An Unknown device was addressed */
-    #define packets_ERR_UNKNOWN              (31u)     /**< An unknown error occurred - End of error space */
+    #define packets_ERR_SHIFT_CALLBACK       (12u)     /**< An invalid callback was attempted */
+    #define packets_ERR_SHIFT_UNKNOWN        (31u)     /**< An unknown error occurred - End of error space */
 
     /* **** PACKET FLAGS **** */
     #define packets_FLAG_ACK                   (1u << packets_FLAG_SHIFT_ACK) /**< This packet is acknowledging the previous command */
@@ -193,12 +197,22 @@
         packets_BUFFER_STATE_RECEIVE_T bufferState;       /**< State of the receive buffer */
     } packets_BUFFER_RECEIVE_S;
 
-/* Struct containing both a send and receive buffer */
+    /* Communication structure  for RX/TX and callbacks */
+    typedef struct {
+        void (*rxReadArray)(uint8* dest, uint16_t len);   /**< Receive bytes from a communication port */
+        void (*txPutArray)(uint8* src, uint16_t len);     /**< Place byte into send buffer */
+        uint32_t (*rxGetBytesPending)(void);                  /**< Report number of bytes available to read */
+        uint32_t (*txGetQueueSize)(void);                     /**< Get available size of the send buffer */
+        void (*ackCallback)(packets_PACKET_S* ackPacket);     /**< Function to call when a packet was acknowledged */
+        void (*cmdCallback)(packets_PACKET_S* cmdPacket);     /**< Function that gets called when a command was received */
+    } packets_COMMUNICATION_S;
+
+    /* Struct containing both a send and receive buffer */
     typedef struct {
         packets_BUFFER_SEND_S send;
-        packets_BUFFER_RECEIVE_S receive;
+        packets_BUFFER_RECEIVE_S receive;   
+        packets_COMMUNICATION_S comms;           
     } packets_BUFFER_FULL_S;
-
 
     
     /***************************************

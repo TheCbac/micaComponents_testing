@@ -96,32 +96,31 @@ uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* tx
     return packets_ERR_SUCCESS;
 }
 
-///*******************************************************************************
-//* Function Name: printPacket()
-//****************************************************************************//**
-//* \brief
-//*  Prints the content of a packet
-//*
-//* \param packet [in]
-//*  Packet to display
-//* 
-//* \param fn [in]
-//*   Print function to use to display results
-//* 
-//* \return
-//*  None
-//*******************************************************************************/
-//void printPacket(packets_PACKET_S* packet, void (*printFn)(char *pszFmt, ...)){
-//    printFn("\r\nModule Id: %d\r\n", packet->moduleId);
-//    printFn("Command: %x\r\n", packet->cmd);
-//    uint16_t len = packet->payloadLen; 
-//    printFn("payload Len: %d\r\n", len);
-//    printFn("Payload:[ ", packet->cmd);
-//    uint16_t i;
-//    for(i = ZERO; i<len; i++){
-//        printFn("0x%x ",packet->payload[i]);
-//    }
-//    printFn("]\r\n");
-//    printFn("Flags: %x", packet->flags);
-//}
+
+/*******************************************************************************
+* Function Name: processPacketEvents()
+****************************************************************************//**
+* \brief
+*  Manages the packet lifecycle. Needs to be called at least once per 
+*
+* \param packet [in]
+*  Pointer to the packet manage
+*
+* \param commandCallback [out]
+* Callback that gets called when a packet 
+* 
+* \return
+*  Returns an error code if a fatal error occurs, zero otherwise
+*******************************************************************************/
+uint32_t processPacketEvents(packets_BUFFER_FULL_S* packet){
+    // see if RX bytes are avaiable, and process them
+    uint16_t rxPending = packet->comms.rxGetBytesPending();
+    if(rxPending){
+        uint16_t i;
+        for(i = ZERO; i < rxPending; i++){
+            packets_processRxByte(packet, packet->
+        }
+    }
+}
+
 /* [] END OF FILE */

@@ -76,7 +76,7 @@ int main(void)
     /* Create a packet object and initialize */
     packets_BUFFER_FULL_S packetBuffer;
     packets_initialize(&packetBuffer);
-    uint32_t error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+    uint32_t error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
     /* Ensure packet buffers were created properly */
     if(error){
         LEDS_Write(LEDS_ON_RED);

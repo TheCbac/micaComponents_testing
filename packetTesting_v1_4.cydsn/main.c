@@ -60,11 +60,11 @@
 * Testing will only occur when MICA_TEST is defined
 */
 #ifdef MICA_TEST
-//    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
+    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
 //    #define MICA_TEST_PACKETS           /* Test Packet communication */
 //    #define MICA_TEST_PACKETS_ISR        /* Receive packets from IMU via interrupt and print results */
 //    #define MICA_TEST_PERIPHERAL_ID         /* Request the ID from the peripheral and display the results over USB */
-    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
+//    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
     
 #endif
 /* -------------- END TEST LEVEL --------------  */
@@ -162,6 +162,7 @@ int main(void) {
         /* Unit tests for MICA Errors */
         LEDS_Write(LEDS_ON_GREEN);
         UART_USB_Start();
+        UART_IMU_Start();
         usbUart_clearScreen();
 
         /* Print Program Header */
@@ -213,7 +214,7 @@ int main(void) {
             packets_initialize(&packetBuffer);
             usbUart_print("\r\n*** Buffer generation ***\r\n");
             /* Nominal Case */
-            testRunner_run(test_generateBuffers(&packetBuffer, "Normal", packets_LEN_BLOCK_PACKET, packets_ERR_SUCCESS));
+            testRunner_run(test_generateBuffers(&packetBuffer, "Normal", packets_LEN_PACKET_128, packets_ERR_SUCCESS));
             /* Long test */
             testRunner_run(test_generateBuffers(&packetBuffer, "Long", 1000, packets_ERR_MEMORY));
             /* Multiple create */
@@ -233,7 +234,7 @@ int main(void) {
             /* Buffer not generated */
             testRunner_run( test_destroyBuffers(&packetBuffer, "Non-generated", packets_ERR_MEMORY));
             /* Normal packet */
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             testRunner_run(test_destroyBuffers(&packetBuffer, "Normal", packets_ERR_SUCCESS));
             /* Too long buffer */
             packets_generateBuffers(&packetBuffer, 2000);
@@ -262,7 +263,7 @@ int main(void) {
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local reference to sending buffer */
             packets_PACKET_S* sendPacket = &(packetBuffer.send.packet); 
             /* Define dummy data */
@@ -279,7 +280,7 @@ int main(void) {
             sendPacket->payloadLen = ZERO;
             testRunner_run(test_packetCreation_stateErrors(&packetBuffer, "No Payload", packets_ERR_SUCCESS));
             /* Long Packet - no memory */
-            sendPacket->payloadLen = packets_LEN_BLOCK_PACKET + 1;
+            sendPacket->payloadLen = packets_LEN_PACKET_128 + 1;
             testRunner_run(test_packetCreation_stateErrors(&packetBuffer, "Long Payload - no memory", ( packets_ERR_MEMORY )));
             /* Long Packet - max payload, and memory */
             sendPacket->payloadLen = 1024;
@@ -295,7 +296,7 @@ int main(void) {
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local reference to sending buffer */
             packets_PACKET_S* sendPacket = &(packetBuffer.send.packet); 
             /* Define valid dummy data */
@@ -331,17 +332,12 @@ int main(void) {
         /* ### Send Packet Test Suite ### */
         {
             usbUart_print("\r\n*** Send Packet ***\r\n");
-            /* Setup - Create a packet object and initialize */
-            packets_BUFFER_FULL_S packetBuffer;
-            packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
-            /* Basic Packet */
-            testRunner_run(test_sendPacket(&packetBuffer, "Send Basic Packet", packets_ERR_SUCCESS));
-            testRunner_run(test_sendPacket(&packetBuffer, "Send Basic Packet 2", packets_ERR_SUCCESS));
-            
-        
-            /* Clean Up */
-            packets_destoryBuffers(&packetBuffer);
+            /* No tx function registered */
+            testRunner_run(test_sendPacket(NULL, "No TX function", packets_ERR_CALLBACK));
+            /* Dummy tx registered */
+            testRunner_run(test_sendPacket(imuUart_dummyTxArray, "Dummy TX", packets_ERR_SUCCESS));
+            /* Real TX */
+            testRunner_run(test_sendPacket(imuUart_putArray, "Real TX", packets_ERR_SUCCESS));
         }
         
         /* ### Process RX Byte Test Suite ### */
@@ -377,7 +373,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local references */
             packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer.send.processBuffer);
             /* No Payload, success */
@@ -421,7 +417,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer1;
             packets_initialize(&packetBuffer1);
-            packets_generateBuffers(&packetBuffer1, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
             /* Local references */
             packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer1.send.processBuffer);
             /* No Payload, success */
@@ -434,7 +430,7 @@ int main(void) {
                 .cmd = 0x10,
                 .payload = payload,
                 .payloadLen = 0,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -451,7 +447,7 @@ int main(void) {
                 .cmd = 0x10,
                 .payload = payload2,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -466,7 +462,7 @@ int main(void) {
                 .cmd = 0x22,
                 .payload = payloadAct,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -482,7 +478,7 @@ int main(void) {
                 .cmd = 0x40,
                 .payload = payload3,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -497,7 +493,7 @@ int main(void) {
                 .cmd = 0x70,
                 .payload = payloadEnergy,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -513,7 +509,7 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer1;
             packets_initialize(&packetBuffer1);
-            packets_generateBuffers(&packetBuffer1, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
 
             uint8 payload[15] = {0xFF, 0x0F};
             packets_PACKET_S testPacket = {
@@ -521,7 +517,7 @@ int main(void) {
                 .cmd = 0x70,
                 .payload = payload,
                 .payloadLen = 2,
-                .payloadMax = packets_LEN_BLOCK_PACKET,
+                .payloadMax = packets_LEN_PACKET_128,
                 .flags = ZERO,
                 .error = ZERO
             };
@@ -556,7 +552,7 @@ int main(void) {
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
         packets_initialize(&packetBuffer);
-        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
         /* Ensure packet buffers were created properly */
         if(error){
             LEDS_Write(LEDS_ON_RED);
@@ -601,7 +597,7 @@ int main(void) {
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
         packets_initialize(&packetBuffer);
-        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
         /* Ensure packet buffers were created properly */
         if(error){
             LEDS_Write(LEDS_ON_RED);
@@ -651,7 +647,7 @@ int main(void) {
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
         packets_initialize(&packetBuffer);
-        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+        uint32 error = packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
         /* Ensure packet buffers were created properly */
         if(error){
             LEDS_Write(LEDS_ON_RED);
@@ -742,7 +738,7 @@ int main(void) {
         usbUart_print("Press 'space' to reset the device\r\n\r\n");
         
         
-        /* ### Self UART Test ### */
+        /* ### Self UART Test - Wait ### */
         {
             usbUart_print("\r\n*** Self UART Test ***\r\n");
             uint8_t data[255];
@@ -754,41 +750,58 @@ int main(void) {
             testRunner_run(test_uartSelf("1 Byte", data, 1));
             testRunner_run(test_uartSelf("8 Bytes", data, 8));
             testRunner_run(test_uartSelf("64 Bytes", data, 64));
-            testRunner_run(test_uartSelf("packets_LEN_BLOCK_PACKET", data, packets_LEN_BLOCK_PACKET));
+            testRunner_run(test_uartSelf("packets_LEN_PACKET_128", data, packets_LEN_PACKET_128));
             
         }
         
-        /* ### Send Packet Test ### */
+        /* ### Self Packet Test ### */
         {
-            usbUart_print("\r\n*** Send Packet Test ***\r\n");
+            usbUart_print("\r\n*** Self Packet Test - Wait ***\r\n");
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
-            packets_generateBuffers(&packetBuffer, packets_LEN_BLOCK_PACKET);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             /* Local Variables */
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
             /* Blank packet */
-            testRunner_run(test_selfPacketParsing(&packetBuffer, "UnInitialized Packet"));
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - UnInitialized Packet"));
             /* None zero packet */
             txPacket->cmd = 0x01;
-            testRunner_run(test_selfPacketParsing(&packetBuffer, "New command"));
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - New command"));
             /* With Payload */
             txPacket->cmd = 0x01;
             uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
             txPacket->payloadLen = 5;
             memcpy(txPacket->payload, data, txPacket->payloadLen);
-            testRunner_run(test_selfPacketParsing(&packetBuffer, "Payload"));
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - Payload"));
             
             packets_destoryBuffers(&packetBuffer);
-            
         }
-        
-        /* ### Respond Packet Test ### */
+
+               /* ### Self Packet Test - Async ### */
         {
-            usbUart_print("\r\n***  Respond Packet Test ***\r\n");
-            testRunner_printResults("Self Respond", true, true, "@TODO Implement");
+            usbUart_print("\r\n*** Self Packet Test - Async ***\r\n");
+            /* Setup - Create a packet object and initialize */
+            packets_BUFFER_FULL_S packetBuffer;
+            packets_initialize(&packetBuffer);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            /* Local Variables */
+            packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
+            /* Blank packet */
+            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - UnInitialized Packet"));
+            /* None zero packet */
+            txPacket->cmd = 0x01;
+            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - New command"));
+            /* With Payload */
+            txPacket->cmd = 0x01;
+            uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
+            txPacket->payloadLen = 5;
+            memcpy(txPacket->payload, data, txPacket->payloadLen);
+            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - Payload"));
+            
+            packets_destoryBuffers(&packetBuffer);
         }
         
 

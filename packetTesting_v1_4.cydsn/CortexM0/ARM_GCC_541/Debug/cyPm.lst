@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
   28:Generated_Source\PSoC4/cyPm.c **** * It means that the CPU has indicated that it is in the sleep mode and
   29:Generated_Source\PSoC4/cyPm.c **** * its main clock can be removed. It is identical to Active from a peripheral
   30:Generated_Source\PSoC4/cyPm.c **** * point of view. Any enabled interrupts can cause wakeup from the Sleep mode.
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 2
 
 
   31:Generated_Source\PSoC4/cyPm.c **** *
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
   66              		.section	.text.CySysPmDeepSleep,"ax",%progbits
   67              		.align	2
   68              		.global	CySysPmDeepSleep
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 3
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 3
 
 
   69              		.code	16
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
   80:Generated_Source\PSoC4/cyPm.c ****             pllResoreFlag = 1u;
   81:Generated_Source\PSoC4/cyPm.c ****             
   82:Generated_Source\PSoC4/cyPm.c ****             /* Set default state = IMO for HFCLK_SEL bit mask */
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 4
 
 
   83:Generated_Source\PSoC4/cyPm.c ****             CY_SYS_CLK_SELECT_REG &= (uint32)(~CY_SYS_CLK_SELECT_DIRECT_SEL_MASK);
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  111:Generated_Source\PSoC4/cyPm.c ****     CY_PM_WFI;
  116              		.loc 1 111 0
  117              		.syntax divided
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 5
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 5
 
 
  118              	@ 111 "Generated_Source\PSoC4\cyPm.c" 1
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  153              	CySysPmHibernate:
  154              	.LFB5:
  131:Generated_Source\PSoC4/cyPm.c **** 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 6
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 6
 
 
  132:Generated_Source\PSoC4/cyPm.c **** 
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
    8:Generated_Source\PSoC4/cyPm.h **** * Reference Guide provided with PSoC Creator.
    9:Generated_Source\PSoC4/cyPm.h **** *
   10:Generated_Source\PSoC4/cyPm.h **** ********************************************************************************
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 7
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 7
 
 
   11:Generated_Source\PSoC4/cyPm.h **** * \copyright
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
   65:Generated_Source\PSoC4/cyPm.h **** ------------------|---------------------------------|-----------|------------------ |
   66:Generated_Source\PSoC4/cyPm.h **** Unmasked          | IRQ priority > current level    | Yes       |   Yes             |
   67:Generated_Source\PSoC4/cyPm.h **** Unmasked          | IRQ priority ≤ current level    | No        |   No              |
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 8
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 8
 
 
   68:Generated_Source\PSoC4/cyPm.h **** Masked            | IRQ priority > current level    | Yes       |   No              |
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  122:Generated_Source\PSoC4/cyPm.h ****     #define CY_PM_RESET_REASON_UNKN             (0u)    /**< Unknown reset reason. */
  123:Generated_Source\PSoC4/cyPm.h ****     #define CY_PM_RESET_REASON_XRES             (1u)    /**< Transition from OFF/XRES to RESET */
  124:Generated_Source\PSoC4/cyPm.h ****     #define CY_PM_RESET_REASON_WAKEUP_HIB       (2u)    /**< Transition/wakeup from HIBERNATE to RE
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 9
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 9
 
 
  125:Generated_Source\PSoC4/cyPm.h ****     #define CY_PM_RESET_REASON_WAKEUP_STOP      (3u)    /**< Transition/wakeup from STOP to RESET *
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  179:Generated_Source\PSoC4/cyPm.h **** /* CM0 System Control Register Constants */
  180:Generated_Source\PSoC4/cyPm.h **** #define CY_PM_CPU_SCR_SLEEPDEEP             ((uint32)(0x04u))
  181:Generated_Source\PSoC4/cyPm.h **** 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 10
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 10
 
 
  182:Generated_Source\PSoC4/cyPm.h **** #if(CY_IP_SRSSV2)
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  175              		.loc 2 229 0
  176 0010 1D4A     		ldr	r2, .L8+4
  177 0012 1368     		ldr	r3, [r2]
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 11
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 11
 
 
  178 0014 9B00     		lsls	r3, r3, #2
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  212              	.LBE4:
  165:Generated_Source\PSoC4/cyPm.c **** 
  166:Generated_Source\PSoC4/cyPm.c ****         #if (CY_IP_HOBTO_DEVICE)
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 12
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 12
 
 
  167:Generated_Source\PSoC4/cyPm.c ****             /* Disable input buffers for all ports */
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  242              	@ 191 "Generated_Source\PSoC4\cyPm.c" 1
  243 007a 30BF     		WFI 
  244              	
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 13
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 13
 
 
  245              	@ 0 "" 2
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  211:Generated_Source\PSoC4/cyPm.c ****     * could be changed with the \ref CySysPmSetWakeupPolarity() function.
  212:Generated_Source\PSoC4/cyPm.c ****     *
  213:Generated_Source\PSoC4/cyPm.c ****     * This function freezes IO cells implicitly. It is not possible to enter
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 14
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 14
 
 
  214:Generated_Source\PSoC4/cyPm.c ****     * the STOP mode before freezing the IO cells. The IO cells remain frozen after
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  282              		@ args = 0, pretend = 0, frame = 0
  283              		@ frame_needed = 0, uses_anonymous_args = 0
  284              	.LVL9:
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 15
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 15
 
 
  285 0000 10B5     		push	{r4, lr}
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  327              	.LFE7:
  328              		.size	CySysPmSetWakeupPolarity, .-CySysPmSetWakeupPolarity
  329              		.section	.text.CySysPmGetResetReason,"ax",%progbits
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 16
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 16
 
 
  330              		.align	2
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  300:Generated_Source\PSoC4/cyPm.c ****             reason = CY_PM_RESET_REASON_XRES;
  301:Generated_Source\PSoC4/cyPm.c ****             break;
  302:Generated_Source\PSoC4/cyPm.c **** 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 17
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 17
 
 
  303:Generated_Source\PSoC4/cyPm.c ****         /* Wakeup from Hibernate */
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  322:Generated_Source\PSoC4/cyPm.c ****     /*******************************************************************************
  323:Generated_Source\PSoC4/cyPm.c ****     * Function Name: CySysPmFreezeIo
  324:Generated_Source\PSoC4/cyPm.c ****     ****************************************************************************//**
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 18
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 18
 
 
  325:Generated_Source\PSoC4/cyPm.c ****     *
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  353:Generated_Source\PSoC4/cyPm.c ****             *  enough time for internal settling.
  354:Generated_Source\PSoC4/cyPm.c ****             */
  355:Generated_Source\PSoC4/cyPm.c ****             (void) CY_PM_PWR_STOP_REG;
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 19
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 19
 
 
  418              		.loc 1 355 0
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  461 0006 094C     		ldr	r4, .L28
  462 0008 2268     		ldr	r2, [r4]
  463 000a 8023     		movs	r3, #128
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 20
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 20
 
 
  464 000c 5B02     		lsls	r3, r3, #9
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  512              	CySysPmUnfreezeIo:
  513              	.LFB10:
  364:Generated_Source\PSoC4/cyPm.c **** 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 21
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 21
 
 
  365:Generated_Source\PSoC4/cyPm.c **** 
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  397:Generated_Source\PSoC4/cyPm.c ****         (void) CY_PM_PWR_STOP_REG;
  535              		.loc 1 397 0
  536 0016 1A68     		ldr	r2, [r3]
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 22
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 22
 
 
  398:Generated_Source\PSoC4/cyPm.c ****         (void) CY_PM_PWR_STOP_REG;
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  584 0034 02       		.byte	0x2
  585 0035 05       		.byte	0x5
  586 0036 27020000 		.4byte	.LASF2
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 23
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 23
 
 
  587 003a 02       		.uleb128 0x2
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  641 00a0 15020000 		.4byte	.LASF14
  642 00a4 04       		.uleb128 0x4
  643 00a5 00000000 		.4byte	.LASF15
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 24
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 24
 
 
  644 00a9 03       		.byte	0x3
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  698 0126 42       		.byte	0x42
  699 0127 6B000000 		.4byte	0x6b
  700 012b 13000000 		.4byte	.LLST1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 25
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 25
 
 
  701 012f 09       		.uleb128 0x9
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  755 019b 06000000 		.4byte	.LBB4
  756 019f 46000000 		.4byte	.LBE4-.LBB4
  757 01a3 01       		.byte	0x1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 26
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 26
 
 
  758 01a4 A8       		.byte	0xa8
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  812 022d E7020000 		.4byte	.LASF26
  813 0231 01       		.byte	0x1
  814 0232 4E01     		.2byte	0x14e
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 27
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 27
 
 
  815 0234 00000000 		.4byte	.LFB9
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  869 02c1 D1020000 		.4byte	0x2d1
  870 02c5 00       		.byte	0
  871 02c6 13       		.uleb128 0x13
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 28
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 28
 
 
  872 02c7 F9000000 		.4byte	.LASF29
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  926 0025 03       		.uleb128 0x3
  927 0026 08       		.uleb128 0x8
  928 0027 00       		.byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 29
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 29
 
 
  929 0028 00       		.byte	0
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  983 005f 0B       		.uleb128 0xb
  984 0060 49       		.uleb128 0x49
  985 0061 13       		.uleb128 0x13
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 30
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 30
 
 
  986 0062 02       		.uleb128 0x2
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1040 00a1 13       		.uleb128 0x13
  1041 00a2 00       		.byte	0
  1042 00a3 00       		.byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 31
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 31
 
 
  1043 00a4 0D       		.uleb128 0xd
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1097 00db 00       		.byte	0
  1098 00dc 10       		.uleb128 0x10
  1099 00dd 05       		.uleb128 0x5
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 32
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 32
 
 
  1100 00de 00       		.byte	0
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1154 0115 00       		.byte	0
  1155 0116 13       		.uleb128 0x13
  1156 0117 2E       		.uleb128 0x2e
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 33
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 33
 
 
  1157 0118 00       		.byte	0
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1211 005c 9F       		.byte	0x9f
  1212 005d 00000000 		.4byte	0
  1213 0061 00000000 		.4byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 34
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 34
 
 
  1214              	.LLST4:
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1268 000c 0000     		.2byte	0
  1269 000e 0000     		.2byte	0
  1270 0010 00000000 		.4byte	.LFB3
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 35
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 35
 
 
  1271 0014 1C000000 		.4byte	.LFE3-.LFB3
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1316      6B657570 
  1316      506F6C61 
  1317              	.LASF19:
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 36
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 36
 
 
  1318 0025 43795379 		.ascii	"CySysPmSleep\000"
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1339              	.LASF13:
  1340 00d2 646F7562 		.ascii	"double\000"
  1340      6C6500
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 37
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 37
 
 
  1341              	.LASF28:
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1363 01a3 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
  1363      20726576 
  1363      6973696F 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 38
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 38
 
 
  1363      6E203233 
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 1
  1386      73657273 
  1386      5C636368 
  1386      656E6579 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccH2djQf.s 			page 39
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccE5MYZV.s 			page 39
 
 
  1386      5C44726F 

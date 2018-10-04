@@ -61,11 +61,11 @@
 * Testing will only occur when MICA_TEST is defined
 */
 #ifdef MICA_TEST
-    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
+//    #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
 //    #define MICA_TEST_PACKETS           /* Test Packet communication */
 //    #define MICA_TEST_PACKETS_ISR        /* Receive packets from IMU via interrupt and print results */
 //    #define MICA_TEST_PERIPHERAL_ID         /* Request the ID from the peripheral and display the results over USB */
-//    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
+    #define MICA_TEST_SELF_PACKETS         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
     
 #endif
 /* -------------- END TEST LEVEL --------------  */
@@ -128,7 +128,7 @@ int main(void) {
         3a. If data is available and matches sent B led toggle
         3b. If data does not match toggle R led  
         */
-        UART_IMU_Start();
+        imuUart_Start();
         LEDS_Write(LEDS_ON_GREEN);
         MICA_delayMs(MICA_DELAY_MS_SEC_ONE);
         LEDS_Write(LEDS_ON_NONE);
@@ -162,8 +162,8 @@ int main(void) {
         #if defined MICA_TEST_PACKETS_ERRORS
         /* Unit tests for MICA Errors */
         LEDS_Write(LEDS_ON_GREEN);
-        UART_USB_Start();
-        UART_IMU_Start();
+        usbUart_Start();
+        imuUart_Start();
         usbUart_clearScreen();
 
         /* Print Program Header */
@@ -337,6 +337,8 @@ int main(void) {
             testRunner_run(test_sendPacket(NULL, "No TX function", packets_ERR_CALLBACK));
             /* Dummy tx registered */
             testRunner_run(test_sendPacket(imuUart_dummyTxArray, "Dummy TX", packets_ERR_SUCCESS));
+            /* Mock tx registered */
+            testRunner_run(test_sendPacket(mock_queueArray, "Dummy TX", packets_ERR_SUCCESS));
             /* Real TX */
             testRunner_run(test_sendPacket(imuUart_putArray, "Real TX", packets_ERR_SUCCESS));
         }
@@ -559,6 +561,34 @@ int main(void) {
             
         }
         
+        /* ### Self Packet Test - Wait ### */
+        {
+            usbUart_print("\r\n*** Self Packet Test - Wait ***\r\n");
+            /* Setup - Create a packet object and initialize */
+            packets_BUFFER_FULL_S packetBuffer;
+            packets_initialize(&packetBuffer);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            packetBuffer.comms.txPutArray = mock_queueArray;
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            /* Local Variables */
+            packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
+            
+            /* Blank packet */
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - UnInitialized Packet"));
+            /* None zero packet */
+            txPacket->cmd = 0x01;
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - New command"));
+            /* With Payload */
+            txPacket->cmd = 0x01;
+            uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
+            txPacket->payloadLen = 5;
+            memcpy(txPacket->payload, data, txPacket->payloadLen);
+            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - Payload"));
+            
+            packets_destoryBuffers(&packetBuffer);
+        }
+        
         /* Display test suite results */
         testRunner_printCount();
 
@@ -577,8 +607,8 @@ int main(void) {
     #elif defined MICA_TEST_PACKETS
         /* Receive a packet from the IMU and print the result via the USB uart */
         /* Start the Components */
-        UART_USB_Start();
-        UART_IMU_Start();
+        usbUart_Start();
+        imuUart_Start();
         LEDS_Write(LEDS_ON_GREEN);
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
@@ -622,8 +652,8 @@ int main(void) {
     #elif defined MICA_TEST_PACKETS_ISR
         /* Receive a packet from the IMU Uart via an interrupt and print the result via the USB uart */
         /* Start the Components */
-        UART_USB_Start();
-        UART_IMU_Start();
+        usbUart_Start();
+        imuUart_Start();
         LEDS_Write(LEDS_ON_GREEN);
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
@@ -672,8 +702,8 @@ int main(void) {
     #elif defined MICA_TEST_PERIPHERAL_ID
         /* Request the ID from the peripheral and display the results over USB */
           /* Start the Components */
-        UART_USB_Start();
-        UART_IMU_Start();
+        usbUart_Start();
+        imuUart_Start();
         LEDS_Write(LEDS_ON_GREEN);
         /* Initialize variables */
         packets_BUFFER_FULL_S packetBuffer;
@@ -758,8 +788,8 @@ int main(void) {
         /* REQ: Hard-wired RX & TX lines - Send packets to self for testing. Display the results over USB */
         /* See hardware test MICA_DEBUG_SELF_UART */
                   /* Start the Components */
-        UART_USB_Start();
-        UART_IMU_Start();
+        usbUart_Start();
+        imuUart_Start();
         LEDS_Write(LEDS_ON_GREEN);
 
         /* Print Program Header */
@@ -785,13 +815,16 @@ int main(void) {
             
         }
         
-        /* ### Self Packet Test ### */
+        /* ### Self Packet Test - Wait ### */
         {
             usbUart_print("\r\n*** Self Packet Test - Wait ***\r\n");
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            packetBuffer.comms.txPutArray = imuUart_putArray;
+            packetBuffer.comms.rxGetBytesPending = imuUart_getRxBufferSize;
+            packetBuffer.comms.rxReadByte = imuUart_getChar;
             /* Local Variables */
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
@@ -821,21 +854,22 @@ int main(void) {
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
             /* Blank packet */
-            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - UnInitialized Packet"));
-            /* None zero packet */
-            txPacket->cmd = 0x01;
-            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - New command"));
-            /* With Payload */
-            txPacket->cmd = 0x01;
-            uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
-            txPacket->payloadLen = 5;
-            memcpy(txPacket->payload, data, txPacket->payloadLen);
-            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - Payload"));
+//            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - UnInitialized Packet"));
+//            /* None zero packet */
+//            txPacket->cmd = 0x01;
+//            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - New command"));
+//            /* With Payload */
+//            txPacket->cmd = 0x01;
+//            uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
+//            txPacket->payloadLen = 5;
+//            memcpy(txPacket->payload, data, txPacket->payloadLen);
+//            testRunner_run(test_selfPacket_async(&packetBuffer, "Async - Payload"));
             
             packets_destoryBuffers(&packetBuffer);
         }
         
-
+        /* Display test suite results */
+        testRunner_printCount();
         /* Infinite loop */
         for(;;){
 

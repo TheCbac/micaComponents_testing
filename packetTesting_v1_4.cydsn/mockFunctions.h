@@ -51,7 +51,7 @@
     uint8_t mock_readRxByte(void);
     uint32_t mock_queueRxByte(uint8_t byte);
     void mock_clearRxQueue(void);      
-    uint32_t mock_queueArray(uint8_t* arr, uint8_t len);
+    void mock_queueArray(uint8_t* arr, uint16_t len);
 
 #endif /* mockFunctions_H */
 /* [] END OF FILE */

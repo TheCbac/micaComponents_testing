@@ -109,14 +109,14 @@ void mock_clearRxQueue(void){
 *   Number of elements to enqueue
 *
 * \return
-*  The number of elements in the queue
+*  None
 *******************************************************************************/
-uint32_t mock_queueArray(uint8_t* arr, uint8_t len){
+void mock_queueArray(uint8_t* arr, uint16_t len){
+
     uint8_t i;
     for(i=ZERO; i< len; i++){
         mock_queueRxByte(arr[i]);   
     }
-    return mock_getRxBytesPending();
 }
 
 /* [] END OF FILE */

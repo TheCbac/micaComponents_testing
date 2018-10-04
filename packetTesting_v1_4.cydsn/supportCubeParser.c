@@ -118,7 +118,7 @@ uint32_t processPacketEvents(packets_BUFFER_FULL_S* packet){
     if(rxPending){
         uint16_t i;
         for(i = ZERO; i < rxPending; i++){
-            packets_processRxByte(packet, packet->
+//            packets_processRxByte(packet);
         }
     }
 }

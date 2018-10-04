@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
   28:Generated_Source\PSoC4/imuUart.c **** *
   29:Generated_Source\PSoC4/imuUart.c **** * \return
   30:Generated_Source\PSoC4/imuUart.c **** * None
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 2
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 2
 
 
   31:Generated_Source\PSoC4/imuUart.c ****  *******************************************************************************/
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
   44:Generated_Source\PSoC4/imuUart.c **** ****************************************************************************//**
   45:Generated_Source\PSoC4/imuUart.c **** *
   46:Generated_Source\PSoC4/imuUart.c **** * \brief Prints out the data starting at the addressed passed in, for the specified 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 3
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 3
 
 
   47:Generated_Source\PSoC4/imuUart.c **** *   length
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
   63:Generated_Source\PSoC4/imuUart.c ****     }
   64:Generated_Source\PSoC4/imuUart.c ****     
   65:Generated_Source\PSoC4/imuUart.c **** }
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 4
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 4
 
 
  104              		.loc 1 65 0 is_stmt 1
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  126              	.LVL14:
  127 0000 0FB4     		push	{r0, r1, r2, r3}
  128              		.cfi_def_cfa_offset 16
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 5
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 5
 
 
  129 0002 F0B5     		push	{r4, r5, r6, r7, lr}
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  116:Generated_Source\PSoC4/imuUart.c ****             pszVal = (uint8*)pArg[index++];
  165              		.loc 1 116 0
  166 0024 651C     		adds	r5, r4, #1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 6
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 6
 
 
  167              	.LVL18:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  210 0052 9C46     		mov	ip, r3
  211 0054 6444     		add	r4, r4, ip
  212 0056 2668     		ldr	r6, [r4]
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 7
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 7
 
 
  213              	.LVL28:
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  256              		.loc 1 130 0
  257 008c 002C     		cmp	r4, #0
  258 008e F5D1     		bne	.L17
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 8
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 8
 
 
  134:Generated_Source\PSoC4/imuUart.c ****             }
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  299 00bc 782B     		cmp	r3, #120
  300 00be 2DD1     		bne	.L19
  146:Generated_Source\PSoC4/imuUart.c ****         {
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 9
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 9
 
 
  147:Generated_Source\PSoC4/imuUart.c ****             xVal = pArg[index++];
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  346 00f0 0DD8     		bhi	.L23
  347              	.LVL54:
  156:Generated_Source\PSoC4/imuUart.c ****                 buffer[i++]=0;
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 10
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 10
 
 
  348              		.loc 1 156 0
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  104:Generated_Source\PSoC4/imuUart.c ****     {
  390              		.loc 1 104 0
  391 0120 129B     		ldr	r3, [sp, #72]
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 11
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 11
 
 
  392 0122 1878     		ldrb	r0, [r3]
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  425              	.LVL64:
  426 0000 70B5     		push	{r4, r5, r6, lr}
  427              		.cfi_def_cfa_offset 16
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 12
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 12
 
 
  428              		.cfi_offset 4, -16
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  470 0032 DCB2     		uxtb	r4, r3
  471              	.LVL74:
  472 0034 AA42     		cmp	r2, r5
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 13
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 13
 
 
  473 0036 E7D3     		bcc	.L32
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  504              	.LVL76:
  505 0000 70B5     		push	{r4, r5, r6, lr}
  506              		.cfi_def_cfa_offset 16
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 14
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 14
 
 
  507              		.cfi_offset 4, -16
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  553 0038 6C000000 		.word	.LC14
  554 003c 84000000 		.word	.LC16
  555 0040 8C000000 		.word	.LC18
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 15
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 15
 
 
  556              		.cfi_endproc
@@ -890,19 +890,19 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  585      3A2000
  586 001f 00       		.space	1
  587              	.LC4:
- 588 0020 30313A30 		.ascii	"01:06:58\000"
- 588      363A3538 
+ 588 0020 30303A34 		.ascii	"00:44:36\000"
+ 588      343A3336 
  588      00
  589 0029 000000   		.space	3
  590              	.LC6:
  591 002c 2000     		.ascii	" \000"
  592 002e 0000     		.space	2
  593              	.LC8:
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 16
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 16
 
 
- 594 0030 4F637420 		.ascii	"Oct  3 2018\000"
- 594      20332032 
+ 594 0030 4F637420 		.ascii	"Oct  4 2018\000"
+ 594      20342032 
  594      30313800 
  595              	.LC10:
  596 003c 0D0A00   		.ascii	"\015\012\000"
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  633 002c 02       		.uleb128 0x2
  634 002d 01       		.byte	0x1
  635 002e 08       		.byte	0x8
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 17
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 17
 
 
  636 002f B4000000 		.4byte	.LASF1
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  690 0098 04       		.byte	0x4
  691 0099 D6000000 		.4byte	.LASF13
  692 009d 04       		.uleb128 0x4
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 18
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 18
 
 
  693 009e 8D000000 		.4byte	.LASF14
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  747 0111 0A       		.uleb128 0xa
  748 0112 0A000000 		.4byte	.LVL2
  749 0116 06040000 		.4byte	0x406
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 19
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 19
 
 
  750 011a 00       		.byte	0
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  804 0190 C4000000 		.4byte	0xc4
  805 0194 87000000 		.4byte	.LLST4
  806 0198 10       		.uleb128 0x10
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 20
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 20
 
 
  807 0199 1B010000 		.4byte	.LASF26
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  861 021f 06040000 		.4byte	0x406
  862 0223 0A       		.uleb128 0xa
  863 0224 0E010000 		.4byte	.LVL59
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 21
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 21
 
 
  864 0228 06040000 		.4byte	0x406
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  918 02a1 05       		.uleb128 0x5
  919 02a2 03       		.byte	0x3
  920 02a3 20000000 		.4byte	.LC4
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 22
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 22
 
 
  921 02a7 00       		.byte	0
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  975 0314 0B       		.uleb128 0xb
  976 0315 3C010000 		.4byte	.LASF35
  977 0319 01       		.byte	0x1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 23
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 23
 
 
  978 031a DC       		.byte	0xdc
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1032 0392 50       		.byte	0x50
  1033 0393 02       		.uleb128 0x2
  1034 0394 75       		.byte	0x75
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 24
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 24
 
 
  1035 0395 00       		.sleb128 0
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1089 03fe EC       		.byte	0xec
  1090 03ff 77000000 		.4byte	0x77
  1091 0403 01       		.uleb128 0x1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 25
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 25
 
 
  1092 0404 51       		.byte	0x51
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1146 0027 00       		.byte	0
  1147 0028 00       		.byte	0
  1148 0029 04       		.uleb128 0x4
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 26
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 26
 
 
  1149 002a 16       		.uleb128 0x16
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1203 0060 2E       		.uleb128 0x2e
  1204 0061 01       		.byte	0x1
  1205 0062 3F       		.uleb128 0x3f
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 27
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 27
 
 
  1206 0063 19       		.uleb128 0x19
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1260 009c 49       		.uleb128 0x49
  1261 009d 13       		.uleb128 0x13
  1262 009e 02       		.uleb128 0x2
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 28
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 28
 
 
  1263 009f 17       		.uleb128 0x17
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1317 00d6 02       		.uleb128 0x2
  1318 00d7 18       		.uleb128 0x18
  1319 00d8 00       		.byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 29
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 29
 
 
  1320 00d9 00       		.byte	0
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1374 010f 14       		.uleb128 0x14
  1375 0110 898201   		.uleb128 0x4109
  1376 0113 01       		.byte	0x1
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 30
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 30
 
 
  1377 0114 11       		.uleb128 0x11
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1431 014f 3B       		.uleb128 0x3b
  1432 0150 05       		.uleb128 0x5
  1433 0151 00       		.byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 31
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 31
 
 
  1434 0152 00       		.byte	0
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1488 0054 9F       		.byte	0x9f
  1489 0055 00000000 		.4byte	0
  1490 0059 00000000 		.4byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 32
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 32
 
 
  1491              	.LLST3:
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1545 00ec 30       		.byte	0x30
  1546 00ed 9F       		.byte	0x9f
  1547 00ee 5A000000 		.4byte	.LVL29
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 33
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 33
 
 
  1548 00f2 5C000000 		.4byte	.LVL30
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1602 017d 0100     		.2byte	0x1
  1603 017f 54       		.byte	0x54
  1604 0180 26000000 		.4byte	.LVL18
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 34
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 34
 
 
  1605 0184 48000000 		.4byte	.LVL25
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1659 0215 91       		.byte	0x91
  1660 0216 50       		.sleb128 -48
  1661 0217 9F       		.byte	0x9f
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 35
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 35
 
 
  1662 0218 52000000 		.4byte	.LVL27
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1716              	.LLST12:
  1717 029f 04000000 		.4byte	.LVL65
  1718 02a3 08000000 		.4byte	.LVL66
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 36
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 36
 
 
  1719 02a7 0200     		.2byte	0x2
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1773 032e 9F       		.byte	0x9f
  1774 032f 00000000 		.4byte	0
  1775 0333 00000000 		.4byte	0
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 37
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 37
 
 
  1776              	.LLST15:
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1830 0030 00000000 		.4byte	0
  1831 0034 00000000 		.4byte	0
  1832              		.section	.debug_line,"",%progbits
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 38
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 38
 
 
  1833              	.Ldebug_line0:
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1858 0093 70737A56 		.ascii	"pszVal\000"
  1858      616C00
  1859              	.LASF23:
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 39
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 39
 
 
  1860 009a 696D7555 		.ascii	"imuUart_print\000"
@@ -2338,7 +2338,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1884      7369676E 
  1884      65642069 
  1885              	.LASF27:
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 40
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 40
 
 
  1886 0137 7856616C 		.ascii	"xVal\000"
@@ -2398,7 +2398,7 @@ ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 1
  1910      6172745F 
  1910      6368616E 
  1910      67654261 
-ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccGN9nxU.s 			page 41
+ARM GAS  C:\Users\ccheney\AppData\Local\Temp\ccMbjSlM.s 			page 41
 
 
  1910      736500

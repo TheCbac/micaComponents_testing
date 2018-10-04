@@ -299,16 +299,9 @@ bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, char* te
 bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult){
    /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
-    /* Send data to txProcessBuffer */
-    uint32 error = packets_ERR_SUCCESS;
-     /* 'Transfer' the data */
-    uint16_t j;
-    for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
-        if(!error){
-            uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
-//            error |= packets_processRxByte(packetBuffer, dataByte);
-        }
-    }
+     /* Process the data */
+    uint32 error = packets_processRxQueue(packetBuffer);
+
     if(!error){
         /* Parse the packet */
         error |= packets_parsePacket(packetBuffer);
@@ -318,6 +311,28 @@ bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* t
         
     return testRunner_printResults(testName, error, expectedResult, testRunner_MSG_NONE);
 }
+//bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult){
+//   /* Reset the RX Buffer */
+//    packets_flushRxBuffers(packetBuffer);
+//    /* Send data to txProcessBuffer */
+//    uint32 error = packets_ERR_SUCCESS;
+//     /* 'Transfer' the data */
+//    uint16_t j;
+//    for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
+//        if(!error){
+//            uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
+////            error |= packets_processRxByte(packetBuffer, dataByte);
+//        }
+//    }
+//    if(!error){
+//        /* Parse the packet */
+//        error |= packets_parsePacket(packetBuffer);
+//    }   
+//    /* Flush TX buffers */
+//    packets_flushTxBuffers(packetBuffer);
+//        
+//    return testRunner_printResults(testName, error, expectedResult, testRunner_MSG_NONE);
+//}
 
 /*******************************************************************************
 * Function Name: test_packetParsing_packetVals()
@@ -341,16 +356,8 @@ bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* t
 bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedPacket){
        /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
-    /* Send data to txProcessBuffer */
-    uint32 error = packets_ERR_SUCCESS;
-     /* 'Transfer' the data */
-    uint16_t j;
-    for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
-        if(!error){
-            uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
-//            error |= packets_processRxByte(packetBuffer, dataByte);
-        }
-    }
+     /* Process the data */
+    uint32 error = packets_processRxQueue(packetBuffer);
     if(!error){
         /* Parse the packet */
         error |= packets_parsePacket(packetBuffer);
@@ -366,6 +373,35 @@ bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* te
     packets_flushTxBuffers(packetBuffer);
     return testRunner_printResults(testName, error, ZERO, msg);
 }
+
+//bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedPacket){
+//       /* Reset the RX Buffer */
+//    packets_flushRxBuffers(packetBuffer);
+//    /* Send data to txProcessBuffer */
+//    uint32 error = packets_ERR_SUCCESS;
+//     /* 'Transfer' the data */
+//    uint16_t j;
+//    for(j=ZERO; j < packetBuffer->send.processBuffer.bufferIndex; j++){
+//        if(!error){
+//            uint8 dataByte = packetBuffer->send.processBuffer.buffer[j];
+////            error |= packets_processRxByte(packetBuffer, dataByte);
+//        }
+//    }
+//    if(!error){
+//        /* Parse the packet */
+//        error |= packets_parsePacket(packetBuffer);
+//    }
+//    
+//    /* Compare the packets */
+//    bool match = comparePackets( &(packetBuffer->receive.packet), expectedPacket);
+//    char msg[20] = "";
+//    if(!match){
+//        sprintf(msg, "Packets do not match");
+//    }
+//    /* Flush TX buffers */
+//    packets_flushTxBuffers(packetBuffer);
+//    return testRunner_printResults(testName, error, ZERO, msg);
+//}
 
 /*******************************************************************************
 * Function Name: test_commandToModule()

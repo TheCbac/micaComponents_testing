@@ -391,7 +391,7 @@ int main(void) {
             mock_clearRxQueue();
             /* Invalid start */
             mock_queueRxByte(packets_SYM_START + 1);
-            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid Start", packets_ERR_START_SYM));
+            testRunner_run(test_processRxByte_stateError(&packetBuffer, "Inalid Start", packets_ERR_START_SYM));
             
             /* Clean up */
             packets_destoryBuffers(&packetBuffer);
@@ -405,38 +405,38 @@ int main(void) {
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-            /* Local references */
-            packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer.send.processBuffer);
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFE, 0xAA};
-            txBuffer->bufferIndex = 9;
-            memcpy(txBuffer->buffer, noPayloadPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(noPayloadPacket, 9);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Valid packet - no payload ", packets_ERR_SUCCESS));
             /* Success, payload */
             uint8 basePacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xFA, 0xAA};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, basePacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(basePacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Valid packet ", packets_ERR_SUCCESS));
             /* Incomplete packet */
-            txBuffer->bufferIndex = 8;
-            memcpy(txBuffer->buffer, noPayloadPacket,txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(noPayloadPacket, 8);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Short packet", packets_ERR_INCOMPLETE));
             /* Invalid start symbol */
             uint8 badStartPacket[15] = {0x02, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF9, 0xAA};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, badStartPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(badStartPacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid start sym", packets_ERR_START_SYM));
             /* Invalid Checksum */
             uint8 badChecksumPacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF0, 0xAA};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, badChecksumPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(badChecksumPacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Bad Checksum", packets_ERR_CHECKSUM));
             /* Invalid End symbol */
             uint8 badEndPacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xFA, 0xAB};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, badEndPacket, txBuffer->bufferIndex);
-            testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid End Symbol", packets_ERR_END_SYM));
-        
+            mock_clearRxQueue();
+            mock_queueArray(badEndPacket, 11);
+            testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid End Symbol", packets_ERR_END_SYM));  
+            
             /* Clean up */
             packets_destoryBuffers(&packetBuffer);
         }
@@ -446,15 +446,15 @@ int main(void) {
         {
             usbUart_print("\r\n*** Packet parsing - Packet Values ***\r\n");
             /* Setup - Create a packet object and initialize */
-            packets_BUFFER_FULL_S packetBuffer1;
-            packets_initialize(&packetBuffer1);
-            packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
-            /* Local references */
-            packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer1.send.processBuffer);
+            packets_BUFFER_FULL_S packetBuffer;
+            packets_initialize(&packetBuffer);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x10, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xEF, 0xAA};
-            txBuffer->bufferIndex = 9;
-            memcpy(txBuffer->buffer, noPayloadPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(noPayloadPacket, 9);
             uint8 payload[15];
             packets_PACKET_S expectedPacket = {
                 .moduleId = packets_ID_MODULE_CONTROL,
@@ -465,14 +465,14 @@ int main(void) {
                 .flags = ZERO,
                 .error = ZERO
             };
-            testRunner_run(test_packetParsing_packetVals(&packetBuffer1, "No payload ", &expectedPacket));
+            testRunner_run(test_packetParsing_packetVals(&packetBuffer, "No payload ", &expectedPacket));
             
             /* No Payload, success */
             uint8 basePacket[15] = {0x01, 0x10, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xEF, 0xAA};
             uint8 payload2[15] = {0xFF, 0xFF};
 //            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(basePacket, 8));
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, basePacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(basePacket, 11);
             packets_PACKET_S expectedPacket2 = {
                 .moduleId = packets_ID_MODULE_CONTROL,
                 .cmd = 0x10,
@@ -482,12 +482,12 @@ int main(void) {
                 .flags = ZERO,
                 .error = ZERO
             };
-            testRunner_run(test_packetParsing_packetVals(&packetBuffer1, "Payload exists ", &expectedPacket2));
+            testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Payload exists ", &expectedPacket2));
             /* Actuation */
             uint8 actuationPacket[15] = {0x01, 0x22, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xDD, 0xAA};
             uint8 payloadAct[15] = {0xFF, 0xFF};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, actuationPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(actuationPacket, 11);
             packets_PACKET_S expectedPacketAct = {
                 .moduleId = packets_ID_MODULE_ACTUATION,
                 .cmd = 0x22,
@@ -497,13 +497,13 @@ int main(void) {
                 .flags = ZERO,
                 .error = ZERO
             };
-            testRunner_run(test_packetParsing_packetVals(&packetBuffer1, "Actuation Module", &expectedPacketAct));
+            testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Actuation Module", &expectedPacketAct));
             /* Sensing Test */
             uint8 sensingPacket[15] = {0x01, 0x40, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xBF, 0xAA};
             uint8 payload3[15] = {0xFF, 0xFF};
 //            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(sensingPacket, 8));
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, sensingPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(sensingPacket, 11);
             packets_PACKET_S expectedPacket3 = {
                 .moduleId = packets_ID_MODULE_SENSING,
                 .cmd = 0x40,
@@ -513,12 +513,12 @@ int main(void) {
                 .flags = ZERO,
                 .error = ZERO
             };
-            testRunner_run(test_packetParsing_packetVals(&packetBuffer1, "Sensing Module", &expectedPacket3));
+            testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Sensing Module", &expectedPacket3));
             /* Energy Module */
             uint8 energyPacket[15] = {0x01, 0x70, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0x8F, 0xAA};
             uint8 payloadEnergy[15] = {0xFF, 0xFF};
-            txBuffer->bufferIndex = 11;
-            memcpy(txBuffer->buffer, energyPacket, txBuffer->bufferIndex);
+            mock_clearRxQueue();
+            mock_queueArray(energyPacket, 11);
             packets_PACKET_S expectedPacketEnergy = {
                 .moduleId = packets_ID_MODULE_ENERGY,
                 .cmd = 0x70,
@@ -528,10 +528,10 @@ int main(void) {
                 .flags = ZERO,
                 .error = ZERO
             };
-            testRunner_run(test_packetParsing_packetVals(&packetBuffer1, "Energy Module", &expectedPacketEnergy));
-//            usbUart_print("%x\r\n", packetBuffer1.receive.packet.moduleId);
+            testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Energy Module", &expectedPacketEnergy));
+            usbUart_print("%x\r\n", packetBuffer.receive.packet.moduleId);
             /* Clean up */
-            packets_destoryBuffers(&packetBuffer1);
+            packets_destoryBuffers(&packetBuffer);
         }
         
         /* ### Print testing packet ### */

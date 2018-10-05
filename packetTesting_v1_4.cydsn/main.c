@@ -62,6 +62,7 @@
 */
 #ifdef MICA_TEST
     #define MICA_TEST_PACKETS_ERRORS       /* Test various error on packts */
+//    #define MICA_TEST_PACKET_HELPERS        /* ADDON to MICA_TEST_PACKETS_ERRORS Test the packet helpers */ 
 //    #define MICA_TEST_PACKETS           /* Test Packet communication */
 //    #define MICA_TEST_PACKETS_ISR        /* Receive packets from IMU via interrupt and print results */
 //    #define MICA_TEST_PERIPHERAL_ID         /* Request the ID from the peripheral and display the results over USB */
@@ -178,34 +179,57 @@ int main(void) {
         
         /* ### Helpers test suite ### */
         { 
-            usbUart_print("\r\n*** Command to Module ***\r\n");
-            testRunner_run(test_commandToModule("Control Command to Module",  0x00, packets_ID_MODULE_CONTROL));   
-            testRunner_run(test_commandToModule("Control Command to Module",  0x01, packets_ID_MODULE_CONTROL));   
-            testRunner_run(test_commandToModule("Control Command to Module",  0x1F, packets_ID_MODULE_CONTROL));   
-            testRunner_run(test_commandToModule("Control Response to Module", 0x80, packets_ID_MODULE_CONTROL));   
-            testRunner_run(test_commandToModule("Control Response to Module", 0x81, packets_ID_MODULE_CONTROL));   
-            testRunner_run(test_commandToModule("Control Response to Module", 0x9F, packets_ID_MODULE_CONTROL));   
-            
-            testRunner_run(test_commandToModule("Actuation Command to Module",  0x20, packets_ID_MODULE_ACTUATION));  
-            testRunner_run(test_commandToModule("Actuation Command to Module",  0x25, packets_ID_MODULE_ACTUATION));   
-            testRunner_run(test_commandToModule("Actuation Command to Module",  0x3F, packets_ID_MODULE_ACTUATION));  
-            testRunner_run(test_commandToModule("Actuation Response to Module", 0xA0, packets_ID_MODULE_ACTUATION));   
-            testRunner_run(test_commandToModule("Actuation Response to Module", 0xB3, packets_ID_MODULE_ACTUATION));   
-            testRunner_run(test_commandToModule("Actuation Response to Module", 0xBF, packets_ID_MODULE_ACTUATION));   
-            
-            testRunner_run(test_commandToModule("Sensing Command to Module",   0x40, packets_ID_MODULE_SENSING));  
-            testRunner_run(test_commandToModule("Sensing Command to Module",   0x44, packets_ID_MODULE_SENSING));   
-            testRunner_run(test_commandToModule("Sensing Command to Module",   0x5F, packets_ID_MODULE_SENSING));  
-            testRunner_run(test_commandToModule("Sensing Response to Module",  0xC0, packets_ID_MODULE_SENSING));   
-            testRunner_run(test_commandToModule("Sensing Response to Module",  0xCA, packets_ID_MODULE_SENSING));   
-            testRunner_run(test_commandToModule("Sensing Response to Module",  0xDF, packets_ID_MODULE_SENSING));  
-            
-            testRunner_run(test_commandToModule("Energy Command to Module",   0x60, packets_ID_MODULE_ENERGY));  
-            testRunner_run(test_commandToModule("Energy Command to Module",   0x7A, packets_ID_MODULE_ENERGY));   
-            testRunner_run(test_commandToModule("Energy Command to Module",   0x7F, packets_ID_MODULE_ENERGY));  
-            testRunner_run(test_commandToModule("Energy Response to Module",  0xE0, packets_ID_MODULE_ENERGY));   
-            testRunner_run(test_commandToModule("Energy Response to Module",  0xEB, packets_ID_MODULE_ENERGY));   
-            testRunner_run(test_commandToModule("Energy Response to Module",  0xFF, packets_ID_MODULE_ENERGY));  
+            #ifdef MICA_TEST_PACKET_HELPERS
+                usbUart_print("\r\n*** Command to Module ***\r\n");
+                testRunner_run(test_commandToModule("Control Command to Module",  0x00, packets_ID_MODULE_CONTROL));   
+                testRunner_run(test_commandToModule("Control Command to Module",  0x01, packets_ID_MODULE_CONTROL));   
+                testRunner_run(test_commandToModule("Control Command to Module",  0x1F, packets_ID_MODULE_CONTROL));   
+                testRunner_run(test_commandToModule("Control Response to Module", 0x80, packets_ID_MODULE_CONTROL));   
+                testRunner_run(test_commandToModule("Control Response to Module", 0x81, packets_ID_MODULE_CONTROL));   
+                testRunner_run(test_commandToModule("Control Response to Module", 0x9F, packets_ID_MODULE_CONTROL));   
+                
+                testRunner_run(test_commandToModule("Actuation Command to Module",  0x20, packets_ID_MODULE_ACTUATION));  
+                testRunner_run(test_commandToModule("Actuation Command to Module",  0x25, packets_ID_MODULE_ACTUATION));   
+                testRunner_run(test_commandToModule("Actuation Command to Module",  0x3F, packets_ID_MODULE_ACTUATION));  
+                testRunner_run(test_commandToModule("Actuation Response to Module", 0xA0, packets_ID_MODULE_ACTUATION));   
+                testRunner_run(test_commandToModule("Actuation Response to Module", 0xB3, packets_ID_MODULE_ACTUATION));   
+                testRunner_run(test_commandToModule("Actuation Response to Module", 0xBF, packets_ID_MODULE_ACTUATION));   
+                
+                testRunner_run(test_commandToModule("Sensing Command to Module",   0x40, packets_ID_MODULE_SENSING));  
+                testRunner_run(test_commandToModule("Sensing Command to Module",   0x44, packets_ID_MODULE_SENSING));   
+                testRunner_run(test_commandToModule("Sensing Command to Module",   0x5F, packets_ID_MODULE_SENSING));  
+                testRunner_run(test_commandToModule("Sensing Response to Module",  0xC0, packets_ID_MODULE_SENSING));   
+                testRunner_run(test_commandToModule("Sensing Response to Module",  0xCA, packets_ID_MODULE_SENSING));   
+                testRunner_run(test_commandToModule("Sensing Response to Module",  0xDF, packets_ID_MODULE_SENSING));  
+                
+                testRunner_run(test_commandToModule("Energy Command to Module",   0x60, packets_ID_MODULE_ENERGY));  
+                testRunner_run(test_commandToModule("Energy Command to Module",   0x7A, packets_ID_MODULE_ENERGY));   
+                testRunner_run(test_commandToModule("Energy Command to Module",   0x7F, packets_ID_MODULE_ENERGY));  
+                testRunner_run(test_commandToModule("Energy Response to Module",  0xE0, packets_ID_MODULE_ENERGY));   
+                testRunner_run(test_commandToModule("Energy Response to Module",  0xEB, packets_ID_MODULE_ENERGY));   
+                testRunner_run(test_commandToModule("Energy Response to Module",  0xFF, packets_ID_MODULE_ENERGY)); 
+               
+                usbUart_print("\r\n*** Printing Packets ***\r\n");
+                /* Setup - Create a packet object and initialize */
+                packets_BUFFER_FULL_S packetBuffer1;
+                packets_initialize(&packetBuffer1);
+                packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
+
+                uint8 payload[15] = {0xFF, 0x0F};
+                packets_PACKET_S testPacket = {
+                    .moduleId = packets_ID_MODULE_ENERGY,
+                    .cmd = 0x70,
+                    .payload = payload,
+                    .payloadLen = 2,
+                    .payloadMax = packets_LEN_PACKET_128,
+                    .flags = ZERO,
+                    .error = ZERO
+                };
+                            
+                packets_printPacket(&testPacket, usbUart_print);
+                
+                packets_destoryBuffers(&packetBuffer1);
+            #endif/* End MICA_TEST_PACKET_HELPERS */
         }
         
         /* ### Buffer Generate Test Suite ### */
@@ -368,25 +392,7 @@ int main(void) {
             /* Buffer overflow */
             packetBuffer.receive.processBuffer.bufferIndex = 100;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Buffer overflow", packets_ERR_MEMORY));
-            /* mock tests - should move to their own test space */
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            mock_queueRxByte(0x01);
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            mock_queueRxByte(0x02);
-//            mock_queueRxByte(0x03);
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            uint8_t arr[10] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
-//            mock_queueArray(arr, 6);
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
-//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+
             /* Valid Start */
             mock_queueRxByte(packets_SYM_START);
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid Start", packets_ERR_SUCCESS));
@@ -409,7 +415,7 @@ int main(void) {
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
-            packetBuffer.comms.ackCallback = printCmdPacket;
+            packetBuffer.comms.ackCallback = printAckPacket;
             packetBuffer.comms.cmdCallback = printCmdPacket;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFE, 0xAA};
@@ -429,7 +435,7 @@ int main(void) {
             uint8 badStartPacket[15] = {0x02, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF9, 0xAA};
             mock_clearRxQueue();
             mock_queueArray(badStartPacket, 11);
-            testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid start sym", packets_ERR_START_SYM));
+            testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid start sym", packets_ERR_START_SYM | packets_ERR_INCOMPLETE));
             /* Invalid Checksum */
             uint8 badChecksumPacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF0, 0xAA};
             mock_clearRxQueue();
@@ -455,14 +461,20 @@ int main(void) {
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.txPutArray = mock_queueArray;
+            packetBuffer.comms.ackCallback = printAckPacket;
+            packetBuffer.comms.cmdCallback = printCmdPacket;
+            
             /* No Payload, success */
-            uint8 noPayloadPacket[15] = {0x01, 0x10, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xEF, 0xAA};
+            uint8 noPayloadPacket[15] = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xAA};
+//            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(noPayloadPacket, 6));
+            
             mock_clearRxQueue();
             mock_queueArray(noPayloadPacket, 9);
             uint8 payload[15];
             packets_PACKET_S expectedPacket = {
                 .moduleId = packets_ID_MODULE_CONTROL,
-                .cmd = 0x10,
+                .cmd = 0x00,
                 .payload = payload,
                 .payloadLen = 0,
                 .payloadMax = packets_LEN_PACKET_128,
@@ -533,35 +545,10 @@ int main(void) {
                 .error = ZERO
             };
             testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Energy Module", &expectedPacketEnergy));
-            usbUart_print("%x\r\n", packetBuffer.receive.packet.moduleId);
             /* Clean up */
             packets_destoryBuffers(&packetBuffer);
         }
-        
-        /* ### Print testing packet ### */
-        {
-            usbUart_print("\r\n*** Validate Packets ***\r\n");
-            /* Setup - Create a packet object and initialize */
-            packets_BUFFER_FULL_S packetBuffer1;
-            packets_initialize(&packetBuffer1);
-            packets_generateBuffers(&packetBuffer1, packets_LEN_PACKET_128);
-
-            uint8 payload[15] = {0xFF, 0x0F};
-            packets_PACKET_S testPacket = {
-                .moduleId = packets_ID_MODULE_ENERGY,
-                .cmd = 0x70,
-                .payload = payload,
-                .payloadLen = 2,
-                .payloadMax = packets_LEN_PACKET_128,
-                .flags = ZERO,
-                .error = ZERO
-            };
-                        
-            packets_printPacket(&testPacket, usbUart_print);
-            
-            packets_destoryBuffers(&packetBuffer1);
-            
-        }
+       
         
         /* ### Self Packet Test - Wait ### */
         {
@@ -573,6 +560,8 @@ int main(void) {
             packetBuffer.comms.txPutArray = mock_queueArray;
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.ackCallback = printAckPacket;
+            packetBuffer.comms.cmdCallback = printCmdPacket;
             /* Local Variables */
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             

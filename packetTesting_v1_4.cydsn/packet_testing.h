@@ -37,11 +37,11 @@
     bool test_commandToModule(char* testName, uint8_t cmd, uint8_t expectedModule);
     bool test_uartSelf(char* testName, uint8_t* data, uint16_t len);
     bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName);
-    bool test_selfPacket_async(packets_BUFFER_FULL_S* p1, packets_BUFFER_FULL_S* p2, char* testName);
     
     /* Helpers */
     bool comparePacketBuffer(packets_BUFFER_FULL_S* b1, packets_BUFFER_FULL_S* b2);
     bool comparePackets(packets_PACKET_S* p1, packets_PACKET_S* p2);
+    bool cmdMatchAckPacket(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket);
     bool compareProcessBuffer(packets_BUFFER_PROCESS_S* p1, packets_BUFFER_PROCESS_S* p2);
 
     

@@ -299,13 +299,17 @@ bool test_processRxByte_stateError(packets_BUFFER_FULL_S* packetBuffer, char* te
 bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* testName, uint32_t expectedResult){
    /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
-     /* Process the data */
-    uint32 error = packets_processRxQueue(packetBuffer);
-
-    if(!error){
-        /* Parse the packet */
-        error |= packets_parsePacket(packetBuffer);
-    }   
+    uint32_t error = packets_ERR_SUCCESS;
+    /* Cannot use processRxQueue here, must manually process */
+    uint8_t len = packetBuffer->comms.rxGetBytesPending();
+    uint8_t i;
+    for(i=ZERO; i<len; i++){
+        /* Process the data */
+        error |= packets_processRxByte(packetBuffer);   
+    }
+    /* Parse the packet - Normally we would check to make sure
+     * packet is complete, but that defeats the purpose of the test */
+    error |= packets_parsePacket(packetBuffer);
     /* Flush TX buffers */
     packets_flushTxBuffers(packetBuffer);
         
@@ -334,51 +338,33 @@ bool test_packetParsing_stateErrors(packets_BUFFER_FULL_S* packetBuffer, char* t
 bool test_packetParsing_packetVals(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedPacket){
        /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
-     /* Process the data */
-    uint32 error = packets_processRxQueue(packetBuffer);
-    if(!error){
-        /* Parse the packet */
-        error |= packets_parsePacket(packetBuffer);
-    }
+     /* Process the cmd packet */
+    uint32 error = packets_processRxQueue(packetBuffer);    
+//    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    bool cmdMatch = comparePackets( &(packetBuffer->receive.packet), expectedPacket);
+    /* Process ack packet */
+    error |= packets_processRxQueue(packetBuffer); 
+//    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    bool ackMatch = cmdMatchAckPacket(expectedPacket, &(packetBuffer->receive.packet));
     
     /* Compare the packets */
-    bool match = comparePackets( &(packetBuffer->receive.packet), expectedPacket);
-    char msg[20] = "";
-    if(!match){
-        sprintf(msg, "Packets do not match");
+    char msg[50] = "";
+ 
+    if(!ackMatch || !cmdMatch){
+        sprintf(msg, "Cmd match: %s, Ack match: %s", cmdMatch ? "true" : "false", ackMatch ? "true" : "false");
     }
+        
     /* Flush TX buffers */
     packets_flushTxBuffers(packetBuffer);
-    return testRunner_printResults(testName, error, ZERO, msg);
+    bool result = testRunner_printResults(testName, error, ZERO, msg);
+    usbUart_print("\r\n");
+    return result;
 }
 
 
 
 
 
-/*******************************************************************************
-* Function Name: test_commandToModule()
-****************************************************************************//**
-* \brief
-*  Tests the command to module function
-*
-* \param [in]testName
-*   Name of the test
-*
-* \param [in] cmd
-*   Command to map
-*
-* \param [in] expectedModule
-*   Expected module
-*
-* \return
-*   Boolean indicating if expected and received modules match
-*******************************************************************************/  
-bool test_commandToModule(char* testName, uint8_t cmd, uint8_t expectedModule){
-    uint8 returnModule;
-    packets_getModuleFromCmd(cmd, &returnModule);
-    return testRunner_printResults(testName, returnModule, expectedModule, testRunner_MSG_NONE);
-}
 
 /*******************************************************************************
 * Function Name: test_uartSelf()
@@ -446,88 +432,37 @@ bool test_uartSelf(char* testName, uint8_t* data, uint16_t len){
 bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
        /* Reset the RX Buffer */
     packets_flushRxBuffers(packetBuffer);
+    
+    packets_PACKET_S cmdPacket = packetBuffer->send.packet;
      /* Transfer the data */
     packets_sendPacket(packetBuffer);
     
+    
+    
     MICA_delayMs(10);
     
-    /* Process the data */
+    /* Process the Received data */
     uint32 error = packets_processRxQueue(packetBuffer);
-
-    if(!error){
-        /* Parse the packet */
-        error |= packets_parsePacket(packetBuffer);
-    }
+    bool cmdMatch = comparePackets( &(packetBuffer->receive.packet), &cmdPacket);
+    /* Process the ACK packet */
+    error |= packets_processRxQueue(packetBuffer); 
+//    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    bool ackMatch = cmdMatchAckPacket( &cmdPacket, &(packetBuffer->receive.packet));
+    
     
     /* Compare the packets */
-    bool match = comparePackets( &(packetBuffer->receive.packet), &(packetBuffer->send.packet));
-    char msg[20] = "";
-    if(!match){
-        sprintf(msg, "Packets do not match");
+    char msg[50] = "";
+    if(!ackMatch || !cmdMatch){
+        sprintf(msg, "Cmd match: %s, Ack match: %s", cmdMatch ? "true" : "false", ackMatch ? "true" : "false");
     }
+    
     /* Flush TX buffers */
     packets_flushTxBuffers(packetBuffer);
-    return testRunner_printResults(testName, error, ZERO, msg);
+    bool result = testRunner_printResults(testName, error, ZERO, msg);
+    usbUart_print("\r\n");
+    return result;
 }
 
-
-/*******************************************************************************
-* Function Name: test_selfPacket_async()
-****************************************************************************//**
-* \brief
-*  Takes the data in the tx process buffer, passes it to the processRxByte
-*   async
-*
-* \param packetBuffer
-*   Pointer to buffers
-*
-* \param testName
-*   Name of test
-*
-* \param expectedResult
-*   The Error code of the expected result
-*
-* \return
-*   Boolean indicating if the test passed
-*******************************************************************************/
-bool test_selfPacket_async(packets_BUFFER_FULL_S* p1, packets_BUFFER_FULL_S* p2, char* testName){
-    /* Reset the RX & TX Buffers on both 'devices' */
-    packets_flushBuffers(p1);
-    packets_flushBuffers(p2);
-
-//    /* Status variable */
-//    uint32 error = packets_ERR_SUCCESS;
-//     /* Transfer the data */
-//    packets_sendPacket(p1);
-//    
-//    while(p1.acknowledged == false) {
-//
-//
-//    }
-//
-//
-//    uint8_t len = UART_IMU_SpiUartGetRxBufferSize();
-//    uint8_t i;
-//    for(i=ZERO; i<len; i++){
-//        error |= packets_processRxByte(packetBuffer, imuUart_getChar());
-//    }
-//        
-//    if(!error){
-//        /* Parse the packet */
-//        error |= packets_parsePacket(packetBuffer);
-//    }
-//    
-//    /* Compare the packets */
-//    bool match = comparePackets( &(packetBuffer->receive.packet), &(packetBuffer->send.packet));
-//    char msg[20] = "";
-//    if(!match){
-//        sprintf(msg, "Packets do not match");
-//    }
-//    /* Flush TX buffers */
-//    packets_flushTxBuffers(packetBuffer);
-//    return testRunner_printResults(testName, error, ZERO, msg);
-
-}
 
 
 /* ***************** HELPERS ***************** */
@@ -599,6 +534,31 @@ bool comparePackets(packets_PACKET_S* p1, packets_PACKET_S* p2){
 }
 
 /*******************************************************************************
+* Function Name: comparePackets()
+****************************************************************************//**
+* \brief
+*  Sees if an acknowledge packet corresponds to a cmd packet
+*
+* \param cmdPacket
+*   Pointer to the command packet
+*
+* \param ackPacket
+*   Pointer to the acknowledge packet
+*
+* \return
+*   Boolean indicating if the buffers correspond
+*******************************************************************************/  
+bool cmdMatchAckPacket(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket){
+    bool match = true;
+
+    match &= cmdPacket->moduleId == ackPacket->moduleId;
+    match &= cmdPacket->cmd == ackPacket->cmd;
+    match &= (cmdPacket->flags | packets_FLAG_ACK)  == ackPacket->flags;
+
+    return match;
+}
+
+/*******************************************************************************
 * Function Name: compareProcessBuffer()
 ****************************************************************************//**
 * \brief
@@ -629,5 +589,28 @@ bool compareProcessBuffer(packets_BUFFER_PROCESS_S* p1, packets_BUFFER_PROCESS_S
     return match;
 }
 
+/*******************************************************************************
+* Function Name: test_commandToModule()
+****************************************************************************//**
+* \brief
+*  Tests the command to module function
+*
+* \param [in]testName
+*   Name of the test
+*
+* \param [in] cmd
+*   Command to map
+*
+* \param [in] expectedModule
+*   Expected module
+*
+* \return
+*   Boolean indicating if expected and received modules match
+*******************************************************************************/  
+bool test_commandToModule(char* testName, uint8_t cmd, uint8_t expectedModule){
+    uint8 returnModule;
+    packets_getModuleFromCmd(cmd, &returnModule);
+    return testRunner_printResults(testName, returnModule, expectedModule, testRunner_MSG_NONE);
+}
 
 /* [] END OF FILE */

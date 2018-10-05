@@ -119,4 +119,24 @@ void mock_queueArray(uint8_t* arr, uint16_t len){
     }
 }
 
+            /* mock tests - should move to their own test space */        
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            mock_queueRxByte(0x01);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            mock_queueRxByte(0x02);
+//            mock_queueRxByte(0x03);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            uint8_t arr[10] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
+//            mock_queueArray(arr, 6);
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte());
+//            usbUart_print("Queue size: %d, Value:0x%x\r\n", mock_getRxBytesPending(), mock_readRxByte())
+
 /* [] END OF FILE */

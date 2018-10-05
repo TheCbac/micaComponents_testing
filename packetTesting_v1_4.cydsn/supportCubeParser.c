@@ -35,8 +35,7 @@
 *  Returns the error of associated with the operation
 *******************************************************************************/
 uint32_t printCmdPacket(packets_PACKET_S* packet){
-    usbUart_print("Packet Command:");
-    packets_printPacket(packet, usbUart_print);
+    usbUart_print("Packet Command: 0x%x\r\n", packet->cmd);
     return packets_ERR_SUCCESS;
 }
 /*******************************************************************************
@@ -52,46 +51,45 @@ uint32_t printCmdPacket(packets_PACKET_S* packet){
 *  Returns the error of associated with the operation
 *******************************************************************************/
 uint32_t printAckPacket(packets_PACKET_S* packet){
-    usbUart_print("Packet Acknowledged:");
-    packets_printPacket(packet, usbUart_print);
+    usbUart_print("Packet Acknowledged: 0x%x\r\n", packet->cmd);
     return packets_ERR_SUCCESS;
 }
 
 
 
-/*******************************************************************************
-* Function Name: acknowledgePacket()
-****************************************************************************//**
-* \brief
-*  <function description>
-*
-* \param rxPacket [in]
-*  Pointer to the received packet
-* 
-* \return
-*  Returns the error of associated with 
-*******************************************************************************/
-uint32_t acknowledgePacket(packets_BUFFER_FULL_S* packet){
-    /* Validate that the command is valid */
-    uint32_t validateErr = validateSupportCubeCmd(&(packet->receive.packet), &(packet->send.packet));
-    uint32_t responseErr = packets_ERR_SUCCESS;
-    /* Command is valid */
-    if(validateErr == packets_ERR_SUCCESS){
-        /* Respond if the NO ACK flag is not set */
-        if( !(packet->receive.packet.flags & packets_FLAG_NO_ACK)){
-            /* Construct the response packet */
-            responseErr = packets_constructPacket(packet);
-            if(!responseErr){
-                /* Send the response packet */
-                responseErr = packets_sendPacket(packet);
-            }
-        }
-    /* An error occured during validation */
-    } else {
-        responseErr = validateErr;
-    }
-    return responseErr;
-}
+///*******************************************************************************
+//* Function Name: acknowledgePacket()
+//****************************************************************************//**
+//* \brief
+//*  <function description>
+//*
+//* \param rxPacket [in]
+//*  Pointer to the received packet
+//* 
+//* \return
+//*  Returns the error of associated with 
+//*******************************************************************************/
+//uint32_t acknowledgePacket(packets_BUFFER_FULL_S* packet){
+//    /* Validate that the command is valid */
+//    uint32_t validateErr = validateSupportCubeCmd(&(packet->receive.packet), &(packet->send.packet));
+//    uint32_t responseErr = packets_ERR_SUCCESS;
+//    /* Command is valid */
+//    if(validateErr == packets_ERR_SUCCESS){
+//        /* Respond if the NO ACK flag is not set */
+//        if( !(packet->receive.packet.flags & packets_FLAG_NO_ACK)){
+//            /* Construct the response packet */
+//            responseErr = packets_constructPacket(packet);
+//            if(!responseErr){
+//                /* Send the response packet */
+//                responseErr = packets_sendPacket(packet);
+//            }
+//        }
+//    /* An error occured during validation */
+//    } else {
+//        responseErr = validateErr;
+//    }
+//    return responseErr;
+//}
 
 
 /*******************************************************************************
@@ -132,33 +130,6 @@ uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* tx
     }
     
     return packets_ERR_SUCCESS;
-}
-
-
-/*******************************************************************************
-* Function Name: processPacketEvents()
-****************************************************************************//**
-* \brief
-*  Manages the packet lifecycle. Needs to be called at least once per 
-*
-* \param packet [in]
-*  Pointer to the packet manage
-*
-* \param commandCallback [out]
-* Callback that gets called when a packet 
-* 
-* \return
-*  Returns an error code if a fatal error occurs, zero otherwise
-*******************************************************************************/
-uint32_t processPacketEvents(packets_BUFFER_FULL_S* packet){
-    // see if RX bytes are avaiable, and process them
-    uint16_t rxPending = packet->comms.rxGetBytesPending();
-    if(rxPending){
-        uint16_t i;
-        for(i = ZERO; i < rxPending; i++){
-//            packets_processRxByte(packet);
-        }
-    }
 }
 
 /* [] END OF FILE */

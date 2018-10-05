@@ -388,7 +388,6 @@ bool test_uartSelf(char* testName, uint8_t* data, uint16_t len){
     /* Print the data passed in */
     imuUart_putArray(data, len);
     /* Wait for data to be received */
-//    while(UART_IMU_SpiUartGetRxBufferSize() < len){}
     MICA_delayMs(TEN);
     /* Read the data back */
     uint8_t i;
@@ -437,8 +436,6 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
      /* Transfer the data */
     packets_sendPacket(packetBuffer);
     
-    
-    
     MICA_delayMs(10);
     
     /* Process the Received data */
@@ -448,7 +445,6 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
     error |= packets_processRxQueue(packetBuffer); 
 //    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
     bool ackMatch = cmdMatchAckPacket( &cmdPacket, &(packetBuffer->receive.packet));
-    
     
     /* Compare the packets */
     char msg[50] = "";
@@ -462,6 +458,58 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
     usbUart_print("\r\n");
     return result;
 }
+
+/*******************************************************************************
+* Function Name: test_validateSupport_command()
+****************************************************************************//**
+* \brief
+*  Sends a command, evaluates the received ack packet against expected
+*
+* \param packetBuffer [in]
+*   Pointer to buffer
+*
+* \param expectedAckPacket [in]
+*   Name of test
+*
+* \param expectedResult [in[
+*   The expected acknowledge packet
+*
+* \return
+*   Boolean indicating if the test passed
+*******************************************************************************/
+bool test_validateSupport_command(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedAckPacket){
+    /* Reset the RX Buffer */
+    packets_flushBuffers(packetBuffer);
+    /* Packet cmd should always match */
+    expectedAckPacket->cmd = packetBuffer->send.packet.cmd;
+    /* Send the Packet */
+    uint32_t error = packets_sendPacket(packetBuffer);
+     /* Process the cmd packet */
+    error |= packets_processRxQueue(packetBuffer);    
+    /* Process ack packet */
+    error |= packets_processRxQueue(packetBuffer); 
+//    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    bool ackMatch = comparePackets(expectedAckPacket, &(packetBuffer->receive.packet));
+    
+    /* Compare the packets */
+    char msg[50] = "";
+ 
+    if(!ackMatch){
+        sprintf(msg, "Ack knowledge packet does not match expected");
+        usbUart_print("\r\nExpected:");
+        packets_printPacket(expectedAckPacket, usbUart_print);
+        usbUart_print("Received:");
+        packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    }
+        
+    /* Flush TX buffers */
+    packets_flushBuffers(packetBuffer);
+    
+    bool result = testRunner_printResults(testName, error, ZERO, msg);
+    usbUart_print("\r\n");
+    return result;
+}
+
 
 
 
@@ -517,7 +565,8 @@ bool comparePackets(packets_PACKET_S* p1, packets_PACKET_S* p2){
 
     match &= p1->moduleId == p2->moduleId;
     match &= p1->cmd == p2->cmd;
-    match &= p1->payloadMax == p2->payloadMax;
+    /* Packets can be the same and have different max payload lengths */
+//    match &= p1->payloadMax == p2->payloadMax;
     match &= p1->payloadLen == p2->payloadLen;
     match &= p1->flags == p2->flags;
     match &= p1->error == p2->error;

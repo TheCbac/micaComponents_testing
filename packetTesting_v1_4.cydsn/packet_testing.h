@@ -37,6 +37,7 @@
     bool test_commandToModule(char* testName, uint8_t cmd, uint8_t expectedModule);
     bool test_uartSelf(char* testName, uint8_t* data, uint16_t len);
     bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName);
+    bool test_validateSupport_command(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedAckPacket);
     
     /* Helpers */
     bool comparePacketBuffer(packets_BUFFER_FULL_S* b1, packets_BUFFER_FULL_S* b2);

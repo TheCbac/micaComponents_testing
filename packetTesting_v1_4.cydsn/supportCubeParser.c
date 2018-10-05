@@ -21,79 +21,8 @@
 #include "project.h"
 
 
-
 /*******************************************************************************
-* Function Name: printCmdPacket()
-****************************************************************************//**
-* \brief
-*  Prints a Received Command packet
-*
-* \param packet [in]
-*  Pointer to the received packet
-* 
-* \return
-*  Returns the error of associated with the operation
-*******************************************************************************/
-uint32_t printCmdPacket(packets_PACKET_S* packet){
-    usbUart_print("Packet Command: 0x%x\r\n", packet->cmd);
-    return packets_ERR_SUCCESS;
-}
-/*******************************************************************************
-* Function Name: printAckPacket()
-****************************************************************************//**
-* \brief
-*  Prints a Received Command packet
-*
-* \param packet [in]
-*  Pointer to the received packet
-* 
-* \return
-*  Returns the error of associated with the operation
-*******************************************************************************/
-uint32_t printAckPacket(packets_PACKET_S* packet){
-    usbUart_print("Packet Acknowledged: 0x%x\r\n", packet->cmd);
-    return packets_ERR_SUCCESS;
-}
-
-
-
-///*******************************************************************************
-//* Function Name: acknowledgePacket()
-//****************************************************************************//**
-//* \brief
-//*  <function description>
-//*
-//* \param rxPacket [in]
-//*  Pointer to the received packet
-//* 
-//* \return
-//*  Returns the error of associated with 
-//*******************************************************************************/
-//uint32_t acknowledgePacket(packets_BUFFER_FULL_S* packet){
-//    /* Validate that the command is valid */
-//    uint32_t validateErr = validateSupportCubeCmd(&(packet->receive.packet), &(packet->send.packet));
-//    uint32_t responseErr = packets_ERR_SUCCESS;
-//    /* Command is valid */
-//    if(validateErr == packets_ERR_SUCCESS){
-//        /* Respond if the NO ACK flag is not set */
-//        if( !(packet->receive.packet.flags & packets_FLAG_NO_ACK)){
-//            /* Construct the response packet */
-//            responseErr = packets_constructPacket(packet);
-//            if(!responseErr){
-//                /* Send the response packet */
-//                responseErr = packets_sendPacket(packet);
-//            }
-//        }
-//    /* An error occured during validation */
-//    } else {
-//        responseErr = validateErr;
-//    }
-//    return responseErr;
-//}
-
-
-/*******************************************************************************
-* Function Name: validateSupportCubeCmd()
+* Function Name: cmdHandler_supportCube()
 ****************************************************************************//**
 * \brief
 *  <function description>
@@ -107,12 +36,10 @@ uint32_t printAckPacket(packets_PACKET_S* packet){
 * \return
 *  Returns the error of associated with 
 *******************************************************************************/
-uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket){
-    /* Set the acknowledge response flag by default */
-    txPacket->flags = packets_FLAG_ACK;
+uint32_t cmdHandler_supportCube(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket){
     /* extract command */
     switch(rxPacket->cmd) {
-        case CMD_ID: {
+        case packets_CMD_ID: {
             /* Respond with the device ID */
             uint8_t i = ZERO;
             txPacket->payload[i++] = SUPPORT_ID_DEVICE_MSB;
@@ -131,5 +58,85 @@ uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* tx
     
     return packets_ERR_SUCCESS;
 }
+
+/* ### Helpers ### */
+
+/*******************************************************************************
+* Function Name: cmdHandler_print()
+****************************************************************************//**
+* \brief
+*  Prints a Received Command packet
+*
+* \param cmdPacket [in]
+*  Pointer to the received packet
+*
+* \param ackPacket [out]
+*  Pointer to the response packet to send out
+*
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t cmdHandler_print(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket){
+    (void) ackPacket;
+    usbUart_print("Packet Command: 0x%x\r\n", cmdPacket->cmd);
+    return packets_ERR_SUCCESS;
+}
+/*******************************************************************************
+* Function Name: ackHandler_print()
+****************************************************************************//**
+* \brief
+*  Prints a Received Command packet
+*
+* \param packet [in]
+*  Pointer to the received packet
+* 
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t ackHandler_print(packets_PACKET_S* packet){
+    usbUart_print("Packet Acknowledged: 0x%x\r\n", packet->cmd);
+    return packets_ERR_SUCCESS;
+}
+
+/*******************************************************************************
+* Function Name: cmdHandler_noop()
+****************************************************************************//**
+* \brief
+*  No Operation command handler
+*
+* \param cmdPacket [in]
+*  Pointer to the received packet
+*
+* \param ackPacket [out]
+*  Pointer to the response packet to send out
+*
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t cmdHandler_noop(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket){
+    (void) cmdPacket;
+    (void) ackPacket;
+    return packets_ERR_SUCCESS;
+}
+/*******************************************************************************
+* Function Name: ackHandler_noop()
+****************************************************************************//**
+* \brief
+*  No Operation ack handler
+*
+* \param packet [in]
+*  Pointer to the received packet
+* 
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t ackHandler_noop(packets_PACKET_S* packet){
+    (void) packet;
+    return packets_ERR_SUCCESS;
+}
+
+
+
+
 
 /* [] END OF FILE */

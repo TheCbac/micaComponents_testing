@@ -27,36 +27,29 @@
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define CMD_ID                  (0x00)  /**< The ID command */
-    #define SUPPORT_ID_DEVICE_MSB          (0x00)
-    #define SUPPORT_ID_DEVICE_LSB          (0x01)
-    #define SUPPORT_ID_FIRMWARE_MSB         (0x00)
+//    #define CMD_ID                  (0x00)  /**< The ID command */
+    #define SUPPORT_ID_DEVICE_MSB           (0x00)
+    #define SUPPORT_ID_DEVICE_LSB           (0x01)
+    #define SUPPORT_ID_FIRMWARE_MSB         (0x01)
     #define SUPPORT_ID_FIRMWARE_LSB         (0x01)
     
     /***************************************
     * Enumerated Types
     ***************************************/
-//    typedef enum {
-//        typeVal1,                 /**< val1 Description */
-//        typeVal2                  /**< val2 Description */
-//    } ENUM_NAME_T;
-    
+
     /***************************************
     * Structures
     ***************************************/
-//    typedef struct {
-//        uint8_t param;            /**< param Description */
-//    } structName_S;
     
     /***************************************
     * Function declarations 
     ***************************************/
-    uint32_t acknowledgePacket(packets_BUFFER_FULL_S* rxPacket);
-    uint32_t validateSupportCubeCmd(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket);
+    uint32_t cmdHandler_supportCube(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket);
 
-    uint32_t printCmdPacket(packets_PACKET_S* packet);
-    uint32_t printAckPacket(packets_PACKET_S* packet);
+    uint32_t cmdHandler_print(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket);
+    uint32_t ackHandler_print(packets_PACKET_S* packet);
     
-
+    uint32_t cmdHandler_noop(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket);
+    uint32_t ackHandler_noop(packets_PACKET_S* packet);
 #endif /* supportCubeParser_H */
 /* [] END OF FILE */

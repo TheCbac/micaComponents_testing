@@ -415,8 +415,8 @@ int main(void) {
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
-            packetBuffer.comms.ackCallback = printAckPacket;
-            packetBuffer.comms.cmdCallback = printCmdPacket;
+            packetBuffer.comms.ackCallback = ackHandler_print;
+            packetBuffer.comms.cmdCallback = cmdHandler_print;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFE, 0xAA};
             mock_clearRxQueue();
@@ -462,8 +462,8 @@ int main(void) {
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
             packetBuffer.comms.txPutArray = mock_queueArray;
-            packetBuffer.comms.ackCallback = printAckPacket;
-            packetBuffer.comms.cmdCallback = printCmdPacket;
+            packetBuffer.comms.ackCallback = ackHandler_print;
+            packetBuffer.comms.cmdCallback = cmdHandler_print;
             
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xAA};
@@ -560,8 +560,8 @@ int main(void) {
             packetBuffer.comms.txPutArray = mock_queueArray;
             packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
             packetBuffer.comms.rxReadByte = mock_readRxByte;
-            packetBuffer.comms.ackCallback = printAckPacket;
-            packetBuffer.comms.cmdCallback = printCmdPacket;
+            packetBuffer.comms.ackCallback = ackHandler_print;
+            packetBuffer.comms.cmdCallback = cmdHandler_print;
             /* Local Variables */
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
@@ -580,9 +580,51 @@ int main(void) {
             packets_destoryBuffers(&packetBuffer);
         }
         
+        /* ### Validate Commands - Support Cube ### */
+        {
+            usbUart_print("\r\n***Validate Commands - Support Cube ***\r\n");
+            /* Setup - Create a packet object and initialize */
+            packets_BUFFER_FULL_S packetBuffer;
+            packets_initialize(&packetBuffer);
+            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            /* Register callback functions */
+            packetBuffer.comms.txPutArray = mock_queueArray;
+            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.ackCallback = ackHandler_noop;
+            packetBuffer.comms.cmdCallback = cmdHandler_supportCube;
+            packets_PACKET_S* txPacket = &packetBuffer.send.packet;
+            /* Expected Packet */
+            packets_PACKET_S expectedAck;
+            memset(&expectedAck, 0, sizeof(packets_PACKET_S));
+            expectedAck.flags = packets_FLAG_ACK;
+            uint8_t expectedPayload[20] = {ZERO};
+            expectedAck.payload = expectedPayload;
+            
+            /* ID command */
+            txPacket->cmd = packets_CMD_ID;
+            txPacket->payloadLen = ZERO;
+            expectedAck.payloadLen = 0x04;
+            expectedPayload[0] = SUPPORT_ID_DEVICE_MSB;
+            expectedPayload[1] = SUPPORT_ID_DEVICE_LSB;
+            expectedPayload[2] = SUPPORT_ID_FIRMWARE_MSB;
+            expectedPayload[3] = SUPPORT_ID_DEVICE_LSB;
+            testRunner_run(test_validateSupport_command(&packetBuffer, "ID Command", &expectedAck));
+            mock_clearRxQueue();
+            /* Unknown Support Command */
+            txPacket->cmd = 0x02;
+            txPacket->payloadLen = ZERO;
+            expectedAck.payloadLen = ZERO;
+            expectedAck.flags = packets_FLAG_ACK | packets_FLAG_INVALID_CMD;
+            testRunner_run(test_validateSupport_command(&packetBuffer, "Unknown command", &expectedAck));
+            
+            
+            
+            packets_destoryBuffers(&packetBuffer);
+        }
+        
         /* Display test suite results */
         testRunner_printCount();
-
         /* Enable the button */
         usbUart_print("Press any key to re-run tests\r\n");
         /* Infinite loop */

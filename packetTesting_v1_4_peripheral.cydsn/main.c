@@ -22,7 +22,7 @@
 
 /* ####################### BEGIN PROGRAM CONFIGURATION ###################### */
 
-//#define MICA_DEBUG
+#define MICA_DEBUG
 /* ---------------- DEBUG CASE ----------------
 * Uncomment ONE of the following
 * Debugging will only occur when MICA_DEBUG is defined

@@ -3,7 +3,7 @@
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
 <CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="micaComponents_testing" persistent="micaComponents_testing.cywrk" platform="NOT_USED">
-<current_project name=".\packetTesting_v1_4.cydsn\packetTesting_v1_4.cyprj" />
+<current_project name=".\ringBufferTesting_v1_0.cydsn\ringBufferTesting_v1_0.cyprj" />
 <wrkspc_folders />
 <files />
 <projects>
@@ -12,6 +12,7 @@
 <v>.\main_v1_0.cydsn\main_v1_0.cyprj</v>
 <v>.\fileGenerators_v1_0.cydsn\fileGenerators_v1_0.cyprj</v>
 <v>.\packetTesting_v1_4_peripheral.cydsn\packetTesting_v1_4_peripheral.cyprj</v>
+<v>.\ringBufferTesting_v1_0.cydsn\ringBufferTesting_v1_0.cyprj</v>
 </projects>
 <workspace_id v="76b0b30c-9731-4fa5-897f-b395360ebe64" />
 <WriteAppVersionLastSavedWith v="4.2.0.641" />
@@ -28,6 +29,8 @@
 <wrkspc_dependency project="fileGenerators_v1_0.cydsn\fileGenerators_v1_0.cyprj" dependency="..\micaComponents\libMica.cylib\libMica.cyprj" />
 <wrkspc_dependency project="packetTesting_v1_4_peripheral.cydsn\packetTesting_v1_4_peripheral.cyprj" dependency="..\micaComponents\fileGenerators.cylib\fileGenerators.cyprj" />
 <wrkspc_dependency project="packetTesting_v1_4_peripheral.cydsn\packetTesting_v1_4_peripheral.cyprj" dependency="..\micaComponents\libMica.cylib\libMica.cyprj" />
+<wrkspc_dependency project="ringBufferTesting_v1_0.cydsn\ringBufferTesting_v1_0.cyprj" dependency="..\micaComponents\fileGenerators.cylib\fileGenerators.cyprj" />
+<wrkspc_dependency project="ringBufferTesting_v1_0.cydsn\ringBufferTesting_v1_0.cyprj" dependency="..\micaComponents\libMica.cylib\libMica.cyprj" />
 </wrkspc_dependencies>
 </CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316>
 <CyGuid_63b68103-67f5-4406-8da6-5c8625765b82 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyIgnoredSystemDepsList" version="1">

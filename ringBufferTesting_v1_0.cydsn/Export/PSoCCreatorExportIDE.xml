@@ -25,8 +25,8 @@
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
   </Toolchains>
-  <Project Name="fileGenerators_v1_0" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" Version="5.70" Type="Normal">
-    <CMSIS_SVD_File>fileGenerators_v1_0.svd</CMSIS_SVD_File>
+  <Project Name="ringBufferTesting_v1_0" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" Version="5.70" Type="Normal">
+    <CMSIS_SVD_File>ringBufferTesting_v1_0.svd</CMSIS_SVD_File>
     <Datasheet />
     <LinkerFiles>
       <LinkerFile Toolchain="ARM GCC Generic">.\Generated_Source\PSoC4\cm0gcc.ld</LinkerFile>
@@ -34,16 +34,16 @@
       <LinkerFile Toolchain="ARM IAR Generic">.\Generated_Source\PSoC4\Cm0Iar.icf</LinkerFile>
     </LinkerFiles>
     <Folders>
-      <Folder BuildType="STRICT" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn">
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn">
           <File BuildType="BUILD" Toolchain="">main.c</File>
-          <File BuildType="BUILD" Toolchain="">testFile.c</File>
+          <File BuildType="BUILD" Toolchain="">ringBuffer_testing.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
-          <File BuildType="BUILD" Toolchain="">testFile.h</File>
+          <File BuildType="BUILD" Toolchain="">ringBuffer_testing.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn\Generated_Source\PSoC4">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn\Generated_Source\PSoC4">
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn">
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cymetadata.c</File>
@@ -89,39 +89,87 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareexport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.scat</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\template_component.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\template_component.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LEDS.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LEDS.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_R_pin.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_R_pin.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_R_pin_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_R_pin_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_G_pin.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_G_pin.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_G_pin_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_G_pin_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_B_pin.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_B_pin.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_B_pin_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\led_B_pin_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LEDS_Control_reg.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LEDS_Control_reg.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LEDS_Control_reg_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\micaCommon.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\micaCommon.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\ringBuffer.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\ringBuffer.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\testRunner.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\testRunner.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\usbUart.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\usbUart.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SPI_UART.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SPI_UART.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SPI_UART_INT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_UART.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_BOOT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_UART_BOOT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_PINS.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SPI_UART_PVT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_PVT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_BOOT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SCBCLK.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SCBCLK.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_tx.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_tx.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_tx_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_tx_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SCB_IRQ.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_SCB_IRQ.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_rx.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_rx.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_rx_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UART_USB_rx_PM.c</File>
         </Files>
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\codegentemp">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\ARM_GCC_441">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\ARM_GCC_473">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\DP8051_Keil_952">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\DP8051">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM0">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM0p">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM3">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM4">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM7">
-        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\fileGenerators_v1_0.cydsn" />
+        <Files Root="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents_testing\ringBufferTesting_v1_0.cydsn" />
       </Folder>
     </Folders>
   </Project>

@@ -227,6 +227,11 @@ int main (void) {
             usbUart_print("\r\n*** Wrap Around (Lumped Test) ***\r\n");
              testRunner_run(test_ringBuffer_wrapAround());
         }
+        /* ### Test clear behaviour ### */
+        {
+            usbUart_print("\r\n*** Clear Buffer (Lumped Test) ***\r\n");
+             testRunner_run(test_ringBuffer_clear());
+        }
             
     /* End MICA_TEST_RINGBUFFER*/
     #else 

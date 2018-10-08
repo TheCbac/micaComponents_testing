@@ -2,27 +2,28 @@
 *                                 MICA  © 2018
 *                           MIT BioInstrumentation Lab
 *
-* File: ringBuffer_testing.h
-* Workspace: micaComponent_testing
-* Project: ringBufferTesting_v1_0
+* File: mockUart.h
+* Workspace: micaComponents_testing
+* Project: packetTesting_v1_4
 * Version: 1.0.0
 * Authors: Craig Cheney
 * 
-* PCB: Support Cube 2.1.1
+* PCB: SupportCube 2.1.1
 * PSoC: CYBLE-214015-01
 *
 * Brief:
-*   Header for ringBuffer_testing.c
+*   Header for mockUart.c
 *
 * 2018.10.08  - Document Created
 ********************************************************************************/
 
 /* Header Guard */
-#ifndef ringBuffer_testing_H
+#ifndef mockUart_H
     /***************************************
     * Included files
     ***************************************/
-    #include "project.h"
+    #include <stdint.h>
+    #include <stdlib.h>
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -41,20 +42,21 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    /* State errors */
-    bool test_generateBuffers(ringBuffer_S* rb, char* testName, uint16 len, uint32_t expectedResult);
-    bool test_destroyBuffers(ringBuffer_S* rb, char* testName, uint32_t expectedResult);
-    bool test_memoryLeak(ringBuffer_S* rb, char* testName, uint16 iterations);
-    bool test_ringBuffer_push(ringBuffer_S* rb, char* testName, uint32_t expectedResult);
-    bool test_ringBuffer_pushArray(ringBuffer_S* rb, uint8_t len, char* testName, uint32_t expectedResult);
-    bool test_ringBuffer_pop(ringBuffer_S* rb, char* testName, uint32_t expectedResult);
-    
-    /* Lumped tests */
-    bool test_ringBuffer_behavior(void);
-    bool test_ringBuffer_wrapAround(void);
-    bool test_ringBuffer_clear(void);
-    
-    
+    uint32_t mockUart1_init(size_t size);
+    uint32_t mockUart1_destroy(void);
+    uint32_t mockUart1_RxGetBytesPending(void);
+    uint8_t mockUart1_RxReadByte(void);
+    void mockUart1_RxClearQueue(void);      
+    uint32_t mockUart1_TxPutByte(uint8_t byte);
+    void mockUart1_TxPutArray(uint8_t* arr, uint16_t len);    
 
-#endif /* ringBuffer_testing_H */
+    uint32_t mockUart2_init(size_t size);
+    uint32_t mockUart2_destroy(void);
+    uint32_t mockUart2_RxGetBytesPending(void);
+    uint8_t mockUart2_RxReadByte(void);
+    void mockUart2_RxClearQueue(void);      
+    uint32_t mockUart2_TxPutByte(uint8_t byte);
+    void mockUart2_TxPutArray(uint8_t* arr, uint16_t len);    
+
+#endif /* mockUart_H */
 /* [] END OF FILE */

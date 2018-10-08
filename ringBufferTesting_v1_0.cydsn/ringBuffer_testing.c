@@ -353,4 +353,54 @@ bool test_ringBuffer_wrapAround(void){
     /* Print results */
     return result;
 }
+
+/*******************************************************************************
+* Function Name: test_ringBuffer_clear()
+****************************************************************************//**
+* \brief
+*  The clear function
+*
+* \param rb
+*   Pointer to ring buffer
+*
+* \param testName
+*   Name of test
+*
+* \param iterations
+*  Number of times to run the test
+*
+* \return
+*  Boolean indicating if the test passed
+*******************************************************************************/
+bool test_ringBuffer_clear(void){
+    ringBuffer_S buffer;
+    ringBuffer_init(&buffer, 6, sizeof(uint8_t));
+    bool result = true;
+    
+    /* Add five elements  */
+    uint8_t arr[10] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
+    ringBuffer_pushArray(&buffer, arr, 5);
+    uint8_t expectedSize = 0x05;
+    uint8_t  actualSize = buffer.count;
+    result &= testRunner_printResults("Clear initial", actualSize, expectedSize, testRunner_MSG_NONE);
+    /* Clear the array */
+    ringBuffer_clear(&buffer);
+    expectedSize = 0x00;
+    actualSize = buffer.count;
+    result &= testRunner_printResults("Clear initial", actualSize, expectedSize, testRunner_MSG_NONE);
+    /* Add an element */
+    uint8_t inVal = 0xFE, rVal;
+    ringBuffer_push(&buffer, &inVal);
+    ringBuffer_pop(&buffer, &rVal);
+    uint8_t expectedVal  = 0xFE;
+    expectedSize  = 0x00;
+    actualSize = buffer.count;
+    result &= testRunner_printResults("Wrap Val ", rVal, expectedVal, testRunner_MSG_NONE);    
+    result &= testRunner_printResults("Wrap size", actualSize, expectedSize, testRunner_MSG_NONE);
+    /* Free the buffer */
+    ringBuffer_free(&buffer);
+    /* Print results */
+    return result;
+}
+
 /* [] END OF FILE */

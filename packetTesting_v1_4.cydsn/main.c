@@ -6,10 +6,10 @@
 * Workspace: DriveBot_v5
 * Project: DriveBot_v5.1
 * Version: v5.1.0
-* Authors: Craig Cheney, Scott McCuen
-* 
-* PCB: DriveBot MCU v5.1.0
-* PSoC: CY8C4245LQI-483
+* Authors: Craig Cheney,
+*
+* PCB: Support Cube v2.1.1
+* PSoC: CYBLE-214015-01
 *
 * Brief:
 *   This is the top-level application file for the DriveBot microcontoller. It
@@ -29,7 +29,8 @@
 #include "packet_testing.h"
 #include "testRunner.h"
 #include "supportCubeParser.h"
-#include "mockFunctions.h"
+//#include "mockFunctions.h"
+#include "mockUart.h"
 
 /*  -------------- DEBUGGING --------------
 * Uncomment MICA_DEBUG to enable general debugging.
@@ -269,7 +270,7 @@ int main(void) {
             packets_destoryBuffers(&packetBuffer);
             testRunner_run(test_destroyBuffers(&packetBuffer, "Multiple destroy", packets_ERR_MEMORY));
             
-            /* Clean Up (Uncessary, here for consistency */
+            /* Clean Up (Unnecessary, here for consistency */
             packets_destoryBuffers(&packetBuffer);
         }
         
@@ -362,7 +363,7 @@ int main(void) {
             /* Dummy tx registered */
             testRunner_run(test_sendPacket(imuUart_dummyTxArray, "Dummy TX", packets_ERR_SUCCESS));
             /* Mock tx registered */
-            testRunner_run(test_sendPacket(mock_queueArray, "Dummy TX", packets_ERR_SUCCESS));
+            testRunner_run(test_sendPacket(mockUart1_TxPutArray, "Mock TX", packets_ERR_SUCCESS));
             /* Real TX */
             testRunner_run(test_sendPacket(imuUart_putArray, "Real TX", packets_ERR_SUCCESS));
         }
@@ -373,35 +374,41 @@ int main(void) {
             /* Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
+            mockUart1_init(64);
+            mockUart2_init(64);
             /* No buffers or RX Functions */
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "No Buffers or RX Functions", packets_ERR_MEMORY | packets_ERR_CALLBACK));
             /* No RX Functions */
             packets_generateBuffers(&packetBuffer, 100);
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX Functions", packets_ERR_CALLBACK));
             /*  No RX get byte */
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
+            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX get byte function", packets_ERR_CALLBACK));
             /* No RX get pending */
             packetBuffer.comms.rxGetBytesPending = NULL;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "No RX get pending function", packets_ERR_CALLBACK));
             /* Valid RX functions */
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
+            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid RX functions", packets_ERR_SUCCESS));
             /* Buffer overflow */
             packetBuffer.receive.processBuffer.bufferIndex = 100;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Buffer overflow", packets_ERR_MEMORY));
 
             /* Valid Start */
-            mock_queueRxByte(packets_SYM_START);
+            mockUart1_TxPutByte(packets_SYM_START);
+            packetBuffer.comms.rxReadByte = mockUart2_RxReadByte;
+            packetBuffer.comms.rxGetBytesPending = mockUart2_RxGetBytesPending;
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Valid Start", packets_ERR_SUCCESS));
-            mock_clearRxQueue();
+            mockUart1_RxClearQueue();
             /* Invalid start */
-            mock_queueRxByte(packets_SYM_START + 1);
+            mockUart1_TxPutByte(packets_SYM_START + 1);
             testRunner_run(test_processRxByte_stateError(&packetBuffer, "Inalid Start", packets_ERR_START_SYM));
             
             /* Clean up */
+            mockUart1_destroy();
+            mockUart2_destroy();
             packets_destoryBuffers(&packetBuffer);
         }
         
@@ -412,42 +419,46 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
+            mockUart1_init(64);
+            mockUart2_init(64);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.rxGetBytesPending = mockUart2_RxGetBytesPending;
+            packetBuffer.comms.rxReadByte = mockUart2_RxReadByte;
             packetBuffer.comms.ackCallback = ackHandler_print;
             packetBuffer.comms.cmdCallback = cmdHandler_print;
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFE, 0xAA};
-            mock_clearRxQueue();
-            mock_queueArray(noPayloadPacket, 9);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(noPayloadPacket, 9);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Valid packet - no payload ", packets_ERR_SUCCESS));
             /* Success, payload */
             uint8 basePacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xFA, 0xAA};
-            mock_clearRxQueue();
-            mock_queueArray(basePacket, 11);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(basePacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Valid packet ", packets_ERR_SUCCESS));
             /* Incomplete packet */
-            mock_clearRxQueue();
-            mock_queueArray(noPayloadPacket, 8);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(noPayloadPacket, 8);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Short packet", packets_ERR_INCOMPLETE));
             /* Invalid start symbol */
             uint8 badStartPacket[15] = {0x02, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF9, 0xAA};
-            mock_clearRxQueue();
-            mock_queueArray(badStartPacket, 11);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(badStartPacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid start sym", packets_ERR_START_SYM | packets_ERR_INCOMPLETE));
             /* Invalid Checksum */
             uint8 badChecksumPacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xF0, 0xAA};
-            mock_clearRxQueue();
-            mock_queueArray(badChecksumPacket, 11);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(badChecksumPacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Bad Checksum", packets_ERR_CHECKSUM));
             /* Invalid End symbol */
             uint8 badEndPacket[15] = {0x01, 0x05, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xFA, 0xAB};
-            mock_clearRxQueue();
-            mock_queueArray(badEndPacket, 11);
+            mockUart2_RxClearQueue();
+            mockUart1_TxPutArray(badEndPacket, 11);
             testRunner_run(test_packetParsing_stateErrors(&packetBuffer, "Invalid End Symbol", packets_ERR_END_SYM));  
             
             /* Clean up */
+            mockUart1_destroy();
+            mockUart2_destroy();
             packets_destoryBuffers(&packetBuffer);
         }
         
@@ -459,18 +470,19 @@ int main(void) {
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
-            packetBuffer.comms.txPutArray = mock_queueArray;
+            mockUart1_init(64);
+            mockUart2_init(64);
+            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
+            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
+            packetBuffer.comms.txPutArray = mockUart2_TxPutArray;
             packetBuffer.comms.ackCallback = ackHandler_print;
             packetBuffer.comms.cmdCallback = cmdHandler_print;
             
             /* No Payload, success */
             uint8 noPayloadPacket[15] = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xAA};
 //            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(noPayloadPacket, 6));
-            
-            mock_clearRxQueue();
-            mock_queueArray(noPayloadPacket, 9);
+            mockUart1_RxClearQueue();
+            mockUart2_TxPutArray(noPayloadPacket, 9);
             uint8 payload[15];
             packets_PACKET_S expectedPacket = {
                 .moduleId = packets_ID_MODULE_CONTROL,
@@ -487,8 +499,8 @@ int main(void) {
             uint8 basePacket[15] = {0x01, 0x10, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xEF, 0xAA};
             uint8 payload2[15] = {0xFF, 0xFF};
 //            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(basePacket, 8));
-            mock_clearRxQueue();
-            mock_queueArray(basePacket, 11);
+            mockUart1_RxClearQueue();
+            mockUart2_TxPutArray(basePacket, 11);
             packets_PACKET_S expectedPacket2 = {
                 .moduleId = packets_ID_MODULE_CONTROL,
                 .cmd = 0x10,
@@ -502,8 +514,8 @@ int main(void) {
             /* Actuation */
             uint8 actuationPacket[15] = {0x01, 0x22, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xDD, 0xAA};
             uint8 payloadAct[15] = {0xFF, 0xFF};
-            mock_clearRxQueue();
-            mock_queueArray(actuationPacket, 11);
+            mockUart1_RxClearQueue();
+            mockUart2_TxPutArray(actuationPacket, 11);
             packets_PACKET_S expectedPacketAct = {
                 .moduleId = packets_ID_MODULE_ACTUATION,
                 .cmd = 0x22,
@@ -518,8 +530,8 @@ int main(void) {
             uint8 sensingPacket[15] = {0x01, 0x40, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0xBF, 0xAA};
             uint8 payload3[15] = {0xFF, 0xFF};
 //            usbUart_print("checksum: %x\r\n", packets_computeChecksum16(sensingPacket, 8));
-            mock_clearRxQueue();
-            mock_queueArray(sensingPacket, 11);
+            mockUart1_RxClearQueue();
+            mockUart2_TxPutArray(sensingPacket, 11);
             packets_PACKET_S expectedPacket3 = {
                 .moduleId = packets_ID_MODULE_SENSING,
                 .cmd = 0x40,
@@ -533,8 +545,8 @@ int main(void) {
             /* Energy Module */
             uint8 energyPacket[15] = {0x01, 0x70, 0x00, 0x02, 0xFF, 0xFF, 0x00, 0x00, 0xFD, 0x8F, 0xAA};
             uint8 payloadEnergy[15] = {0xFF, 0xFF};
-            mock_clearRxQueue();
-            mock_queueArray(energyPacket, 11);
+            mockUart1_RxClearQueue();
+            mockUart2_TxPutArray(energyPacket, 11);
             packets_PACKET_S expectedPacketEnergy = {
                 .moduleId = packets_ID_MODULE_ENERGY,
                 .cmd = 0x70,
@@ -546,6 +558,8 @@ int main(void) {
             };
             testRunner_run(test_packetParsing_packetVals(&packetBuffer, "Energy Module", &expectedPacketEnergy));
             /* Clean up */
+            mockUart1_destroy();
+            mockUart2_destroy();
             packets_destoryBuffers(&packetBuffer);
         }
        
@@ -556,10 +570,12 @@ int main(void) {
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
+            mockUart1_init(64);
+            mockUart2_init(64);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-            packetBuffer.comms.txPutArray = mock_queueArray;
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.txPutArray = mockUart2_TxPutArray;
+            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
+            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
             packetBuffer.comms.ackCallback = ackHandler_print;
             packetBuffer.comms.cmdCallback = cmdHandler_print;
             /* Local Variables */
@@ -577,6 +593,8 @@ int main(void) {
             memcpy(txPacket->payload, data, txPacket->payloadLen);
             testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - Payload"));
             
+            mockUart1_destroy();
+            mockUart2_destroy();
             packets_destoryBuffers(&packetBuffer);
         }
         
@@ -587,10 +605,12 @@ int main(void) {
             packets_BUFFER_FULL_S packetBuffer;
             packets_initialize(&packetBuffer);
             packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
+            mockUart1_init(64);
+            mockUart2_init(64);
             /* Register callback functions */
-            packetBuffer.comms.txPutArray = mock_queueArray;
-            packetBuffer.comms.rxGetBytesPending = mock_getRxBytesPending;
-            packetBuffer.comms.rxReadByte = mock_readRxByte;
+            packetBuffer.comms.txPutArray = mockUart2_TxPutArray;
+            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
+            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
             packetBuffer.comms.ackCallback = ackHandler_noop;
             packetBuffer.comms.cmdCallback = cmdHandler_supportCube;
             packets_PACKET_S* txPacket = &packetBuffer.send.packet;
@@ -610,7 +630,7 @@ int main(void) {
             expectedPayload[2] = SUPPORT_ID_FIRMWARE_MSB;
             expectedPayload[3] = SUPPORT_ID_DEVICE_LSB;
             testRunner_run(test_validateSupport_command(&packetBuffer, "ID Command", &expectedAck));
-            mock_clearRxQueue();
+            mockUart1_RxClearQueue();
             /* Unknown Support Command */
             txPacket->cmd = 0x02;
             txPacket->payloadLen = ZERO;
@@ -618,8 +638,8 @@ int main(void) {
             expectedAck.flags = packets_FLAG_ACK | packets_FLAG_INVALID_CMD;
             testRunner_run(test_validateSupport_command(&packetBuffer, "Unknown command", &expectedAck));
             
-            
-            
+            mockUart1_destroy();
+            mockUart2_destroy();
             packets_destoryBuffers(&packetBuffer);
         }
         

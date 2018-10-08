@@ -436,16 +436,12 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* device1, packets_BUFFER_FULL_S*
     packets_PACKET_S cmdPacket = device1->send.packet;
      /* Transfer the data */
     packets_sendPacket(device1);
-    
-    /* Delay necessary in hardware test */
-    MICA_delayMs(10);
-    
     /* Process the Received data */
     uint32 error = packets_processRxQueue(device2);
     bool cmdMatch = comparePackets( &(device2->receive.packet), &cmdPacket);
     /* Process the ACK packet */
     error |= packets_processRxQueue(device1); 
-//    packets_printPacket(&(device1->receive.packet), usbUart_print);
+
     bool ackMatch = cmdMatchAckPacket( &cmdPacket, &(device1->receive.packet));
     
     /* Compare the packets */
@@ -454,43 +450,65 @@ bool test_selfPacket_wait(packets_BUFFER_FULL_S* device1, packets_BUFFER_FULL_S*
         sprintf(msg, "Cmd match: %s, Ack match: %s", cmdMatch ? "true" : "false", ackMatch ? "true" : "false");
     }
     
-    /* Flush TX buffers */
-//    packets_flushTxBuffers(device1);
     bool result = testRunner_printResults(testName, error, ZERO, msg);
     usbUart_print("\r\n");
     return result;
 }
-//bool test_selfPacket_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
-//       /* Reset the RX Buffer */
-//    packets_flushRxBuffers(packetBuffer);
-//    
-//    packets_PACKET_S cmdPacket = packetBuffer->send.packet;
-//     /* Transfer the data */
-//    packets_sendPacket(packetBuffer);
-//    
-//    /* Delay necessary in hardware test */
-//    MICA_delayMs(10);
-//    
-//    /* Process the Received data */
-//    uint32 error = packets_processRxQueue(packetBuffer);
-//    bool cmdMatch = comparePackets( &(packetBuffer->receive.packet), &cmdPacket);
-//    /* Process the ACK packet */
-//    error |= packets_processRxQueue(packetBuffer); 
-////    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
-//    bool ackMatch = cmdMatchAckPacket( &cmdPacket, &(packetBuffer->receive.packet));
-//    
-//    /* Compare the packets */
-//    char msg[50] = "";
-//    if(!ackMatch || !cmdMatch){
-//        sprintf(msg, "Cmd match: %s, Ack match: %s", cmdMatch ? "true" : "false", ackMatch ? "true" : "false");
-//    }
-//    
-//    /* Flush TX buffers */
-//    packets_flushTxBuffers(packetBuffer);
-//    bool result = testRunner_printResults(testName, error, ZERO, msg);
-//    usbUart_print("\r\n");
-//    return result;
-//}
+
+/*******************************************************************************
+* Function Name: test_selfPacket_HW_wait()
+****************************************************************************//**
+* \brief
+*  Hardware version of the self packet test. Requires RX & TX to be wired together
+*   Takes the data in the tx process buffer, passes it to the processRxByte,
+*   then parses the data
+*
+* \param packetBuffer
+*   Pointer to buffers
+*
+* \param testName
+*   Name of test
+*
+* \param expectedResult
+*   The Error code of the expected result
+*
+* \return
+*   Boolean indicating if the test passed
+*******************************************************************************/
+bool test_selfPacket_HW_wait(packets_BUFFER_FULL_S* packetBuffer, char* testName){
+       /* Reset the RX Buffer */
+    packets_flushRxBuffers(packetBuffer);
+    
+    packets_PACKET_S cmdPacket = packetBuffer->send.packet;
+     /* Transfer the data */
+    packets_sendPacket(packetBuffer);
+    
+    /* Delay necessary in hardware test */
+    MICA_delayMs(10);
+    
+    /* Process the Received data */
+    uint32 error = packets_processRxQueue(packetBuffer);
+    bool cmdMatch = comparePackets( &(packetBuffer->receive.packet), &cmdPacket);
+    /* Delay necessary in hardware test */
+    MICA_delayMs(10);
+    /* Process the ACK packet */
+    error |= packets_processRxQueue(packetBuffer); 
+    
+//    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
+    bool ackMatch = cmdMatchAckPacket( &cmdPacket, &(packetBuffer->receive.packet));
+    
+    /* Compare the packets */
+    char msg[50] = "";
+    if(!ackMatch || !cmdMatch){
+        sprintf(msg, "Cmd match: %s, Ack match: %s", cmdMatch ? "true" : "false", ackMatch ? "true" : "false");
+    }
+    
+    /* Flush TX buffers */
+    packets_flushBuffers(packetBuffer);
+    bool result = testRunner_printResults(testName, error, ZERO, msg);
+    usbUart_print("\r\n");
+    return result;
+}
 
 /*******************************************************************************
 * Function Name: test_validateSupport_command()
@@ -526,69 +544,23 @@ bool test_validateSupport_command(packets_BUFFER_FULL_S* device1, packets_BUFFER
         /* Process ack packet */
         error |= packets_processRxQueue(device1); 
     }
-
-    packets_printPacket(&(device1->receive.packet), usbUart_print);
-    packets_printPacket(&(device2->receive.packet), usbUart_print);
+    bool ackMatch = comparePackets(expectedAckPacket, &(device1->receive.packet));
     
-    return testRunner_printResults(testName, error, ZERO, "");
-
-    
-////    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
-//    bool ackMatch = comparePackets(expectedAckPacket, &(packetBuffer->receive.packet));
-//    
-//    /* Compare the packets */
-//    char msg[50] = "";
-// 
-//    if(!ackMatch){
-//        sprintf(msg, "Ack knowledge packet does not match expected");
-//        usbUart_print("\r\nExpected:");
-//        packets_printPacket(expectedAckPacket, usbUart_print);
-//        usbUart_print("Received:");
-//        packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
-//    }
-//        
-//    /* Flush TX buffers */
-//    packets_flushBuffers(packetBuffer);
-//    
-//    bool result = testRunner_printResults(testName, error, ZERO, msg);
-//    usbUart_print("\r\n");
-//    return result;
+    /* Compare the packets */
+    char msg[50] = "";
+ 
+    if(!ackMatch){
+        sprintf(msg, "Ack knowledge packet does not match expected");
+        usbUart_print("\r\nExpected:");
+        packets_printPacket(expectedAckPacket, usbUart_print);
+        usbUart_print("Received:");
+        packets_printPacket(&(device1->receive.packet), usbUart_print);
+    }
+            
+    bool result = testRunner_printResults(testName, error, ZERO, msg);
+    usbUart_print("\r\n");
+    return result;
 }
-//bool test_validateSupport_command(packets_BUFFER_FULL_S* packetBuffer, char* testName, packets_PACKET_S* expectedAckPacket){
-//    /* Reset the RX Buffer */
-//    packets_flushBuffers(packetBuffer);
-//    /* Packet cmd should always match */
-//    expectedAckPacket->cmd = packetBuffer->send.packet.cmd;
-//    /* Send the Packet */
-//    uint32_t error = packets_sendPacket(packetBuffer);
-//     /* Process the cmd packet */
-//    error |= packets_processRxQueue(packetBuffer);    
-//    /* Process ack packet */
-//    error |= packets_processRxQueue(packetBuffer); 
-////    packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
-//    bool ackMatch = comparePackets(expectedAckPacket, &(packetBuffer->receive.packet));
-//    
-//    /* Compare the packets */
-//    char msg[50] = "";
-// 
-//    if(!ackMatch){
-//        sprintf(msg, "Ack knowledge packet does not match expected");
-//        usbUart_print("\r\nExpected:");
-//        packets_printPacket(expectedAckPacket, usbUart_print);
-//        usbUart_print("Received:");
-//        packets_printPacket(&(packetBuffer->receive.packet), usbUart_print);
-//    }
-//        
-//    /* Flush TX buffers */
-//    packets_flushBuffers(packetBuffer);
-//    
-//    bool result = testRunner_printResults(testName, error, ZERO, msg);
-//    usbUart_print("\r\n");
-//    return result;
-//}
-
-
-
 
 /* ***************** HELPERS ***************** */
 

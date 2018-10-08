@@ -29,7 +29,6 @@
 #include "packet_testing.h"
 #include "testRunner.h"
 #include "supportCubeParser.h"
-//#include "mockFunctions.h"
 #include "mockUart.h"
 
 /*  -------------- DEBUGGING --------------
@@ -644,7 +643,7 @@ int main(void) {
             expectedAck.payload = expectedPayload;
             
             /* ID command */
-            txPacket->cmd = packets_CMD_ID + 1;
+            txPacket->cmd = packets_CMD_ID;
             txPacket->payloadLen = ZERO;
             expectedAck.payloadLen = 0x04;
             expectedPayload[0] = SUPPORT_ID_DEVICE_MSB;
@@ -654,62 +653,19 @@ int main(void) {
             testRunner_run(test_validateSupport_command(&device1, &device2, "ID Command", &expectedAck));
             mockUart1_RxClearQueue();
             /* Unknown Support Command */
-//            txPacket->cmd = 0x02;
-//            txPacket->payloadLen = ZERO;
-//            expectedAck.payloadLen = ZERO;
-//            expectedAck.flags = packets_FLAG_ACK | packets_FLAG_INVALID_CMD;
-//            testRunner_run(test_validateSupport_command(&packetBuffer, "Unknown command", &expectedAck));
+            txPacket->cmd = 0x02;
+            txPacket->payloadLen = ZERO;
+            expectedAck.payloadLen = ZERO;
+            expectedAck.flags = packets_FLAG_ACK | packets_FLAG_INVALID_CMD;
+            testRunner_run(test_validateSupport_command(&device1, &device2, "Unknown command", &expectedAck));
             
+            /* Clean-up */
             mockUart1_destroy();
             mockUart2_destroy();
             packets_destoryBuffers(&device1);
             packets_destoryBuffers(&device2);
         }
-//        /* ### Validate Commands - Support Cube ### */
-//        {
-//            usbUart_print("\r\n***Validate Commands - Support Cube ***\r\n");
-//            /* Setup - Create a packet object and initialize */
-//            packets_BUFFER_FULL_S packetBuffer;
-//            packets_initialize(&packetBuffer);
-//            packets_generateBuffers(&packetBuffer, packets_LEN_PACKET_128);
-//            mockUart1_init(64);
-//            mockUart2_init(64);
-//            /* Register callback functions */
-//            packetBuffer.comms.txPutArray = mockUart2_TxPutArray;
-//            packetBuffer.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
-//            packetBuffer.comms.rxReadByte = mockUart1_RxReadByte;
-//            packetBuffer.comms.ackCallback = ackHandler_noop;
-//            packetBuffer.comms.cmdCallback = cmdHandler_supportCube;
-//            packets_PACKET_S* txPacket = &packetBuffer.send.packet;
-//            /* Expected Packet */
-//            packets_PACKET_S expectedAck;
-//            memset(&expectedAck, 0, sizeof(packets_PACKET_S));
-//            expectedAck.flags = packets_FLAG_ACK;
-//            uint8_t expectedPayload[20] = {ZERO};
-//            expectedAck.payload = expectedPayload;
-//            
-//            /* ID command */
-//            txPacket->cmd = packets_CMD_ID;
-//            txPacket->payloadLen = ZERO;
-//            expectedAck.payloadLen = 0x04;
-//            expectedPayload[0] = SUPPORT_ID_DEVICE_MSB;
-//            expectedPayload[1] = SUPPORT_ID_DEVICE_LSB;
-//            expectedPayload[2] = SUPPORT_ID_FIRMWARE_MSB;
-//            expectedPayload[3] = SUPPORT_ID_DEVICE_LSB;
-//            testRunner_run(test_validateSupport_command(&packetBuffer, "ID Command", &expectedAck));
-//            mockUart1_RxClearQueue();
-//            /* Unknown Support Command */
-//            txPacket->cmd = 0x02;
-//            txPacket->payloadLen = ZERO;
-//            expectedAck.payloadLen = ZERO;
-//            expectedAck.flags = packets_FLAG_ACK | packets_FLAG_INVALID_CMD;
-//            testRunner_run(test_validateSupport_command(&packetBuffer, "Unknown command", &expectedAck));
-//            
-//            mockUart1_destroy();
-//            mockUart2_destroy();
-//            packets_destoryBuffers(&packetBuffer);
-//        }
-        
+
         /* Display test suite results */
         testRunner_printCount();
         /* Enable the button */
@@ -945,20 +901,22 @@ int main(void) {
             packetBuffer.comms.txPutArray = imuUart_putArray;
             packetBuffer.comms.rxGetBytesPending = imuUart_getRxBufferSize;
             packetBuffer.comms.rxReadByte = imuUart_getChar;
+            packetBuffer.comms.ackCallback = ackHandler_print;
+            packetBuffer.comms.cmdCallback = cmdHandler_print;
             /* Local Variables */
             packets_PACKET_S* txPacket = &(packetBuffer.send.packet);
             
             /* Blank packet */
-            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - UnInitialized Packet"));
+            testRunner_run(test_selfPacket_HW_wait(&packetBuffer, "Wait - UnInitialized Packet"));
             /* None zero packet */
             txPacket->cmd = 0x01;
-            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - New command"));
+            testRunner_run(test_selfPacket_HW_wait(&packetBuffer, "Wait - New command"));
             /* With Payload */
             txPacket->cmd = 0x01;
             uint8_t data[10] = {0x01, 0xff, 0xCC, 0xDD, 0x3E};
             txPacket->payloadLen = 5;
             memcpy(txPacket->payload, data, txPacket->payloadLen);
-            testRunner_run(test_selfPacket_wait(&packetBuffer, "Wait - Payload"));
+            testRunner_run(test_selfPacket_HW_wait(&packetBuffer, "Wait - Payload"));
             
             packets_destoryBuffers(&packetBuffer);
         }

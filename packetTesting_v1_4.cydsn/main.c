@@ -54,7 +54,7 @@
 * Uncomment MICA_TEST_<case> below to
 * enable ONE of the test levels. */
 
-#define MICA_TEST
+//#define MICA_TEST
 
 /* -------------- TEST LEVEL --------------
 * Uncomment ONE of the following
@@ -608,7 +608,7 @@ int main(void) {
          /* ### Validate Commands - Support Cube ### */
         {
             /* Create two different packet buffers and use mock uarts to parse
-            uarts should be aligned for both RX and TX (i.e. device1 -> uart 1)*/
+            mockUarts should be aligned for both RX and TX (i.e. device1 -> uart1)*/
             usbUart_print("\r\n***Validate Commands - Support Cube ***\r\n");
             /* Setup - Create a packet object and initialize */
             packets_BUFFER_FULL_S device1, device2;
@@ -625,14 +625,14 @@ int main(void) {
             device1.comms.rxGetBytesPending = mockUart1_RxGetBytesPending;
             device1.comms.rxReadByte = mockUart1_RxReadByte;
             device1.comms.txPutArray = mockUart1_TxPutArray;
-            device1.comms.ackCallback = ackHandler_noop;
+            device1.comms.ackCallback = ackHandler_print;
             device1.comms.cmdCallback = cmdHandler_supportCube;
             packets_PACKET_S* txPacket = &device1.send.packet;
             /* Register callback functions - device 2 */
             device2.comms.rxGetBytesPending = mockUart2_RxGetBytesPending;
             device2.comms.rxReadByte = mockUart2_RxReadByte;
             device2.comms.txPutArray = mockUart2_TxPutArray;
-            device2.comms.ackCallback = ackHandler_noop;
+            device2.comms.ackCallback = ackHandler_print;
             device2.comms.cmdCallback = cmdHandler_supportCube;
 
             /* Expected Packet */
@@ -965,11 +965,33 @@ int main(void) {
     #if defined(MICA_DEBUG) && defined(MICA_TEST)
         #error "MICA_DEBUG and MICA_TEST may not be defined at the same time"
     #endif
-#endif /* MICA_TEST */
-/* %%%%%%%%%%%%%%%%%%  End Debugging & Testing  %%%%%%%%%%%%%%%%%% */
-    
     /* Fall through Infinite Loop */
     for(;;){ }
+#endif /* MICA_TEST */
+/* %%%%%%%%%%%%%%%%%%  End Debugging & Testing  %%%%%%%%%%%%%%%%%% */
+    /* Start components */
+    LEDS_Write(LEDS_ON_GREEN);
+    usbUart_Start();
+    imuUart_Start();
+    
+    /* Setup Packet */
+    packets_BUFFER_FULL_S usbPackets;
+    uint32_t err = packets_initialize(&usbPackets);
+    err |= packets_generateBuffers(&usbPackets, packets_LEN_PACKET_128);
+    if(err){
+        LEDS_Write(LEDS_ON_RED);
+        for(;;){}
+    }
+    /* Register callback functions - device 1 */
+    usbPackets.comms.rxGetBytesPending = usbUart_getRxBufferSize;
+    usbPackets.comms.rxReadByte = usbUart_getChar;
+    usbPackets.comms.txPutArray = usbUart_putArray;
+    usbPackets.comms.ackCallback = ackHandler_supportCube;
+    usbPackets.comms.cmdCallback = cmdHandler_supportCube;
+    /* Infinite Loop */
+    for(;;){
+        packets_processRxQueue(&usbPackets);
+    }
 } /* End main */
 
 /*******************************************************************************

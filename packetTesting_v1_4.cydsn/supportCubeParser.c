@@ -59,6 +59,25 @@ uint32_t cmdHandler_supportCube(packets_PACKET_S* rxPacket, packets_PACKET_S* tx
     return packets_ERR_SUCCESS;
 }
 
+/*******************************************************************************
+* Function Name: ackHandler_print()
+****************************************************************************//**
+* \brief
+*  Support cube handler for received acknowledge packet. Currently just toggles
+*   the blue led.
+*
+* \param packet [in]
+*  Pointer to the received packet
+* 
+* \return
+*  Returns the error of associated with the operation
+*******************************************************************************/
+uint32_t ackHandler_supportCube(packets_PACKET_S* packet){
+    (void) packet;
+    LEDS_B_Toggle();
+    return packets_ERR_SUCCESS;
+}
+
 /* ### Helpers ### */
 
 /*******************************************************************************

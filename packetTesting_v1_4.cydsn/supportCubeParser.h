@@ -45,6 +45,8 @@
     * Function declarations 
     ***************************************/
     uint32_t cmdHandler_supportCube(packets_PACKET_S* rxPacket, packets_PACKET_S* txPacket);
+    uint32_t ackHandler_supportCube(packets_PACKET_S* packet);
+    
 
     uint32_t cmdHandler_print(packets_PACKET_S* cmdPacket, packets_PACKET_S* ackPacket);
     uint32_t ackHandler_print(packets_PACKET_S* packet);
